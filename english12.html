@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Grade 12 English NEB Previous Year Question Papers. View and Download PDFs.">
+    <title>English PYQs — NEB Archive</title>
+
+    <!-- Prevent FOUC (Flash of Unstyled Content) for Dark Mode -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Local stylesheet -->
+    <link rel="stylesheet" href="CSS/style(english12).css">
+</head>
+<body>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-mark">◆</span>
+                NEB <span class="logo-accent">Archive</span>
+            </a>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="pyqs.html" class="nav-link active">PYQs</a>
+                <a href="notes.html" class="nav-link">Notes</a>
+                <a href="quiz.html" class="nav-link">Quizzes</a>
+                <a href="#" class="btn btn-primary btn-sm nav-cta">Get Started</a>
+            </nav>
+
+            <div class="nav-right-controls" style="display: flex; align-items: center;">
+                <!-- Dark Mode Toggle Button -->
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2"></path><path d="M12 20v2"></path>
+                        <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
+                        <path d="M2 12h2"></path><path d="M20 12h2"></path>
+                        <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
+                    </svg>
+                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                    </svg>
+                </button>
+
+                <!-- Hamburger menu (mobile) -->
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" style="margin-left: 16px;">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== PAGE HEADER ==================== -->
+    <section class="page-header">
+        <div class="container">
+            <a href="grade12_science.html" class="back-link">← Science Stream Subjects</a>
+            <span class="badge">📖 English · Grade 12</span>
+            <h1 class="page-title">English PYQs</h1>
+            <p class="page-subtitle">
+                Select a year to view and download Previous Year Question Papers.
+            </p>
+        </div>
+    </section>
+
+    <!-- ==================== CONTROLS SECTION ==================== -->
+    <section class="controls-section">
+        <div class="container">
+            <div class="controls-wrapper" style="grid-template-columns: 1fr; justify-content: center; max-width: 300px; margin: 0 auto;">
+                <!-- Year Filter (Dynamically populated by JS) -->
+                <div class="filter-group">
+                    <select id="yearFilter" class="filter-select">
+                        <!-- JS will inject options here -->
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== RESULTS CONTAINER ==================== -->
+    <section class="pyq-results-section">
+        <div class="container">
+            <!-- JS will inject cards here -->
+            <div id="paper-container" class="pyq-grid"></div>
+            
+            <!-- Empty State Message -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <div class="empty-icon">📄</div>
+                <h3>No papers found</h3>
+                <p>No papers are available for this year yet. Check back later!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <span class="logo-mark">◆</span>
+                    NEB <span class="logo-accent">Archive</span>
+                </a>
+                <p class="footer-tagline">Organized. Ad-free. Built for students.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">GitHub</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© <span id="year"></span> NEB Archive. Made with ☕ by a NEB Student.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="english_pyqs.js"></script>
+</body>
+</html>
