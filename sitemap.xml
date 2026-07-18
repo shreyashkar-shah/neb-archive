@@ -7,15 +7,27 @@
   </url>
 
   <url>
-    <loc>https://neb-archive.pages.dev/browse.html</loc>
+    <loc>https://neb-archive.pages.dev/pyqs.html</loc>
+  </url>
+
+  <url>
+    <loc>https://neb-archive.pages.dev/notes.html</loc>
+  </url>
+
+  <url>
+    <loc>https://neb-archive.pages.dev/quiz.html</loc>
+  </url>
+
+  <url>
+    <loc>https://neb-archive.pages.dev/grade12.html</loc>
+  </url>
+
+  <url>
+    <loc>https://neb-archive.pages.dev/grade12_science.html</loc>
   </url>
 
   <url>
     <loc>https://neb-archive.pages.dev/english12.html</loc>
-  </url>
-
-  <url>
-    <loc>https://neb-archive.pages.dev/papers.html</loc>
   </url>
 
 </urlset>
