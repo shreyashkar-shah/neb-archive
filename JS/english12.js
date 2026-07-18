@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ------------------------------------------------
-       3. EVENT LISTENERS (Year Pills) & INITIAL LOAD
+       3. EVENT LISTENERS (Year Pills)
        ------------------------------------------------ */
     yearPills.forEach(pill => {
         pill.addEventListener('click', () => {
@@ -175,8 +175,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initial render
-    renderContent("All Years");
+    /* ------------------------------------------------
+       4. INITIAL LOAD (Guaranteed Default to "All")
+       ------------------------------------------------ */
+    // Explicitly set "All" pill to active just in case HTML missed it
+    yearPills.forEach(p => {
+        if (p.dataset.year === "All") {
+            p.classList.add('active');
+        } else {
+            p.classList.remove('active');
+        }
+    });
+    
+    // Force render the papers immediately using the correct string "All"
+    renderContent("All");
 
     // Footer Year
     const yearSpan = document.getElementById('year');
