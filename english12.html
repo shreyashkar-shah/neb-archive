@@ -43,7 +43,6 @@
             </nav>
 
             <div class="nav-right-controls" style="display: flex; align-items: center;">
-                <!-- Dark Mode Toggle Button -->
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4"></circle>
@@ -57,7 +56,6 @@
                     </svg>
                 </button>
 
-                <!-- Hamburger menu (mobile) -->
                 <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" style="margin-left: 16px;">
                     <span></span>
                     <span></span>
@@ -74,7 +72,7 @@
             <span class="badge">📖 English · Grade 12</span>
             <h1 class="page-title">English PYQs</h1>
             <p class="page-subtitle">
-                Select a year to view and download Previous Year Question Papers.
+                Select a year to filter. Click on a paper to view Questions and Solutions.
             </p>
         </div>
     </section>
@@ -82,23 +80,47 @@
     <!-- ==================== CONTROLS SECTION ==================== -->
     <section class="controls-section">
         <div class="container">
-            <div class="controls-wrapper" style="grid-template-columns: 1fr; justify-content: center; max-width: 300px; margin: 0 auto;">
-                <!-- Year Filter (Dynamically populated by JS) -->
-                <div class="filter-group">
-                    <select id="yearFilter" class="filter-select">
-                        <!-- JS will inject options here -->
-                    </select>
-                </div>
+            <!-- Replaced dropdown with clickable Year Pills -->
+            <div class="year-pills-wrapper">
+                <button class="year-pill active" data-year="All">All Years</button>
+                <button class="year-pill" data-year="2083">2083</button>
+                <button class="year-pill" data-year="2082">2082</button>
+                <button class="year-pill" data-year="2081">2081</button>
+                <button class="year-pill" data-year="2080">2080</button>
+                <button class="year-pill" data-year="2079">2079</button>
+                <button class="year-pill" data-year="2078">2078</button>
             </div>
         </div>
     </section>
 
     <!-- ==================== RESULTS CONTAINER ==================== -->
-    <section class="pyq-results-section">
+    <section class="list-results-section">
         <div class="container">
-            <!-- JS will inject cards here -->
-            <div id="paper-container" class="pyq-grid"></div>
             
+            <!-- Section 1: Board Papers -->
+            <div class="paper-category">
+                <h2 class="category-title"><span class="cat-icon">🏛️</span> Board Papers</h2>
+                <div id="board-papers-container" class="paper-list">
+                    <!-- JS will inject items here -->
+                </div>
+            </div>
+
+            <!-- Section 2: Supplementary Papers -->
+            <div class="paper-category">
+                <h2 class="category-title"><span class="cat-icon">📝</span> Supplementary Papers</h2>
+                <div id="supplementary-papers-container" class="paper-list">
+                    <!-- JS will inject items here -->
+                </div>
+            </div>
+
+            <!-- Section 3: Practice Sets -->
+            <div class="paper-category">
+                <h2 class="category-title"><span class="cat-icon">🎯</span> Practice Sets</h2>
+                <div id="practice-papers-container" class="paper-list">
+                    <!-- JS will inject items here -->
+                </div>
+            </div>
+
             <!-- Empty State Message -->
             <div id="empty-state" class="empty-state" style="display: none;">
                 <div class="empty-icon">📄</div>
@@ -129,7 +151,6 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="english_pyqs.js"></script>
+    <script src="JS/english12.js"></script>
 </body>
 </html>

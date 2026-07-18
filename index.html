@@ -7,12 +7,13 @@
     <title>NEB Archive — Your Ultimate NEB Study Hub</title>
 
     <!-- Prevent FOUC (Flash of Unstyled Content) for Dark Mode -->
-<script>
-    (function() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    })();
-</script>
+    <!-- Defaulting to Dark Mode -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
 
     <!-- Preconnect to Google Fonts for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +27,7 @@
 </head>
 <body>
 
-        <!-- ==================== NAVBAR ==================== -->
+    <!-- ==================== NAVBAR ==================== -->
     <header class="navbar" id="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
@@ -35,7 +36,7 @@
             </a>
 
             <nav class="nav-links" id="navLinks">
-                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html" class="nav-link active">Home</a>
                 <a href="pyqs.html" class="nav-link">PYQs</a>
                 <a href="notes.html" class="nav-link">Notes</a>
                 <a href="quiz.html" class="nav-link">Quizzes</a>
@@ -80,7 +81,7 @@
             </p>
             <div class="hero-buttons">
                 <a href="#features" class="btn btn-primary">Explore Materials</a>
-                <a href="#quizzes" class="btn btn-outline">Take a Quiz</a>
+                <a href="quiz.html" class="btn btn-outline">Take a Quiz</a>
             </div>
 
             <!-- Small stat strip for social proof -->
@@ -117,7 +118,7 @@
                     <div class="card-icon">📄</div>
                     <h3 class="card-title">PYQs</h3>
                     <p class="card-desc">Previous Year Questions sorted by year, subject, and faculty. Practice with the real deal.</p>
-                    <a href="#" class="card-link">Browse PYQs →</a>
+                    <a href="pyqs.html" class="card-link">Browse PYQs →</a>
                 </article>
 
                 <!-- Card 2 -->
@@ -125,7 +126,7 @@
                     <div class="card-icon">🧠</div>
                     <h3 class="card-title">Smart Quizzes</h3>
                     <p class="card-desc">Test your knowledge with chapter-wise quizzes. Instant feedback, zero distractions.</p>
-                    <a href="#" class="card-link">Start Quiz →</a>
+                    <a href="quiz.html" class="card-link">Start Quiz →</a>
                 </article>
 
                 <!-- Card 3 -->
@@ -133,7 +134,7 @@
                     <div class="card-icon">📝</div>
                     <h3 class="card-title">Premium Notes</h3>
                     <p class="card-desc">Concise, curated notes that cut the fluff. Focus on what actually shows up in exams.</p>
-                    <a href="#" class="card-link">Read Notes →</a>
+                    <a href="notes.html" class="card-link">Read Notes →</a>
                 </article>
 
                 <!-- Card 4 -->
@@ -214,6 +215,6 @@
     </footer>
 
     <!-- Local script -->
-    <script src="script.js"></script>
+    <script src="JS/index.js"></script>
 </body>
 </html>
