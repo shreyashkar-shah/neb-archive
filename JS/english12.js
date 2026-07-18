@@ -15,8 +15,7 @@ const mockApiData = {
         { id: "s1", year: "2080", title: "Supplementary Exam 2080", description: "Makeup exam for 2080 batch.", questionR2: "https://pub-xxxxx.r2.dev/eng_supp_2080_q.pdf", solutionR2: "https://pub-xxxxx.r2.dev/eng_supp_2080_s.pdf" }
     ],
     practicePapers: [
-        { id: "p1", year: "2081", title: "Practice Set 1 - Full Mock", description: "Curated by NEB Archive team.", questionR2: "https://pub-xxxxx.r2.dev/eng_practice_1_q.pdf", solutionR2: "https://pub-xxxxx.r2.dev/eng_practice_1_s.pdf" },
-        { id: "p2", year: "2080", title: "Practice Set 2 - Grammar Focus", description: "Curated by NEB Archive team.", questionR2: "https://pub-xxxxx.r2.dev/eng_practice_2_q.pdf", solutionR2: "https://pub-xxxxx.r2.dev/eng_practice_2_s.pdf" }
+        { id: "p1", year: "2081", title: "Practice Set 1 - Full Mock", description: "Curated by NEB Archive team.", questionR2: "https://pub-xxxxx.r2.dev/eng_practice_1_q.pdf", solutionR2: "https://pub-xxxxx.r2.dev/eng_practice_1_s.pdf" }
     ]
 };
 
