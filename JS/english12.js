@@ -1,15 +1,15 @@
 /* ====================================================
    NEB Archive — English PYQs Logic (Accordion List)
-   Optimized for Cloudflare R2
+   Optimized for Supabase / Cloudflare R2
    ==================================================== */
 
 // MOCK API DATA
 // Simulates data fetched from your backend.
-// Replace 'r2Link' values with actual Cloudflare R2 public URLs.
 const mockApiData = {
     boardPapers: [
-        { id: "b1", year: "2083", title: "Annual Board Exam 2083", description: "Conducted by NEB in 2083 BS.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/2083/english/English%202083.pdf", solutionR2: "https://pub-xxxxx.r2.dev/eng_board_2080_s.pdf" },
-        { id: "b2", year: "2079", title: "Annual Board Exam 2079", description: "Conducted by NEB in 2079 BS.", questionR2: "https://pub-xxxxx.r2.dev/eng_board_2079_q.pdf", solutionR2: "#" } // No solution example
+        { id: "b1", year: "2083", title: "English Question Paper 2083", description: "Conducted by NEB in 2083 BS.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/2083/English%202083.pdf", solutionR2: "#" },
+        { id: "b2", year: "2082", title: "English Question Paper 2082", description: "Conducted by NEB in 2082 BS.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/2082/English%202082.pdf", solutionR2: "#" }, 
+        { id: "b3", year: "2081", title: "English Question Paper 2081", description: "Conducted by NEB in 2081 BS.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/2081/English%202081.pdf", solutionR2: "#" } 
     ],
     supplementaryPapers: [
         { id: "s1", year: "2080", title: "Supplementary Exam 2080", description: "Makeup exam for 2080 batch.", questionR2: "https://pub-xxxxx.r2.dev/eng_supp_2080_q.pdf", solutionR2: "https://pub-xxxxx.r2.dev/eng_supp_2080_s.pdf" }
@@ -55,9 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = document.getElementById('empty-state');
     const yearPills = document.querySelectorAll('.year-pill');
     
-    // Helper to generate HTML for a single accordion item (Download button removed)
+    // Helper to generate HTML for a single accordion item
     function createAccordionHTML(item) {
         const hasSolution = item.solutionR2 && item.solutionR2 !== "#";
+        
+        // Encode the URL and Title so they pass safely through the browser URL to viewer.html
+        const questionViewerUrl = `viewer.html?file=${encodeURIComponent(item.questionR2)}&title=${encodeURIComponent(item.title + " - Question")}`;
+        const solutionViewerUrl = `viewer.html?file=${encodeURIComponent(item.solutionR2)}&title=${encodeURIComponent(item.title + " - Solution")}`;
         
         return `
             <div class="accordion-item" data-id="${item.id}">
@@ -90,7 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <h4>Question Paper</h4>
                             </div>
                             <div class="sub-card-actions">
-                                <a href="${item.questionR2}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">View PDF</a>
+                                <!-- Points to custom viewer.html -->
+                                <a href="${questionViewerUrl}" class="btn btn-primary btn-sm">View PDF</a>
                             </div>
                         </div>
 
@@ -106,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <div class="sub-card-actions">
                                 ${hasSolution ? `
-                                    <a href="${item.solutionR2}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">View PDF</a>
+                                    <a href="${solutionViewerUrl}" class="btn btn-primary btn-sm">View PDF</a>
                                 ` : `
                                     <span style="font-size: 13px; color: var(--text-muted); width: 100%; text-align: center; padding: 8px 0;">Solution not available yet.</span>
                                 `}
