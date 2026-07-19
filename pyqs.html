@@ -1,63 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-        <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RT0GH6QY0J"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-RT0GH6QY0J');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Browse NEB Previous Year Questions (PYQs). Find exam papers for Science and Management faculties.">
     <title>PYQs — NEB Archive</title>
+    <meta name="description" content="Browse NEB Previous Year Questions (PYQs). Find exam papers for Science and Management faculties.">
 
-    <!-- Prevent FOUC (Flash of Unstyled Content) for Dark Mode -->
     <script>
         (function() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
 
-    <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@350;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Inter font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@0.475.0"></script>
 
-    <!-- Local stylesheet -->
     <link rel="stylesheet" href="CSS/style(pyqs).css">
-
-    <!-- Inline style to center the 4th and 5th cards gracefully -->
-    <style>
-        .pyq-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 24px;
-        }
-        .pyq-card {
-            flex: 1 1 300px; /* Allows cards to grow/shrink, base 300px */
-            max-width: 350px; /* Prevents cards from getting too wide on large screens */
-            box-sizing: border-box;
-        }
-    </style>
 </head>
 <body>
+
+    <a href="#main-content" class="skip-link">Skip to content</a>
 
     <!-- ==================== NAVBAR ==================== -->
     <header class="navbar" id="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
-                <span class="logo-mark">◆</span>
-                NEB <span class="logo-accent">Archive</span>
+                <span class="logo-mark"><i data-lucide="layers"></i></span>
+                NEB Archive
             </a>
 
             <nav class="nav-links" id="navLinks">
@@ -65,140 +38,159 @@
                 <a href="pyqs.html" class="nav-link active">PYQs</a>
                 <a href="notes.html" class="nav-link">Notes</a>
                 <a href="quiz.html" class="nav-link">Quizzes</a>
-                <a href="#" class="btn btn-primary btn-sm nav-cta">Get Started</a>
+                <a href="textbooks.html" class="nav-link">Textbooks</a>
             </nav>
 
-            <div class="nav-right-controls" style="display: flex; align-items: center;">
-                <!-- Dark Mode Toggle Button -->
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-                    <!-- Sun Icon (Light Mode) -->
-                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="4"></circle>
-                        <path d="M12 2v2"></path><path d="M12 20v2"></path>
-                        <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
-                        <path d="M2 12h2"></path><path d="M20 12h2"></path>
-                        <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
-                    </svg>
-                    <!-- Moon Icon (Dark Mode) -->
-                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-                    </svg>
+            <div class="nav-right">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i class="i-sun" data-lucide="sun"></i>
+                    <i class="i-moon" data-lucide="moon"></i>
                 </button>
-
-                <!-- Hamburger menu (mobile) -->
-                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" style="margin-left: 16px;">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- ==================== PAGE HEADER ==================== -->
-    <section class="page-header">
-        <div class="container">
-            <span class="badge">📂 Question Bank</span>
-            <h1 class="page-title">Previous Year Questions</h1>
-            <p class="page-subtitle">
-                Find NEB exam papers from past years to practice and ace your exams.
-            </p>
-        </div>
-    </section>
+    <main id="main-content">
 
-    <!-- ==================== GRADES SELECTION SECTION ==================== -->
-    <section class="pyq-results-section">
-        <div class="container">
-            <!-- Grade Cards Container -->
-            <div class="pyq-grid">
-                
-                <!-- Grade 8 Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">Middle School</span>
+        <!-- ==================== HERO ==================== -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-grid"></div>
+
+            <div class="container">
+                <div class="pyq-hero-grid">
+                    <div class="hero-inner" style="text-align: left; max-width: 100%;">
+                        <span class="eyebrow">Question Bank</span>
+                        <h1 class="hero-title">Previous Year Questions</h1>
+                        <p class="hero-subtitle" style="margin-left: 0;">
+                            Board exam papers and top school question sets — sorted by grade and subject, ready to open or solve.
+                        </p>
+
+                        <!-- Source Toggle -->
+                        <div class="source-toggle" role="tablist" aria-label="Question source">
+                            <button class="source-btn active" role="tab" aria-selected="true" data-source="board">
+                                <i data-lucide="landmark"></i>
+                                Board Exams
+                            </button>
+                            <button class="source-btn" role="tab" aria-selected="false" data-source="school">
+                                <i data-lucide="school"></i>
+                                School Papers
+                            </button>
+                        </div>
                     </div>
-                    <div class="notes-icon" style="margin-bottom: 16px;">🎒</div>
-                    <h3>Grade 8</h3>
-                    <p>Access previous year question papers for Grade 8 subjects.</p>
-                    <a href="#" class="card-link">View Materials →</a>
-                </article>
 
-                <!-- Grade 9 Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">Foundation</span>
+                    <!-- Quick Stats Panel -->
+                    <div class="stats-panel reveal" style="--i:1" id="statsPanel">
+                        <div class="stats-panel-header">
+                            <span class="stats-label" id="statsLabel">Grade 8 · Board</span>
+                            <i data-lucide="bar-chart-2"></i>
+                        </div>
+                        <div class="stats-grid" id="statsGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="stats-footer" id="statsFooter">
+                            <!-- Total count -->
+                        </div>
                     </div>
-                    <div class="notes-icon" style="margin-bottom: 16px;">📘</div>
-                    <h3>Grade 9</h3>
-                    <p>Access previous year question papers for Grade 9 subjects.</p>
-                    <a href="#" class="card-link">View Materials →</a>
-                </article>
-
-                <!-- Grade 10 Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">SEE Preparation</span>
-                    </div>
-                    <div class="notes-icon" style="margin-bottom: 16px;">📗</div>
-                    <h3>Grade 10</h3>
-                    <p>Access previous year question papers for Grade 10 (SEE) subjects.</p>
-                    <a href="#" class="card-link">View Materials →</a>
-                </article>
-
-                <!-- Grade 11 Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag management">+2 First Year</span>
-                    </div>
-                    <div class="notes-icon" style="margin-bottom: 16px;">📙</div>
-                    <h3>Grade 11</h3>
-                    <p>Access previous year question papers for Grade 11 (NEB) subjects.</p>
-                    <a href="#" class="card-link">View Materials →</a>
-                </article>
-
-                <!-- Grade 12 Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag management">+2 Final Year</span>
-                    </div>
-                    <div class="notes-icon" style="margin-bottom: 16px;">📕</div>
-                    <h3>Grade 12</h3>
-                    <p>Access previous year question papers for Grade 12 (NEB) subjects.</p>
-                    <a href="grade12/grade12.html" class="card-link">View Materials →</a>
-                </article>
-
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- ==================== ARCHIVE SECTION ==================== -->
+        <section class="section archive-section">
+            <div class="container">
+
+                <!-- Grade Pills -->
+                <div class="grade-bar reveal">
+                    <div class="grade-caption" id="gradeCaption">Select your grade to view available subjects and papers.</div>
+                    <div class="grade-pills" id="gradePills"></div>
+                </div>
+
+                <!-- Stream selector (Grade 11 & 12 only) -->
+                <div class="stream-bar reveal" id="streamBar" hidden>
+                    <span class="bar-label"><i data-lucide="git-branch"></i>Stream</span>
+                    <div class="grade-pills" id="streamPills"></div>
+                </div>
+
+                <!-- Layout Grid -->
+                <div class="archive-layout">
+
+                    <!-- Left Panel: Subject (board) or School (school mode) -->
+                    <aside class="subject-panel reveal" id="subjectPanel">
+                        <div class="panel-heading">
+                            <h2 id="subjectHeading">Grade 8</h2>
+                            <button id="subjectToggle" class="collapse-btn" aria-expanded="true">
+                                <i data-lucide="chevron-down"></i>
+                            </button>
+                        </div>
+                        <p class="subject-note" id="subjectNote">Select a subject to filter papers.</p>
+                        <div class="subject-list" id="subjectList"></div>
+                    </aside>
+
+                    <!-- Paper Panel -->
+                    <div class="paper-panel reveal" style="--i:1">
+                        <div class="content-top">
+                            <div>
+                                <span class="eyebrow" id="contentEyebrow">Grade 8 / English</span>
+                                <h2 id="paperHeading">English</h2>
+                                <p id="paperCount">Showing 3 papers</p>
+                            </div>
+                            <div class="sort-note">
+                                <i data-lucide="arrow-down-narrow-wide"></i>
+                                <span>Sorted by Year (Newest)</span>
+                            </div>
+                        </div>
+
+                        <div class="year-filter" id="yearFilter"></div>
+
+                        <div class="paper-list" id="paperList"></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="footer">
-        <div class="container footer-content">
-            <div class="footer-brand">
-                <a href="index.html" class="logo">
-                    <span class="logo-mark">◆</span>
-                    NEB <span class="logo-accent">Archive</span>
-                </a>
-                <p class="footer-tagline">Organized. Ad-free. Built for students.</p>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <span class="logo-mark"><i data-lucide="layers"></i></span>
+                        NEB Archive
+                    </a>
+                    <p class="footer-tag">Authentic NEB study resources, organized and free for every student in Nepal.</p>
+                </div>
+                <div class="foot-col">
+                    <h4>Resources</h4>
+                    <a href="pyqs.html">PYQs</a>
+                    <a href="notes.html">Notes</a>
+                    <a href="quiz.html">Quizzes</a>
+                    <a href="textbooks.html">Textbooks</a>
+                </div>
+                <div class="foot-col">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy</a>
+                </div>
             </div>
-            <div class="footer-links">
-                <a href="#">GitHub</a>
-                <a href="#">Contact</a>
-                <a href="#">Privacy</a>
+            <div class="footer-bottom">
+                <p>© <span id="year"></span> NEB Archive · All Rights Reserved</p>
+                <div class="footer-socials">
+                    <a href="#" aria-label="GitHub"><i data-lucide="github"></i></a>
+                    <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+                    <a href="#" aria-label="Mail"><i data-lucide="mail"></i></a>
+                </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© <span id="year"></span> NEB Archive. Made with ☕ by a NEB Student.</p>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script>
-        // Just keeping the year updater active so the footer works
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
-
     <script src="JS/pyqs.js"></script>
-
 </body>
 </html>

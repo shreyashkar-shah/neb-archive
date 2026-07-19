@@ -1,16 +1,16 @@
 /* ============================================================
-   NEB Archive â€” Design System
+   NEB Archive — Design System
    Light: warm paper + ink indigo.
    Dark:  indigo-tinted charcoal, elevation by lightness.
    ============================================================ */
 :root {
-    /* Surfaces â€” warm paper */
+    /* Surfaces — warm paper */
     --paper:        oklch(98.6% 0.007 80);
     --surface:      oklch(99.7% 0.004 80);
     --surface-2:    oklch(96.8% 0.008 80);
     --surface-3:    oklch(94.8% 0.010 80);
 
-    /* Ink â€” cool near-black */
+    /* Ink — cool near-black */
     --ink:          oklch(24% 0.020 275);
     --ink-soft:     oklch(38% 0.020 275);
     --muted:        oklch(53% 0.016 275);
@@ -20,7 +20,7 @@
     --border:       oklch(91.5% 0.008 80);
     --border-strong:oklch(86% 0.010 80);
 
-    /* Accent â€” deep indigo */
+    /* Accent — deep indigo */
     --accent:       oklch(48% 0.118 264);
     --accent-hover: oklch(42% 0.125 264);
     --accent-ink:   oklch(34% 0.100 264);
@@ -39,7 +39,7 @@
     /* Grid line color for hero/CTA */
     --grid-line: var(--border);
 
-    /* Shadows â€” subtle, ink-tinted */
+    /* Shadows — subtle, ink-tinted */
     --shadow-xs: 0 1px 2px oklch(24% 0.02 275 / 0.05);
     --shadow-sm: 0 2px 6px oklch(24% 0.02 275 / 0.06), 0 1px 2px oklch(24% 0.02 275 / 0.04);
     --shadow-md: 0 8px 24px oklch(24% 0.02 275 / 0.08), 0 2px 6px oklch(24% 0.02 275 / 0.05);
@@ -66,10 +66,6 @@
 
 /* ------------------------------------------------------------
    DARK THEME
-   Base is a near-black tinted toward the indigo hue (not gray,
-   not pure black). Elevation climbs in lightness: 15 â†’ 18 â†’ 22.
-   Accent is lifted in lightness and slightly desaturated so it
-   glows without vibrating. Body weight drops to 350 + tracking.
    ------------------------------------------------------------ */
 [data-theme="dark"] {
     --paper:        oklch(15.5% 0.018 274);
@@ -100,7 +96,6 @@
 
     --grid-line: oklch(26% 0.020 274);
 
-    /* In dark, depth comes from lightness, not shadow. Keep faint. */
     --shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.4);
     --shadow-sm: 0 2px 8px oklch(0% 0 0 / 0.35);
     --shadow-md: 0 10px 30px oklch(0% 0 0 / 0.4);
@@ -430,9 +425,9 @@ p { text-wrap: pretty; }
     .tile.wide { flex-direction: column; align-items: flex-start; gap: 20px; grid-column: span 2; }
     .why-grid { grid-template-columns: 1fr; gap: 48px; }
     .footer-top {
-    grid-template-columns: 1fr;
-    gap: 80px;
-}
+        grid-template-columns: 1fr;
+        gap: 80px;
+    }
     .footer-brand { grid-column: 1 / -1; }
     .hero-preview { margin-top: 52px; }
 }
