@@ -1,231 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-        <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RT0GH6QY0J"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-RT0GH6QY0J');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NEB Archive - A centralized hub for NEB +2 students to find PYQs, notes, study materials, and quizzes.">
-    <title>NEB Archive — Your Ultimate NEB Study Hub</title>
+    <meta name="description" content="NEB Archive â€” the most organized, authentic and reliable collection of NEB study resources. PYQs, notes, textbooks and quizzes for Grades 8â€“12.">
+    <title>NEB Archive: Authentic NEB study resources, organized</title>
 
-    <!-- Prevent FOUC (Flash of Unstyled Content) for Dark Mode -->
-    <!-- Defaulting to Dark Mode -->
+    <!-- Prevent flash of wrong theme -->
     <script>
-        (function() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
+        (function () {
+            try {
+                const t = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
         })();
     </script>
 
-    <!-- Preconnect to Google Fonts for performance -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@350;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Inter font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@0.475.0"></script>
 
-    <!-- Local stylesheet -->
+    <!-- Styles -->
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
+    <a href="#main" class="skip-link">Skip to content</a>
 
     <!-- ==================== NAVBAR ==================== -->
     <header class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo">
-                <span class="logo-mark">◆</span>
-                NEB <span class="logo-accent">Archive</span>
+            <a href="index.html" class="logo" aria-label="NEB Archive home">
+                <span class="logo-mark"><i data-lucide="library-big"></i></span>
+                NEB Archive
             </a>
 
-            <nav class="nav-links" id="navLinks">
+            <nav class="nav-links" id="navLinks" aria-label="Primary">
                 <a href="index.html" class="nav-link active">Home</a>
                 <a href="pyqs.html" class="nav-link">PYQs</a>
                 <a href="notes.html" class="nav-link">Notes</a>
                 <a href="quiz.html" class="nav-link">Quizzes</a>
-                <a href="#" class="btn btn-primary btn-sm nav-cta">Get Started</a>
+                <a href="textbooks.html" class="nav-link">Textbooks</a>
             </nav>
 
-            <div class="nav-right-controls" style="display: flex; align-items: center;">
-                <!-- Dark Mode Toggle Button -->
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-                    <!-- Sun Icon (Light Mode) -->
-                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="4"></circle>
-                        <path d="M12 2v2"></path><path d="M12 20v2"></path>
-                        <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
-                        <path d="M2 12h2"></path><path d="M20 12h2"></path>
-                        <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
-                    </svg>
-                    <!-- Moon Icon (Dark Mode) -->
-                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-                    </svg>
+            <div class="nav-right">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <i data-lucide="sun" class="i-sun"></i>
+                    <i data-lucide="moon" class="i-moon"></i>
                 </button>
-
-                <!-- Hamburger menu (mobile) -->
-                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" style="margin-left: 16px;">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <a href="pyqs.html" class="btn btn-primary nav-cta">Browse resources</a>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+                    <span></span><span></span><span></span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- ==================== HERO SECTION ==================== -->
-    <section class="hero" id="home">
-        <div class="container hero-content">
-            <span class="badge">Ace your preparation 📚</span>
-            <h1 class="hero-title">Your Ultimate <span class="accent-text">NEB Study Archive</span></h1>
-            <p class="hero-subtitle">
-                Stop wasting time searching through scattered groups and dead links.
-                Find PYQs, notes, and quizzes for your +2 exams — all in one organized, ad-free place.
-            </p>
-            <div class="hero-buttons">
-                <a href="#features" class="btn btn-primary">Explore Materials</a>
-                <a href="quiz.html" class="btn btn-outline">Take a Quiz</a>
-            </div>
-
-            <!-- Small stat strip for social proof -->
-            <div class="hero-stats">
-                <div class="stat">
-                    <span class="stat-num">500+</span>
-                    <span class="stat-label">PYQs</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
-                    <span class="stat-num">120+</span>
-                    <span class="stat-label">Notes</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
-                    <span class="stat-num">100%</span>
-                    <span class="stat-label">Free</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== FEATURES / RESOURCES SECTION ==================== -->
-    <section class="features section" id="features">
+    <main id="main">
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Everything you need, organized</h2>
-                <p class="section-subtitle">No more endless scrolling. Just the resources that actually help you score better.</p>
+            <div class="hero-inner">
+                <span class="badge reveal">
+                    <b>Grades 8 to 12</b>Science, Management &amp; Law
+                </span>
+                <h1 class="hero-title reveal" style="--i:1">
+                        Welcome to NEB Archive! 
+                </h1>
+                <p class="hero-subtitle reveal" style="--i:2">
+                    A comprehensive collection of previous year questions (PYQs), notes, textbooks and quizzes, sorted by subject and year.
+                    No more dead links or cluttered groups, just the materials that actually help you score.
+                </p>
+                <div class="hero-buttons reveal" style="--i:3">
+                    <a href="pyqs.html" class="btn btn-primary btn-lg">Browse resources <i data-lucide="arrow-right" class="arrow"></i></a>
+                    <a href="quiz.html" class="btn btn-ghost btn-lg"><i data-lucide="circle-play"></i> Take a quiz</a>
+                </div>
+                <div class="hero-note reveal" style="--i:4">
+                    <i data-lucide="badge-check"></i> · Free forever · No sign-up · 100% Authentic ·
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TRUST STRIP ==================== -->
+    <section class="trust">
+        <div class="container">
+            <div class="trust-inner">
+                <div class="trust-item reveal"><span class="trust-num">6+</span><span class="trust-lbl">Years of papers</span></div>
+                <div class="trust-item reveal" style="--i:1"><span class="trust-num">12</span><span class="trust-lbl">Core subjects</span></div>
+                <div class="trust-item reveal" style="--i:2"><span class="trust-num">100%</span><span class="trust-lbl">Free access</span></div>
+                <div class="trust-item reveal" style="--i:3"><span class="trust-num">0</span><span class="trust-lbl">Sign-up walls</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== RESOURCES / BENTO ==================== -->
+    <section class="resources section" id="features">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="eyebrow">Resources</span>
+                <h2 class="section-title">Everything you need, in one calm place</h2>
+                <p class="section-sub">No endless scrolling, no broken PDFs. Just the resources that move your grade.</p>
             </div>
 
-            <div class="features-grid">
-                <!-- Card 1 -->
-                <article class="card reveal" id="pyqs">
-                    <div class="card-icon">📄</div>
-                    <h3 class="card-title">PYQs</h3>
-                    <p class="card-desc">Previous Year Questions sorted by year, subject, and faculty. Practice with the real deal.</p>
-                    <a href="pyqs.html" class="card-link">Browse PYQs →</a>
+            <div class="bento">
+                <article class="tile featured reveal">
+                    <div class="tile-ico"><i data-lucide="file-text"></i></div>
+                    <span class="tile-label">Past papers</span>
+                    <h3 class="tile-title">Previous year questions</h3>
+                    <p class="tile-desc">Sorted by year, subject and faculty. The most direct way to understand exactly what NEB asks, and how they mark it.</p>
+                    <div class="mini-list">
+                        <div class="mini-row"><span class="mini-ico"><i data-lucide="atom"></i></span><span class="mini-txt">Physics</span><span class="mini-tag">Grade 11</span></div>
+                        <div class="mini-row"><span class="mini-ico"><i data-lucide="flask-conical"></i></span><span class="mini-txt">Chemistry</span><span class="mini-tag">Grade 12</span></div>
+                        <div class="mini-row"><span class="mini-ico"><i data-lucide="sigma"></i></span><span class="mini-txt">Mathematics</span><span class="mini-tag">Grade 10</span></div>
+                    </div>
+                    <a href="pyqs.html" class="tile-link">Browse PYQs <i data-lucide="arrow-right"></i></a>
                 </article>
 
-                <!-- Card 2 -->
-                <article class="card reveal" id="quizzes">
-                    <div class="card-icon">🧠</div>
-                    <h3 class="card-title">Smart Quizzes</h3>
-                    <p class="card-desc">Test your knowledge with chapter-wise quizzes. Instant feedback, zero distractions.</p>
-                    <a href="quiz.html" class="card-link">Start Quiz →</a>
+                <article class="tile std reveal" style="--i:1">
+                    <div class="tile-ico"><i data-lucide="notebook-pen"></i></div>
+                    <span class="tile-label">Study notes</span>
+                    <h3 class="tile-title">Concise, exam-focused notes</h3>
+                    <p class="tile-desc">Curated notes that cut the fluff and focus on the concepts that consistently show up in exams.</p>
+                    <a href="notes.html" class="tile-link">Read notes <i data-lucide="arrow-right"></i></a>
                 </article>
 
-                <!-- Card 3 -->
-                <article class="card reveal" id="notes">
-                    <div class="card-icon">📝</div>
-                    <h3 class="card-title">Premium Notes</h3>
-                    <p class="card-desc">Concise, curated notes that cut the fluff. Focus on what actually shows up in exams.</p>
-                    <a href="notes.html" class="card-link">Read Notes →</a>
+                <article class="tile std reveal" style="--i:2">
+                    <div class="tile-ico"><i data-lucide="book-open"></i></div>
+                    <span class="tile-label">Textbooks</span>
+                    <h3 class="tile-title">Official NEB textbooks</h3>
+                    <p class="tile-desc">Prescribed textbooks for every subject, straight from the source. No hunting random PDFs across the internet.</p>
+                    <a href="textbooks.html" class="tile-link">View textbooks <i data-lucide="arrow-right"></i></a>
                 </article>
 
-                <!-- Card 4 -->
-                <article class="card reveal">
-                    <div class="card-icon">📐</div>
-                    <h3 class="card-title">Syllabus & Blueprints</h3>
-                    <p class="card-desc">Know exactly what to study. Updated syllabus and exam blueprints all in one place.</p>
-                    <a href="#" class="card-link">View Syllabus →</a>
+                <article class="tile wide reveal" style="--i:3">
+                    <div class="tile-ico"><i data-lucide="brain-circuit"></i></div>
+                    <div class="tile-body">
+                        <span class="tile-label">Practice</span>
+                        <h3 class="tile-title">Chapter-wise quizzes with instant feedback</h3>
+                        <p class="tile-desc">Test yourself chapter by chapter and see exactly where you stand, right away.</p>
+                    </div>
+                    <div class="tile-cta">
+                        <a href="quiz.html" class="btn btn-ghost">Start a quiz <i data-lucide="arrow-right" class="arrow"></i></a>
+                    </div>
                 </article>
             </div>
         </div>
     </section>
 
-    <!-- ==================== WHY US SECTION ==================== -->
-    <section class="why-us section" id="why-us">
-        <div class="container why-us-content reveal">
-            <div class="why-us-text">
-                <span class="eyebrow">Why NEB Archive?</span>
-                <h2 class="section-title">Tired of scrolling through random Facebook groups?</h2>
-                <p class="why-us-desc">
-                    We've been there. Broken links, spammy ads, and outdated PDFs buried under thousands of posts.
-                    NEB Archive fixes that — every resource is organized, searchable, and ad-free.
-                </p>
-                <ul class="why-us-list">
-                    <li><span class="check">✓</span> Clean, distraction-free interface</li>
-                    <li><span class="check">✓</span> Resources sorted by subject and year</li>
-                    <li><span class="check">✓</span> Built and maintained by a fellow NEB student</li>
-                    <li><span class="check">✓</span> 100% free, no sign-up walls</li>
-                </ul>
-            </div>
-            <div class="why-us-visual">
-                <div class="visual-card">
-                    <div class="visual-header">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
+    <!-- ==================== WHY US ==================== -->
+    <section class="why section" id="why-us">
+        <div class="container">
+            <div class="why-grid">
+                <div class="reveal">
+                    <span class="eyebrow">Why NEB Archive</span>
+                    <h2 class="section-title section-head left" style="margin-bottom:14px">Broken links and scattered groups, solved.</h2>
+                    <p class="section-sub" style="max-width:46ch">Outdated posts, dead PDFs and resources buried under thousands of messages. We keep everything organized, searchable and in one place.</p>
+                    <ul class="why-list">
+                        <li><span class="check"><i data-lucide="check"></i></span><span class="why-li-txt"><strong>Distraction-free by design</strong><span>A clean interface built for focus, not ads.</span></span></li>
+                        <li><span class="check"><i data-lucide="check"></i></span><span class="why-li-txt"><strong>Sorted by subject and year</strong><span>Find any paper in seconds, not scrolls.</span></span></li>
+                        <li><span class="check"><i data-lucide="check"></i></span><span class="why-li-txt"><strong>Built by a fellow NEB student</strong><span>Made by someone who sat the same exams.</span></span></li>
+                        <li><span class="check"><i data-lucide="check"></i></span><span class="why-li-txt"><strong>No sign-up walls or paywalls</strong><span>Open the page, get what you need, leave.</span></span></li>
+                    </ul>
+                </div>
+                <div class="compare reveal" style="--i:1" aria-hidden="true">
+                    <div class="compare-card bad">
+                        <div class="cc-head bad"><i data-lucide="folder-x"></i> The old way</div>
+                        <div class="cc-line bad"><i data-lucide="x"></i> Dead Google Drive links</div>
+                        <div class="cc-line bad"><i data-lucide="x"></i> Papers lost in group chats</div>
+                        <div class="cc-line bad"><i data-lucide="x"></i> Random, mislabelled PDFs</div>
                     </div>
-                    <div class="visual-body">
-                        <div class="visual-line w-80"></div>
-                        <div class="visual-line w-60"></div>
-                        <div class="visual-line w-90"></div>
-                        <div class="visual-line w-40"></div>
-                        <div class="visual-line w-70"></div>
+                    <div class="compare-card">
+                        <div class="cc-head good"><i data-lucide="folder-check"></i> With NEB Archive</div>
+                        <div class="cc-line good"><i data-lucide="check"></i> Every paper, organized by year</div>
+                        <div class="cc-line good"><i data-lucide="check"></i> One search across all subjects</div>
+                        <div class="cc-line good"><i data-lucide="check"></i> Verified, up-to-date sources</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==================== CTA SECTION ==================== -->
-    <section class="cta-section section">
-        <div class="container cta-box">
-            <h2>Ready to study smarter?</h2>
-            <p>Join thousands of NEB students who stopped searching and started studying.</p>
-            <a href="#" class="btn btn-primary btn-lg">Get Started Free</a>
+    <!-- ==================== CTA ==================== -->
+    <section class="cta section">
+        <div class="container">
+            <div class="cta-panel reveal">
+                <div class="cta-inner">
+                    <span class="eyebrow" style="color:oklch(80% 0.09 264)">Ready when you are</span>
+                    <h2>Start studying smarter today</h2>
+                    <p>Every resource you need for NEB, organized, authentic and ready the moment you open the page.</p>
+                    <a href="pyqs.html" class="btn btn-primary btn-lg">Browse resources <i data-lucide="arrow-right" class="arrow"></i></a>
+                </div>
+            </div>
         </div>
     </section>
+    </main>
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="footer">
-        <div class="container footer-content">
-            <div class="footer-brand">
-                <a href="#" class="logo">
-                    <span class="logo-mark">◆</span>
-                    NEB <span class="logo-accent">Archive</span>
-                </a>
-                <p class="footer-tagline">Organized. Ad-free. Built for students.</p>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <span class="logo-mark"><i data-lucide="library-big"></i></span>
+                        NEB Archive
+                    </a>
+                    <p class="footer-tag">Authentic NEB study resources, organized and free for every student in Nepal.</p>
+                </div>
+                <div class="foot-col">
+                    <h4>Resources</h4>
+                    <a href="pyqs.html">Previous papers</a>
+                    <a href="notes.html">Study notes</a>
+                    <a href="textbooks.html">Textbooks</a>
+                    <a href="quiz.html">Quizzes</a>
+                </div>
+                <div class="foot-col">
+                    <h4>Project</h4>
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy</a>
+                </div>
             </div>
-            <div class="footer-links">
-                <a href="#">GitHub</a>
-                <a href="#">Contact</a>
-                <a href="#">Privacy</a>
+            <div class="footer-bottom">
+                <p>© <span id="year"></span> NEB Archive · All Rights Reserved</p>
+                <div class="footer-socials">
+                    <a href="https://github.com/shreyashkar-shah" target="_blank" rel="noopener" aria-label="GitHub"><i data-lucide="github"></i></a>
+                    <a href="mailto:your@email.com" aria-label="Email"><i data-lucide="mail"></i></a>
+                    <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+                </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© <span id="year"></span> NEB Archive: Made by Shreyashkar Shah.</p>
         </div>
     </footer>
 
-    <!-- Local script -->
+    <!-- Scripts -->
     <script src="JS/index.js"></script>
 </body>
 </html>
