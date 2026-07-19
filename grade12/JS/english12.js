@@ -7,9 +7,10 @@
 // Simulates data fetched from your backend.
 const mockApiData = {
     boardPapers: [
-        { id: "b1", year: "2083", title: "English Question Paper 2083", description: "Conducted by NEB in 2083 BS.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/english/2083/English%202083.pdf", solutionR2: "#" },
-        { id: "b2", year: "2082", title: "English Question Paper 2082", description: "Conducted by NEB in 2082 BS.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/english/2082/English%202082.pdf", solutionR2: "#" }, 
-        { id: "b3", year: "2081", title: "English Question Paper 2081", description: "Conducted by NEB in 2081 BS.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/english/2081/English%202081.pdf", solutionR2: "#" } 
+        { id: "b1", year: "2081", title: "English Question Paper 2081", description: "Conducted by NEB in 2081 B.S.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/english/2081/English%202081.pdf", solutionR2: "#" },
+        { id: "b2", year: "2082", title: "English Question Paper 2082", description: "Conducted by NEB in 2082 B.S.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/english/2082/English%202082.pdf", solutionR2: "#" }, 
+        { id: "b3", year: "2083", title: "English Question Paper 2083 (Regular)", description: "Conducted by NEB in 2083 B.S.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/english/2083/English%202083%20(Regular).pdf", solutionR2: "#" },
+        { id: "b4", year: "2083", title: "English Question Paper 2083 (Partial)", description: "Conducted by NEB in 2083 B.S.", questionR2: "https://cqmqxazynzmkoahuppnu.supabase.co/storage/v1/object/public/papers/grade12/science/english/2083/English%202083%20(Partial).pdf", solutionR2: "#" } 
     ],
     supplementaryPapers: [
         { id: "s1", year: "2080", title: "Supplementary Exam 2080", description: "Makeup exam for 2080 batch.", questionR2: "https://pub-xxxxx.r2.dev/eng_supp_2080_q.pdf", solutionR2: "https://pub-xxxxx.r2.dev/eng_supp_2080_s.pdf" }
