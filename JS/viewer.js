@@ -51,21 +51,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileUrl = urlParams.get('file');
     const fileTitle = urlParams.get('title') || "Document";
 
-    document.getElementById('pdf-title').textContent = fileTitle;
+    const pdfTitleElem = document.getElementById('pdf-title');
+    if (pdfTitleElem) {
+        pdfTitleElem.textContent = fileTitle;
+    }
+
+    const container = document.getElementById('pdf-container');
 
     if (!fileUrl) {
-        document.getElementById('loading-spinner').innerHTML = "<p style='color: red;'>Error: No file specified.</p>";
+        container.innerHTML = "<div class='loading-spinner'><p style='color: red;'>Error: No file specified.</p></div>";
         return;
     }
 
+    // Show exactly what URL we are trying to fetch (useful for debugging)
+    container.innerHTML = `<div class='loading-spinner'><div class='spinner'></div><p>Fetching document...</p></div>`;
+
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    const container = document.getElementById('pdf-container');
     const thumbnailList = document.getElementById('thumbnail-list');
     
     let currentScale = 1.0; 
     let pdfDoc = null;
-    let currentPageNum = 1; // Track current page for keyboard navigation
+    let currentPageNum = 1;
 
     /* ------------------------------------------------
        3. INTERSECTION OBSERVER (Track active page)
@@ -80,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const pageNum = parseInt(entry.target.dataset.pageNum);
-                currentPageNum = pageNum; // Update global tracker
+                currentPageNum = pageNum;
                 
                 if (pdfDoc) {
                     pageIndicator.textContent = `${pageNum} / ${pdfDoc.numPages}`;
@@ -105,22 +112,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let targetPage = currentPageNum;
 
-        // Check which key was pressed
         if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'ArrowRight') {
-            e.preventDefault(); // Prevent default browser scroll
+            e.preventDefault();
             if (targetPage < pdfDoc.numPages) targetPage++;
         } else if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'ArrowLeft') {
             e.preventDefault();
             if (targetPage > 1) targetPage--;
         } else {
-            return; // Ignore other keys
+            return;
         }
 
-        // If target page is different from current, scroll to it
         if (targetPage !== currentPageNum) {
             const targetCanvas = document.querySelector(`#pdf-container canvas[data-page-num="${targetPage}"]`);
             if (targetCanvas) {
-                // Optimistic update so rapid key presses work smoothly
                 currentPageNum = targetPage; 
                 targetCanvas.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
@@ -128,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ------------------------------------------------
-       5. MAIN PDF RENDERING (High-DPI Fix)
+       5. MAIN PDF RENDERING (Enhanced Error Handling)
        ------------------------------------------------ */
     async function renderPDF() {
         try {
@@ -169,7 +173,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error("Error rendering PDF:", error);
-            container.innerHTML = "<div class='loading-spinner'><p style='color: red;'>Failed to load PDF. Check CORS settings or file URL.</p></div>";
+            // This will now display the exact reason on the screen why it failed
+            container.innerHTML = `
+                <div class='loading-spinner' style='color: red; max-width: 600px; text-align: center; padding: 24px;'>
+                    <h3 style='margin-bottom: 16px;'>Failed to load PDF</h3>
+                    <p style='font-weight: bold; margin-bottom: 8px;'>Reason:</p>
+                    <p style='font-size: 13px; background: rgba(255,0,0,0.1); padding: 12px; border-radius: 8px; margin-bottom: 16px; word-break: break-all;'>${error.message}</p>
+                    <p style='font-size: 13px;'>If it says "Failed to fetch", it means your storage bucket (Supabase/Cloudflare) is blocking this website via CORS policy. You must allow your domain in your storage settings.</p>
+                </div>
+            `;
         }
     }
 

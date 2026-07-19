@@ -11,11 +11,11 @@
 
     gtag('config', 'G-RT0GH6QY0J');
     </script>
-
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Grade 12 Science NEB Previous Year Questions. Find exam papers for Physics, Chemistry, Biology, Maths, and more.">
-    <title>Science Stream PYQs — NEB Archive</title>
+    <meta name="description" content="Grade 12 Mathematics NEB Previous Year Question Papers. View PDFs.">
+    <title>Mathematics PYQs — NEB Archive</title>
 
     <!-- Prevent FOUC (Flash of Unstyled Content) for Dark Mode -->
     <script>
@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Local stylesheet -->
-    <link rel="stylesheet" href="CSS/style(grade12_science).css">
+    <link rel="stylesheet" href="CSS/style(english12).css">
 </head>
 <body>
 
@@ -54,7 +54,6 @@
             </nav>
 
             <div class="nav-right-controls" style="display: flex; align-items: center;">
-                <!-- Dark Mode Toggle Button -->
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4"></circle>
@@ -68,7 +67,6 @@
                     </svg>
                 </button>
 
-                <!-- Hamburger menu (mobile) -->
                 <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" style="margin-left: 16px;">
                     <span></span>
                     <span></span>
@@ -81,97 +79,61 @@
     <!-- ==================== PAGE HEADER ==================== -->
     <section class="page-header">
         <div class="container">
-            <a href="grade12.html" class="back-link">← Grade 12 Streams</a>
-            <span class="badge">🔬 Science · Grade 12</span>
-            <h1 class="page-title">Science Stream PYQs</h1>
+            <a href="grade12_science.html" class="back-link">← Science Stream Subjects</a>
+            <span class="badge">📐 Mathematics · Grade 12</span>
+            <h1 class="page-title">Mathematics PYQs</h1>
             <p class="page-subtitle">
-                Select a subject to access its Previous Year Question Papers.
+                Select a year to filter. Click on a paper to view Questions and Solutions.
             </p>
         </div>
     </section>
 
-    <!-- ==================== SUBJECTS SELECTION SECTION ==================== -->
-    <section class="pyq-results-section">
+    <!-- ==================== CONTROLS SECTION ==================== -->
+    <section class="controls-section">
         <div class="container">
-            <div class="pyq-grid">
-                
-                <!-- English Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">Compulsory</span>
-                    </div>
-                    <div class="notes-icon">📖</div>
-                    <h3>English</h3>
-                    <p>NEB Grade 12 English board exam papers.</p>
-                    <a href="english12.html" class="card-link">View English PYQs →</a>
-                </article>
+            <!-- Replaced dropdown with clickable Year Pills -->
+            <div class="year-pills-wrapper">
+                <button class="year-pill active" data-year="All">All Years</button>
+                <button class="year-pill" data-year="2083">2083</button>
+                <button class="year-pill" data-year="2082">2082</button>
+                <button class="year-pill" data-year="2081">2081</button>
+            </div>
+        </div>
+    </section>
 
-                <!-- Mathematics Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">Core</span>
-                    </div>
-                    <div class="notes-icon">📐</div>
-                    <h3>Mathematics</h3>
-                    <p>Algebra, Calculus, Vectors, Probability, and more.</p>
-                    <a href="maths12.html" class="card-link">View Maths PYQs →</a>
-                </article>
+    <!-- ==================== RESULTS CONTAINER ==================== -->
+    <section class="list-results-section">
+        <div class="container">
+            
+            <!-- Section 1: Board Papers -->
+            <div class="paper-category">
+                <h2 class="category-title"><span class="cat-icon">🏛️</span> Board Papers</h2>
+                <div id="board-papers-container" class="paper-list">
+                    <!-- JS will inject items here -->
+                </div>
+            </div>
 
-                <!-- Nepali Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">Compulsory</span>
-                    </div>
-                    <div class="notes-icon">📕</div>
-                    <h3>Nepali</h3>
-                    <p>NEB Grade 12 Nepali board exam papers.</p>
-                    <a href="nepali12.html" class="card-link">View Nepali PYQs →</a>
-                </article>
+            <!-- Section 2: Supplementary Papers -->
+            <div class="paper-category">
+                <h2 class="category-title"><span class="cat-icon">📝</span> Supplementary Papers</h2>
+                <div id="supplementary-papers-container" class="paper-list">
+                    <!-- JS will inject items here -->
+                </div>
+            </div>
 
-                <!-- Physics Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">Core</span>
-                    </div>
-                    <div class="notes-icon">⚛️</div>
-                    <h3>Physics</h3>
-                    <p>Mechanics, Electricity, Magnetism, Optics, and more.</p>
-                    <a href="physics12.html" class="card-link">View Physics PYQs →</a>
-                </article>
+            <!-- Section 3: Practice Sets -->
+            <div class="paper-category">
+                <h2 class="category-title"><span class="cat-icon">🎯</span> Practice Sets</h2>
+                <div id="practice-papers-container" class="paper-list">
+                    <!-- JS will inject items here -->
+                </div>
+            </div>
 
-                <!-- Chemistry Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">Core</span>
-                    </div>
-                    <div class="notes-icon">🧪</div>
-                    <h3>Chemistry</h3>
-                    <p>Physical, Organic, and Inorganic Chemistry papers.</p>
-                    <a href="chemistry12.html" class="card-link">View Chemistry PYQs →</a>
-                </article>
-
-                <!-- Biology Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">Core</span>
-                    </div>
-                    <div class="notes-icon">🧬</div>
-                    <h3>Biology</h3>
-                    <p>Botany, Zoology, Genetics, and Human Physiology.</p>
-                    <a href="biology12.html" class="card-link">View Biology PYQs →</a>
-                </article>
-
-                <!-- Computer Science Card -->
-                <article class="pyq-card">
-                    <div class="card-meta-top">
-                        <span class="tag science">Optional</span>
-                    </div>
-                    <div class="notes-icon">💻</div>
-                    <h3>Computer Science</h3>
-                    <p>Programming, Databases, Networking, and more.</p>
-                    <a href="cs12.html" class="card-link">View CS PYQs →</a>
-                </article>
-
+            <!-- Empty State Message -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <div class="empty-icon">📄</div>
+                <h3>No papers found</h3>
+                <p>No papers are available for this year yet. Check back later!</p>
             </div>
         </div>
     </section>
@@ -197,7 +159,6 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="JS/grade12_science.js"></script>
+    <script src="JS/maths12.js"></script>
 </body>
 </html>
