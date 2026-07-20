@@ -47,7 +47,7 @@ let pdfDoc        = null;
 let currentPage   = 1;
 let totalPages    = 0;
 let scale         = 1.0;
-let fitMode       = 'page';
+let fitMode       = 'width';  // A5 portrait: fit-width gives a good default reading size
 let pageElements  = new Map();
 let renderPending = new Set();
 let intersectObs  = null;
@@ -61,9 +61,11 @@ const ZOOM_PRESETS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0];
 
 function initMeta() {
     sourceBadge.textContent   = MODE === 'solution' ? 'Solution' : SOURCE;
-    paperTitleNav.textContent = [TITLE, GRADE && `Grade ${GRADE}`, YEAR].filter(Boolean).join(' · ');
+    paperTitleNav.textContent = TITLE;
     document.title            = `${TITLE} — NEB Archive`;
-    // init lucide after DOM is ready
+    // reflect default fitMode in toolbar
+    fitPageBtn.classList.remove('active');
+    fitWidthBtn.classList.add('active');
     lucide.createIcons();
 }
 

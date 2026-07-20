@@ -204,7 +204,7 @@ function openViewer(action) {
     const title      = `${state.subject}${streamPart} — Grade ${state.grade} · ${yearPart}`;
     const source     = state.source === 'board' ? 'NEB Official' : 'School Paper';
 
-    const p = new URLSearchParams({ url: fileURL, title, grade: state.grade, year: yearPart, source, mode });
+    const p = new URLSearchParams({ url: fileURL, title, source, mode });
     window.location.href = `viewer.html?${p}`;
 }
 
@@ -219,7 +219,7 @@ function openViewerForCard(card, action) {
     const title      = `${state.subject}${streamPart} — Grade ${state.grade} · ${year}`;
     const source     = state.source === 'board' ? 'NEB Official' : 'School Paper';
 
-    const p = new URLSearchParams({ url: fileURL, title, grade: state.grade, year, source, mode });
+    const p = new URLSearchParams({ url: fileURL, title, source, mode });
     window.location.href = `viewer.html?${p}`;
 }
 
