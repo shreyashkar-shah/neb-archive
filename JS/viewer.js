@@ -51,6 +51,7 @@ let fitMode       = 'page';
 let pageElements  = new Map();
 let renderPending = new Set();
 let intersectObs  = null;
+let loadSuccess   = false;  // guard: once canvas shown, never show error
 
 const ZOOM_MIN     = 0.4;
 const ZOOM_MAX     = 4.0;
@@ -255,13 +256,18 @@ function snapToPreset(dir) {
 /* ── UI STATES ──────────────────────────────────────────── */
 
 function showCanvas() {
-    loaderShell.hidden  = true;
-    errorShell.hidden   = true;  // ensure error overlay never shows over a successful render
-    canvasScroll.hidden = false;
+    loadSuccess               = true;
+    loaderShell.hidden        = true;
+    loaderShell.style.display = 'none';
+    errorShell.hidden         = true;
+    errorShell.style.display  = 'none';
+    canvasScroll.hidden       = false;
+    canvasScroll.style.display = 'block';
     syncUI();
 }
 
 function showError() {
+    if (loadSuccess) return;   // PDF already rendered — don't cover it
     loaderShell.hidden = true;
     errorShell.hidden  = false;
     lucide.createIcons();
