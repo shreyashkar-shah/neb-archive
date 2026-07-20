@@ -10,9 +10,9 @@
     <script>
         (function () {
             try {
-                const t = localStorage.getItem('theme') || 'light';
+                const t = localStorage.getItem('theme') || 'dark';
                 document.documentElement.setAttribute('data-theme', t);
-            } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+            } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
         })();
     </script>
 
