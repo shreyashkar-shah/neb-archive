@@ -101,9 +101,9 @@ async function loadPDF() {
         totalPagesEl.textContent = totalPages;
         pageInput.max            = totalPages;
 
+        showCanvas();           // must be visible before buildSkeleton reads clientWidth
         await buildSkeleton();
         setProgress(100);
-        showCanvas();
         renderVisiblePages();
         setupObserver();
 
@@ -219,8 +219,9 @@ function syncUI() {
 /* ── ZOOM ───────────────────────────────────────────────── */
 
 function computeFitScale(vp, mode) {
-    const W = canvasScroll.clientWidth  - 48;
-    const H = canvasScroll.clientHeight - 64;
+    // fall back to window dimensions if container not yet visible
+    const W = (canvasScroll.clientWidth  || window.innerWidth)  - 48;
+    const H = (canvasScroll.clientHeight || window.innerHeight) - 64;
     if (mode === 'width') return Math.max(0.4, W / vp.width);
     if (mode === 'page')  return Math.max(0.4, Math.min(W / vp.width, H / vp.height));
     return scale;
