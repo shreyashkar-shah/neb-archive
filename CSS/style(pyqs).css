@@ -200,11 +200,11 @@ p { text-wrap: pretty; }
 .grade-pill[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); box-shadow: var(--glow); }
 
 /* Stream selector row (Grade 11 & 12 only) — reuses .grade-pills/.grade-pill styling */
-.stream-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+.stream-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
 .bar-label { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
 .bar-label svg { width: 14px; height: 14px; }
 
-.archive-layout { display: grid; grid-template-columns: 280px 1fr; gap: 32px; align-items: start; }
+.archive-layout { display: grid; grid-template-columns: 280px 1fr; gap: 32px; align-items: start; margin-top: 48px; }
 .subject-panel { position: sticky; top: 94px; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); }
 .panel-heading { display: flex; justify-content: space-between; align-items: center; }
 .panel-heading h2 { font-size: 1.5rem; font-weight: var(--heading-weight); }
@@ -343,6 +343,19 @@ p { text-wrap: pretty; }
     border-color: oklch(55% 0.10 60);
 }
 
+
+
+/* ================= PROVINCE ROW ================= */
+.province-row {
+    display: flex; align-items: center; gap: 14px;
+    margin: 16px 0 0;
+    padding: 14px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    flex-wrap: wrap;
+}
+.province-row .stream-pills { flex-wrap: wrap; }
 
 /* ================= STREAM BAR ================= */
 .stream-bar {

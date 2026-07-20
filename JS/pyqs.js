@@ -4,72 +4,35 @@
 
 /* ── DATA ───────────────────────────────────────────────── */
 
+// Grades 8 & 10: province-wise (SEE/BLE)
+// Grade 9 removed — no centralised authentic papers
+// Grades 11 & 12: stream-based board/school papers
+
+const PROVINCES = ['Koshi', 'Madhesh', 'Bagmati', 'Gandaki', 'Lumbini', 'Karnali', 'Sudurpashchim'];
+
 const BOARD_DATA = {
-    8:  { subjects: 
-            { English: ['2083','2082','2081'], 
-              Mathematics: ['2083','2082','2081'],
-              Nepali: ['2083','2082','2081'], 
-              Science: ['2083','2082','2081'], 
-              'Social Studies': ['2083','2082','2081'] } },
-
-    9:  { subjects: 
-            { English: ['2083','2082','2081'], 
-              Mathematics: ['2083','2082','2081'], 
-              Nepali: ['2083','2082','2081'],
-              Science: ['2083','2082','2081'], 
-              'Social Studies': ['2083','2082','2081'], 
-              'Computer Science': ['2083','2082','2081'],
-              Accounting: ['2083','2082','2081'] } },
-
-    10: { subjects: 
-            { English: ['2083','2082','2081'], 
-              Mathematics: ['2083','2082','2081'], 
-              Nepali: ['2083','2082','2081'],
-              Science: ['2083','2082','2081'], 
-              'Social Studies': ['2083','2082','2081'], 
-              'Computer Science': ['2083','2082','2081'],
-              Accounting: ['2083','2082','2081'] } },
-
+    10: {
+        province: true,
+        subjects: {
+            English:          ['2082','2081'],
+            Mathematics:      ['2082','2081'],
+            Nepali:           ['2082','2081'],
+            Science:          ['2082','2081'],
+            'Social Studies': ['2082','2081'],
+            'Computer Science':['2082','2081'],
+            Accounting:       ['2082','2081'],
+        }
+    },
     11: {
         streams: {
-            Science:    { subjects: 
-                            { English: ['2083','2082','2081'], 
-                              Mathematics: ['2083','2082','2081'], 
-                              Nepali: ['2083','2082','2081'], 
-                              Physics: ['2083','2082','2081'], 
-                              Chemistry: ['2083','2082','2081'], 
-                              Biology: ['2083','2082','2081'],
-                              'Computer Science': ['2083','2082','2081'] } },
-
-            Management: { subjects: 
-                            { English: ['2083','2082','2081'], 
-                              Mathematics: ['2083','2082','2081'], 
-                              Nepali: ['2083','2082','2081'], 
-                              'Social Studies': ['2083','2082','2081'],
-                              Economics: ['2083','2082','2081'], 
-                              Accounting: ['2083','2082','2081'], 
-                              'Business Studies': ['2083','2082','2081'] } }
+            Science:    { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], Physics: ['2082','2081'], Chemistry: ['2082','2081'], Biology: ['2082','2081'], 'Computer Science': ['2082','2081'] } },
+            Management: { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], 'Social Studies': ['2082','2081'], Economics: ['2082','2081'], Accounting: ['2082','2081'], 'Business Studies': ['2082','2081'] } }
         }
     },
     12: {
         streams: {
-            Science:    { subjects: 
-                            { English: ['2083','2082','2081'], 
-                              Mathematics: ['2083','2082','2081'], 
-                              Nepali: ['2083','2082','2081'], 
-                              Physics: ['2083','2082','2081'], 
-                              Chemistry: ['2083','2082','2081'], 
-                              Biology: ['2083','2082','2081'],
-                              'Computer Science': ['2083','2082','2081'] } },
-
-            Management: { subjects: 
-                            { English: ['2083','2082','2081'], 
-                              Mathematics: ['2083','2082','2081'], 
-                              Nepali: ['2083','2082','2081'], 
-                              'Social Studies': ['2083','2082','2081'],
-                              Economics: ['2083','2082','2081'], 
-                              Accounting: ['2083','2082','2081'], 
-                              'Business Studies': ['2083','2082','2081'] } }
+            Science:    { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], Physics: ['2082','2081'], Chemistry: ['2082','2081'], Biology: ['2082','2081'], 'Computer Science': ['2082','2081'] } },
+            Management: { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], 'Social Studies': ['2082','2081'], Economics: ['2082','2081'], Accounting: ['2082','2081'], 'Business Studies': ['2082','2081'] } }
         }
     }
 };
@@ -77,20 +40,20 @@ const BOARD_DATA = {
 const SCHOOL_DATA = {
     11: {
         streams: {
-            Science:    { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], Physics: ['2083','2082','2081'], Chemistry: ['2083','2082','2081'], Biology: ['2083','2082','2081'], 'Computer Science': ['2083','2082','2081'] } },
-            Management: { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], 'Social Studies': ['2083','2082','2081'], Economics: ['2083','2082','2081'], Accounting: ['2083','2082','2081'], 'Business Studies': ['2083','2082','2081'] } }
+            Science:    { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], Physics: ['2082','2081'], Chemistry: ['2082','2081'], Biology: ['2082','2081'], 'Computer Science': ['2082','2081'] } },
+            Management: { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], 'Social Studies': ['2082','2081'], Economics: ['2082','2081'], Accounting: ['2082','2081'], 'Business Studies': ['2082','2081'] } }
         }
     },
     12: {
         streams: {
-            Science:    { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], Physics: ['2083','2082','2081'], Chemistry: ['2083','2082','2081'], Biology: ['2083','2082','2081'], 'Computer Science': ['2083','2082','2081'] } },
-            Management: { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], 'Social Studies': ['2083','2082','2081'], Economics: ['2083','2082','2081'], Accounting: ['2083','2082','2081'], 'Business Studies': ['2083','2082','2081'] } }
+            Science:    { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], Physics: ['2082','2081'], Chemistry: ['2082','2081'], Biology: ['2082','2081'], 'Computer Science': ['2082','2081'] } },
+            Management: { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], 'Social Studies': ['2082','2081'], Economics: ['2082','2081'], Accounting: ['2082','2081'], 'Business Studies': ['2082','2081'] } }
         }
     }
 };
 
 /* ── SUPABASE CONFIG ────────────────────────────────────── */
-// BUG FIX: was set to the dashboard URL — must be your project's API base URL
+
 const SUPABASE_URL   = 'https://cqmqxazynzmkoahuppnu.supabase.co';
 const STORAGE_BUCKET = 'pyqs';
 
@@ -98,37 +61,35 @@ function slug(s) {
     return s.toLowerCase().replace(/\s+/g, '-');
 }
 
-function getPaperPath(source, grade, stream, subject, year, mode) {
-    // mode: 'paper' | 'solution'
+function getPaperPath(source, grade, stream, subject, year, mode, province) {
     const suffix = mode === 'solution' ? '-solution' : '';
     const file   = `${year}${suffix}.pdf`;
 
     if (source === 'board') {
         if (['11','12'].includes(String(grade))) {
+            // board/11/science/physics/2082.pdf
             return `board/${grade}/${slug(stream)}/${slug(subject)}/${file}`;
         }
-        return `board/${grade}/${slug(subject)}/${file}`;
+        // Province-wise: board/10/bagmati/english/2082.pdf
+        return `board/${grade}/${slug(province)}/${slug(subject)}/${file}`;
     }
-    // school
-    if (['11','12'].includes(String(grade))) {
-        return `school/${grade}/${slug(stream)}/${slug(subject)}/${file}`;
-    }
-    return `school/${grade}/${slug(subject)}/${file}`;
+    // school — always stream-based
+    return `school/${grade}/${slug(stream)}/${slug(subject)}/${file}`;
 }
 
 function getPaperURL(path) {
-    // BUG FIX: was double-building the path by appending /storage/v1/... onto the dashboard URL
     return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${path}`;
 }
 
 /* ── STATE ──────────────────────────────────────────────── */
 
 const state = {
-    source:  'board',
-    grade:   '8',
-    stream:  '',
-    subject: 'English',
-    year:    'all',
+    source:   'board',
+    grade:    '12',        // default to 12 — most demand
+    stream:   'Science',
+    subject:  'Physics',
+    province: 'Bagmati',   // default province for grade 8/10
+    year:     'all',
 };
 
 /* ── HELPERS ────────────────────────────────────────────── */
@@ -138,19 +99,23 @@ const icon = n => `<i data-lucide="${n}"></i>`;
 
 const subjectIcon = s =>
     s === 'Mathematics' || s === 'Business Mathematics' ? 'sigma' :
-    s === 'Physics'           ? 'atom' :
-    s === 'Chemistry'         ? 'flask-conical' :
-    s === 'Biology'           ? 'dna' :
-    s.includes('Computer')    ? 'monitor' :
-    s === 'Nepali'            ? 'book' :
-    s === 'Social Studies'    ? 'globe' :
-    s === 'Accounting'        ? 'calculator' :
-    s === 'Economics'         ? 'trending-up' :
-    s === 'Business Studies'  ? 'briefcase' :
+    s === 'Physics'            ? 'atom' :
+    s === 'Chemistry'          ? 'flask-conical' :
+    s === 'Biology'            ? 'dna' :
+    s.includes('Computer')     ? 'monitor' :
+    s === 'Nepali'             ? 'book' :
+    s === 'Social Studies'     ? 'globe' :
+    s === 'Accounting'         ? 'calculator' :
+    s === 'Economics'          ? 'trending-up' :
+    s === 'Business Studies'   ? 'briefcase' :
     'book-open';
 
 function gradeNode() {
     return state.source === 'board' ? BOARD_DATA[state.grade] : SCHOOL_DATA[state.grade];
+}
+
+function isProvinceGrade() {
+    return state.source === 'board' && !!gradeNode()?.province;
 }
 
 function hasStreams() {
@@ -177,7 +142,7 @@ function currentYears() {
 
 function ensureValidGrade() {
     const grades = availableGrades();
-    if (!grades.includes(String(state.grade))) state.grade = grades[0];
+    if (!grades.includes(String(state.grade))) state.grade = grades[grades.length - 1]; // default to last (12)
 }
 
 function ensureValidStream() {
@@ -191,32 +156,17 @@ function ensureValidSubject() {
     if (!subs.includes(state.subject)) state.subject = subs[0] || '';
 }
 
-/* ── NAVIGATE TO VIEWER ─────────────────────────────────── */
+/* ── OPEN VIEWER ────────────────────────────────────────── */
 
-function openViewer(action) {
-    const mode    = action === 'solution' ? 'solution' : 'paper';
-    const path    = getPaperPath(state.source, state.grade, state.stream, state.subject, state.year === 'all' ? currentYears()[0] : state.year, mode);
-    const fileURL = getPaperURL(path);
-
-    // Build a human-readable title
-    const streamPart = state.stream ? ` (${state.stream})` : '';
-    const yearPart   = state.year === 'all' ? currentYears()[0] : state.year;
-    const title      = `${state.subject}${streamPart} — Grade ${state.grade} · ${yearPart}`;
-    const source     = state.source === 'board' ? 'NEB' : 'School Paper';
-
-    const p = new URLSearchParams({ url: fileURL, title, source, mode });
-    window.location.href = `viewer.html?${p}`;
-}
-
-// Called when a specific card's button is clicked — reads year from the card
 function openViewerForCard(card, action) {
     const year    = card.dataset.year;
     const mode    = action === 'solution' ? 'solution' : 'paper';
-    const path    = getPaperPath(state.source, state.grade, state.stream, state.subject, year, mode);
+    const path    = getPaperPath(state.source, state.grade, state.stream, state.subject, year, mode, state.province);
     const fileURL = getPaperURL(path);
 
     const streamPart = state.stream ? ` (${state.stream})` : '';
-    const title      = `${state.subject}${streamPart} — Grade ${state.grade} · ${year}`;
+    const provPart   = isProvinceGrade() ? ` · ${state.province}` : '';
+    const title      = `${state.subject}${streamPart} — Grade ${state.grade}${provPart} · ${year}`;
     const source     = state.source === 'board' ? 'NEB' : 'School Paper';
 
     const p = new URLSearchParams({ url: fileURL, title, source, mode });
@@ -229,10 +179,11 @@ function renderStats() {
     const subs     = currentSubjects();
     const subNames = Object.keys(subs);
     const streamPart = state.stream ? ` · ${state.stream}` : '';
-    $('#statsLabel').textContent = `Grade ${state.grade}${streamPart} · ${state.source === 'board' ? 'Board' : 'School'}`;
+    const provPart   = isProvinceGrade() ? ` · ${state.province}` : '';
+    $('#statsLabel').textContent = `Grade ${state.grade}${streamPart}${provPart}`;
 
     if (!subNames.length) {
-        $('#statsGrid').innerHTML  = `<div class="stats-empty">No data available</div>`;
+        $('#statsGrid').innerHTML   = `<div class="stats-empty">No data available</div>`;
         $('#statsFooter').innerHTML = '';
         return;
     }
@@ -257,8 +208,9 @@ function renderStats() {
 
 function renderGrades() {
     const grades = availableGrades();
+    const labels  = { 8: 'Grade 8 (BLE)', 10: 'Grade 10 (SEE)', 11: 'Grade 11', 12: 'Grade 12' };
     $('#gradePills').innerHTML = grades.map(g =>
-        `<button class="grade-pill" role="tab" aria-selected="${String(g) === String(state.grade)}" data-grade="${g}">Grade ${g}</button>`
+        `<button class="grade-pill" role="tab" aria-selected="${String(g) === String(state.grade)}" data-grade="${g}">${labels[g] || 'Grade ' + g}</button>`
     ).join('');
 
     $('#gradeCaption').textContent = state.source === 'board'
@@ -277,7 +229,7 @@ function renderStreamBar() {
     const streams = availableStreams();
 
     const bar = document.createElement('div');
-    bar.id = 'streamBar';
+    bar.id        = 'streamBar';
     bar.className = 'stream-bar';
     bar.innerHTML = `
         <span class="stream-bar-label">Stream</span>
@@ -292,10 +244,39 @@ function renderStreamBar() {
     lucide.createIcons();
 }
 
+/* ── PROVINCE ROW (grade 8 & 10 only) ───────────────────── */
+
+function renderProvinceRow() {
+    const existing = document.getElementById('provinceRow');
+    if (existing) existing.remove();
+    if (!isProvinceGrade()) return;
+
+    const row = document.createElement('div');
+    row.id        = 'provinceRow';
+    row.className = 'province-row';
+    row.innerHTML = `
+        <span class="stream-bar-label"><i data-lucide="map-pin"></i> Province</span>
+        <div class="stream-pills">
+            ${PROVINCES.map(pv => `
+                <button class="stream-pill" aria-selected="${pv === state.province}" data-province="${pv}">${pv}</button>
+            `).join('')}
+        </div>`;
+
+    // insert after stream bar if present, else after grade bar
+    const after = document.getElementById('streamBar') || document.querySelector('.grade-bar');
+    after.after(row);
+    lucide.createIcons();
+}
+
 /* ── LEFT PANEL ──────────────────────────────────────────── */
 
 function renderLeftPanel() {
-    $('#subjectHeading').textContent = hasStreams() ? state.stream || 'Subjects' : `Grade ${state.grade}`;
+    let heading;
+    if (hasStreams())         heading = state.stream || 'Subjects';
+    else if (isProvinceGrade()) heading = `Grade ${state.grade}`;
+    else                      heading = `Grade ${state.grade}`;
+
+    $('#subjectHeading').textContent = heading;
     $('#subjectNote').textContent    = state.source === 'school'
         ? 'Select a subject to filter school papers.'
         : 'Select a subject to filter papers.';
@@ -326,8 +307,9 @@ function renderPapers() {
     const list = state.year === 'all' ? yrs : yrs.filter(y => y === state.year);
 
     const streamPart  = state.stream ? ` (${state.stream})` : '';
-    const sourceLabel = state.source === 'board' ? 'Board Examination' : 'School Papers';
-    const eyebrow     = `Grade ${state.grade}${streamPart} / ${state.subject}`;
+    const provPart    = isProvinceGrade() ? ` · ${state.province}` : '';
+    const sourceLabel = state.source === 'board' ? 'NEB' : 'School Paper';
+    const eyebrow     = `Grade ${state.grade}${streamPart}${provPart} / ${state.subject}`;
 
     $('#contentEyebrow').textContent = eyebrow;
     $('#paperHeading').textContent   = state.subject;
@@ -339,11 +321,11 @@ function renderPapers() {
             <div>
                 <div class="paper-title">${state.subject} — ${sourceLabel}</div>
                 <div class="paper-meta">
-                    <span>Grade ${state.grade}${state.stream ? ' · ' + state.stream : ''}</span>
+                    <span>Grade ${state.grade}${state.stream ? ' · ' + state.stream : ''}${isProvinceGrade() ? ' · ' + state.province : ''}</span>
                     <span>·</span>
                     <span class="paper-year">${y}</span>
                     <span>·</span>
-                    <span>${state.source === 'board' ? 'NEB' : 'School Paper'}</span>
+                    <span>${sourceLabel}</span>
                 </div>
             </div>
             <div class="paper-actions">
@@ -355,7 +337,7 @@ function renderPapers() {
         <div class="empty-state">
             ${icon('file-search')}
             <strong>No papers found</strong>
-            <span>Try a different year, subject, or grade.</span>
+            <span>Try a different year, subject${isProvinceGrade() ? ', or province' : ', or grade'}.</span>
         </div>`;
 }
 
@@ -364,6 +346,7 @@ function renderPapers() {
 function render() {
     renderGrades();
     renderStreamBar();
+    renderProvinceRow();
     renderLeftPanel();
     renderYears();
     renderPapers();
@@ -399,22 +382,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /* Single delegated click handler — strict priority order, always early-return */
+    /* Delegated click handler */
     document.addEventListener('click', e => {
 
-        // ── 1. Paper action buttons (View / Solution) ──────────
-        // BUG FIX: changed from <a href="#viewer"> to <button data-action>
-        // so there's no anchor navigation competing with our handler.
-        // Also fixed: handler now returns immediately, so grade/subject/year
-        // selectors below never fire when a card button is clicked.
+        // 1. Paper action buttons
         const actionBtn = e.target.closest('[data-action]');
         if (actionBtn) {
             const card = actionBtn.closest('[data-year]');
             if (card) openViewerForCard(card, actionBtn.dataset.action);
-            return; // always stop here
+            return;
         }
 
-        // ── 2. Grade pills ─────────────────────────────────────
+        // 2. Grade pills
         const gradeEl = e.target.closest('[data-grade]');
         if (gradeEl) {
             state.grade = gradeEl.dataset.grade;
@@ -425,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // ── 3. Stream pills ────────────────────────────────────
+        // 3. Stream pills
         const streamEl = e.target.closest('[data-stream]');
         if (streamEl) {
             state.stream = streamEl.dataset.stream;
@@ -435,7 +414,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // ── 4. Subject buttons ─────────────────────────────────
+        // 4. Province pills
+        const provEl = e.target.closest('[data-province]');
+        if (provEl) {
+            state.province = provEl.dataset.province;
+            state.year     = 'all';
+            renderProvinceRow();
+            renderYears();
+            renderPapers();
+            renderStats();
+            lucide.createIcons();
+            return;
+        }
+
+        // 5. Subject buttons
         const subjectEl = e.target.closest('[data-subject]');
         if (subjectEl) {
             state.subject = subjectEl.dataset.subject;
@@ -448,9 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // ── 5. Year chips ──────────────────────────────────────
+        // 6. Year chips
         const yearEl = e.target.closest('[data-year]');
-        // Guard: only match year-chip buttons, not paper cards which also have data-year
         if (yearEl && yearEl.classList.contains('year-chip')) {
             state.year = yearEl.dataset.year;
             renderYears();
