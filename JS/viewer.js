@@ -1,254 +1,376 @@
-/* ====================================================
-   NEB Archive — PDF Viewer Logic
-   Uses PDF.js to render PDFs natively in the browser
-   ==================================================== */
+/* ============================================================
+   NEB Archive — PDF Viewer
+   viewer.js is loaded as type="module" so ES imports work.
+   lucide is loaded as a UMD global in viewer.html before this.
+   ============================================================ */
 
-document.addEventListener('DOMContentLoaded', () => {
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs';
 
-    /* ------------------------------------------------
-       1. DARK MODE, BACK BTN, & SIDEBAR TOGGLE
-       ------------------------------------------------ */
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
-    }
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
 
-    const backBtn = document.getElementById('viewer-back-btn');
-    if (backBtn) {
-        backBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = 'index.html'; 
-            }
-        });
-    }
+/* ── URL PARAMS ─────────────────────────────────────────── */
 
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const sidebar = document.getElementById('pdf-sidebar');
-    const pageIndicator = document.getElementById('page-indicator');
-    
-    if (window.innerWidth <= 768) {
-        sidebar.classList.add('hidden');
-    }
+const p       = new URLSearchParams(location.search);
+const PDF_URL = p.get('url')    || '';
+const TITLE   = p.get('title')  || 'Question Paper';
+const YEAR    = p.get('year')   || '';
+const GRADE   = p.get('grade')  || '';
+const SOURCE  = p.get('source') || 'NEB Official';
+const MODE    = p.get('mode')   || 'paper';
 
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
-        });
-    }
+/* ── DOM ────────────────────────────────────────────────── */
 
-    /* ------------------------------------------------
-       2. URL PARAMS & PDF.JS INITIALIZATION
-       ------------------------------------------------ */
-    const urlParams = new URLSearchParams(window.location.search);
-    const fileUrl = urlParams.get('file');
-    const fileTitle = urlParams.get('title') || "Document";
+const navbar        = document.getElementById('navbar');
+const paperTitleNav = document.getElementById('paperTitleNav');
+const sourceBadge   = document.getElementById('sourceBadge');
+const loaderShell   = document.getElementById('loaderShell');
+const errorShell    = document.getElementById('errorShell');
+const canvasScroll  = document.getElementById('canvasScroll');
+const pagesWrap     = document.getElementById('pagesWrap');
+const progressBar   = document.getElementById('progressBar');
+const prevBtn       = document.getElementById('prevPage');
+const nextBtn       = document.getElementById('nextPage');
+const pageInput     = document.getElementById('pageInput');
+const totalPagesEl  = document.getElementById('totalPages');
+const zoomOutBtn    = document.getElementById('zoomOut');
+const zoomInBtn     = document.getElementById('zoomIn');
+const zoomDisplay   = document.getElementById('zoomDisplay');
+const fitPageBtn    = document.getElementById('fitPage');
+const fitWidthBtn   = document.getElementById('fitWidth');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+const themeToggle   = document.getElementById('themeToggle');
 
-    const pdfTitleElem = document.getElementById('pdf-title');
-    if (pdfTitleElem) {
-        pdfTitleElem.textContent = fileTitle;
-    }
+/* ── STATE ──────────────────────────────────────────────── */
 
-    const container = document.getElementById('pdf-container');
+let pdfDoc        = null;
+let currentPage   = 1;
+let totalPages    = 0;
+let scale         = 1.0;
+let fitMode       = 'page';
+let pageElements  = new Map();
+let renderPending = new Set();
+let intersectObs  = null;
 
-    if (!fileUrl) {
-        container.innerHTML = "<div class='loading-spinner'><p style='color: red;'>Error: No file specified.</p></div>";
+const ZOOM_MIN     = 0.4;
+const ZOOM_MAX     = 4.0;
+const ZOOM_PRESETS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0];
+
+/* ── META ───────────────────────────────────────────────── */
+
+function initMeta() {
+    sourceBadge.textContent   = MODE === 'solution' ? 'Solution' : SOURCE;
+    paperTitleNav.textContent = [TITLE, GRADE && `Grade ${GRADE}`, YEAR].filter(Boolean).join(' · ');
+    document.title            = `${TITLE} — NEB Archive`;
+    // init lucide after DOM is ready
+    lucide.createIcons();
+}
+
+/* ── PROGRESS ───────────────────────────────────────────── */
+
+function setProgress(pct) {
+    progressBar.style.width = pct + '%';
+    progressBar.setAttribute('aria-valuenow', pct);
+    if (pct >= 100) setTimeout(() => progressBar.classList.add('done'), 400);
+}
+
+/* ── LOAD ───────────────────────────────────────────────── */
+
+async function loadPDF() {
+    if (!PDF_URL) {
+        showPlaceholder('No paper selected', 'Open this viewer from the PYQs page by clicking "View" on a paper.');
         return;
     }
 
-    // Show exactly what URL we are trying to fetch (useful for debugging)
-    container.innerHTML = `<div class='loading-spinner'><div class='spinner'></div><p>Fetching document...</p></div>`;
-
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-    const thumbnailList = document.getElementById('thumbnail-list');
-    
-    let currentScale = 1.0; 
-    let pdfDoc = null;
-    let currentPageNum = 1;
-
-    /* ------------------------------------------------
-       3. INTERSECTION OBSERVER (Track active page)
-       ------------------------------------------------ */
-    const observerOptions = {
-        root: container,
-        rootMargin: '0px',
-        threshold: 0.5 
-    };
-
-    const pageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const pageNum = parseInt(entry.target.dataset.pageNum);
-                currentPageNum = pageNum;
-                
-                if (pdfDoc) {
-                    pageIndicator.textContent = `${pageNum} / ${pdfDoc.numPages}`;
-                }
-                
-                document.querySelectorAll('.thumbnail-item').forEach(t => t.classList.remove('active'));
-                
-                const activeThumb = document.querySelector(`.thumbnail-item[data-page-num="${pageNum}"]`);
-                if (activeThumb) {
-                    activeThumb.classList.add('active');
-                    activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }
-            }
+    try {
+        const task = pdfjsLib.getDocument({
+            url: PDF_URL,
+            cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/cmaps/',
+            cMapPacked: true,
+            withCredentials: false,
         });
-    }, observerOptions);
 
-    /* ------------------------------------------------
-       4. KEYBOARD NAVIGATION (Up/Down, Left/Right, PgUp/PgDn)
-       ------------------------------------------------ */
-    document.addEventListener('keydown', (e) => {
-        if (!pdfDoc) return;
+        task.onProgress = ({ loaded, total }) => {
+            if (total) setProgress(Math.round(loaded / total * 85));
+        };
 
-        let targetPage = currentPageNum;
+        pdfDoc     = await task.promise;
+        totalPages = pdfDoc.numPages;
+        setProgress(90);
 
-        if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'ArrowRight') {
-            e.preventDefault();
-            if (targetPage < pdfDoc.numPages) targetPage++;
-        } else if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'ArrowLeft') {
-            e.preventDefault();
-            if (targetPage > 1) targetPage--;
-        } else {
-            return;
-        }
+        totalPagesEl.textContent = totalPages;
+        pageInput.max            = totalPages;
 
-        if (targetPage !== currentPageNum) {
-            const targetCanvas = document.querySelector(`#pdf-container canvas[data-page-num="${targetPage}"]`);
-            if (targetCanvas) {
-                currentPageNum = targetPage; 
-                targetCanvas.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-    });
+        await buildSkeleton();
+        setProgress(100);
+        showCanvas();
+        renderVisiblePages();
+        setupObserver();
 
-    /* ------------------------------------------------
-       5. MAIN PDF RENDERING (Enhanced Error Handling)
-       ------------------------------------------------ */
-    async function renderPDF() {
-        try {
-            if (!pdfDoc) {
-                const loadingTask = pdfjsLib.getDocument(fileUrl);
-                pdfDoc = await loadingTask.promise;
-                pageIndicator.textContent = `1 / ${pdfDoc.numPages}`;
-                await renderThumbnails(); 
-            }
-            
-            container.innerHTML = ''; 
-            const outputScale = window.devicePixelRatio || 1;
-
-            for (let i = 1; i <= pdfDoc.numPages; i++) {
-                const page = await pdfDoc.getPage(i);
-                const viewport = page.getViewport({ scale: currentScale * 1.5 });
-                
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-
-                canvas.width = Math.floor(viewport.width * outputScale);
-                canvas.height = Math.floor(viewport.height * outputScale);
-                canvas.style.width = Math.floor(viewport.width) + 'px';
-                canvas.style.height = Math.floor(viewport.height) + 'px';
-                canvas.dataset.pageNum = i; 
-
-                container.appendChild(canvas);
-
-                const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
-
-                await page.render({
-                    canvasContext: context,
-                    viewport: viewport,
-                    transform: transform
-                }).promise;
-
-                pageObserver.observe(canvas);
-            }
-        } catch (error) {
-            console.error("Error rendering PDF:", error);
-            // This will now display the exact reason on the screen why it failed
-            container.innerHTML = `
-                <div class='loading-spinner' style='color: red; max-width: 600px; text-align: center; padding: 24px;'>
-                    <h3 style='margin-bottom: 16px;'>Failed to load PDF</h3>
-                    <p style='font-weight: bold; margin-bottom: 8px;'>Reason:</p>
-                    <p style='font-size: 13px; background: rgba(255,0,0,0.1); padding: 12px; border-radius: 8px; margin-bottom: 16px; word-break: break-all;'>${error.message}</p>
-                    <p style='font-size: 13px;'>If it says "Failed to fetch", it means your storage bucket (Supabase/Cloudflare) is blocking this website via CORS policy. You must allow your domain in your storage settings.</p>
-                </div>
-            `;
-        }
+    } catch (err) {
+        console.error('[viewer] load error:', err);
+        showError();
     }
+}
 
-    /* ------------------------------------------------
-       6. THUMBNAIL RENDERING
-       ------------------------------------------------ */
-    async function renderThumbnails() {
-        thumbnailList.innerHTML = ''; 
-        const thumbScale = 0.3; 
+/* ── SKELETON ───────────────────────────────────────────── */
 
-        for (let i = 1; i <= pdfDoc.numPages; i++) {
-            const page = await pdfDoc.getPage(i);
-            const viewport = page.getViewport({ scale: thumbScale });
+async function buildSkeleton() {
+    const first  = await pdfDoc.getPage(1);
+    const baseVp = first.getViewport({ scale: 1 });
+    scale        = computeFitScale(baseVp, fitMode);
+    updateZoomDisplay();
 
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
+    for (let i = 1; i <= totalPages; i++) {
+        const page = await pdfDoc.getPage(i);
+        const vp   = page.getViewport({ scale });
 
-            await page.render({
-                canvasContext: context,
-                viewport: viewport
-            }).promise;
+        const wrap         = document.createElement('div');
+        wrap.className     = 'pdf-page';
+        wrap.dataset.page  = i;
+        wrap.style.width   = vp.width  + 'px';
+        wrap.style.height  = vp.height + 'px';
 
-            const thumbItem = document.createElement('div');
-            thumbItem.classList.add('thumbnail-item');
-            thumbItem.dataset.pageNum = i;
-            thumbItem.appendChild(canvas);
+        const canvas         = document.createElement('canvas');
+        canvas.width         = Math.floor(vp.width  * devicePixelRatio);
+        canvas.height        = Math.floor(vp.height * devicePixelRatio);
+        canvas.style.width   = vp.width  + 'px';
+        canvas.style.height  = vp.height + 'px';
 
-            const pageNumLabel = document.createElement('div');
-            pageNumLabel.classList.add('thumbnail-page-num');
-            pageNumLabel.textContent = `Page ${i}`;
-            thumbItem.appendChild(pageNumLabel);
+        const lbl         = document.createElement('span');
+        lbl.className     = 'page-label';
+        lbl.textContent   = `${i} / ${totalPages}`;
 
-            thumbItem.addEventListener('click', () => {
-                const mainCanvas = document.querySelector(`#pdf-container canvas[data-page-num="${i}"]`);
-                if (mainCanvas) {
-                    mainCanvas.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    
-                    if (window.innerWidth <= 768) {
-                        sidebar.classList.add('hidden');
-                    }
-                }
-            });
-
-            thumbnailList.appendChild(thumbItem);
-        }
+        wrap.append(canvas, lbl);
+        pagesWrap.appendChild(wrap);
+        pageElements.set(i, { wrap, canvas, page, rendered: false });
     }
+}
 
-    /* ------------------------------------------------
-       7. ZOOM CONTROLS
-       ------------------------------------------------ */
-    const zoomInBtn = document.getElementById('zoom-in');
-    const zoomOutBtn = document.getElementById('zoom-out');
-    const zoomLevelSpan = document.getElementById('zoom-level');
+/* ── RENDER ─────────────────────────────────────────────── */
 
-    function updateZoom(newScale) {
-        currentScale = newScale;
-        currentScale = Math.max(0.5, Math.min(currentScale, 3.0)); 
-        zoomLevelSpan.textContent = Math.round(currentScale * 100) + "%";
-        renderPDF(); 
+async function renderPage(n) {
+    const e = pageElements.get(n);
+    if (!e || e.rendered || renderPending.has(n)) return;
+    renderPending.add(n);
+    try {
+        const vp  = e.page.getViewport({ scale });
+        const ctx = e.canvas.getContext('2d');
+        e.canvas.width        = Math.floor(vp.width  * devicePixelRatio);
+        e.canvas.height       = Math.floor(vp.height * devicePixelRatio);
+        e.canvas.style.width  = vp.width  + 'px';
+        e.canvas.style.height = vp.height + 'px';
+        e.wrap.style.width    = vp.width  + 'px';
+        e.wrap.style.height   = vp.height + 'px';
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        await e.page.render({ canvasContext: ctx, viewport: vp }).promise;
+        e.rendered = true;
+    } catch (_) {
+        // cancelled — will retry on next scroll/zoom
+    } finally {
+        renderPending.delete(n);
     }
+}
 
-    zoomInBtn.addEventListener('click', () => updateZoom(currentScale + 0.2));
-    zoomOutBtn.addEventListener('click', () => updateZoom(currentScale - 0.2));
+function renderVisiblePages() {
+    const buf   = 2;
+    const start = Math.max(1, currentPage - buf);
+    const end   = Math.min(totalPages, currentPage + buf);
+    for (let i = start; i <= end; i++) renderPage(i);
+}
 
-    // Initial Load
-    renderPDF();
+async function reRenderAll() {
+    for (const [, e] of pageElements) e.rendered = false;
+    renderPending.clear();
+    renderVisiblePages();
+}
 
+/* ── INTERSECTION OBSERVER ──────────────────────────────── */
+
+function setupObserver() {
+    if (intersectObs) intersectObs.disconnect();
+    intersectObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const n = parseInt(entry.target.dataset.page, 10);
+            renderPage(n);
+            if (entry.intersectionRatio > 0.5) { currentPage = n; syncUI(); }
+        });
+    }, { root: canvasScroll, threshold: [0, 0.5, 1], rootMargin: '120px 0px 120px 0px' });
+
+    for (const [, { wrap }] of pageElements) intersectObs.observe(wrap);
+}
+
+/* ── NAVIGATION ─────────────────────────────────────────── */
+
+function goToPage(n, smooth = true) {
+    currentPage = Math.max(1, Math.min(totalPages, n));
+    syncUI();
+    pageElements.get(currentPage)?.wrap.scrollIntoView({ behavior: smooth ? 'smooth' : 'instant', block: 'start' });
+    renderVisiblePages();
+}
+
+function syncUI() {
+    pageInput.value  = currentPage;
+    prevBtn.disabled = currentPage <= 1;
+    nextBtn.disabled = currentPage >= totalPages;
+}
+
+/* ── ZOOM ───────────────────────────────────────────────── */
+
+function computeFitScale(vp, mode) {
+    const W = canvasScroll.clientWidth  - 48;
+    const H = canvasScroll.clientHeight - 64;
+    if (mode === 'width') return Math.max(0.4, W / vp.width);
+    if (mode === 'page')  return Math.max(0.4, Math.min(W / vp.width, H / vp.height));
+    return scale;
+}
+
+async function applyZoom(newScale, newFitMode = 'custom') {
+    scale   = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, newScale));
+    fitMode = newFitMode;
+    updateZoomDisplay();
+    fitPageBtn.classList.toggle('active',  fitMode === 'page');
+    fitWidthBtn.classList.toggle('active', fitMode === 'width');
+    await reRenderAll();
+}
+
+async function applyFitMode(mode) {
+    if (!pdfDoc) return;
+    const pg = pageElements.get(1)?.page || await pdfDoc.getPage(1);
+    const vp = pg.getViewport({ scale: 1 });
+    await applyZoom(computeFitScale(vp, mode), mode);
+}
+
+function updateZoomDisplay() {
+    zoomDisplay.textContent = Math.round(scale * 100) + '%';
+}
+
+function snapToPreset(dir) {
+    if (dir > 0) return ZOOM_PRESETS.find(z => z > scale + 0.01) ?? Math.min(ZOOM_MAX, scale + 0.25);
+    return [...ZOOM_PRESETS].reverse().find(z => z < scale - 0.01) ?? Math.max(ZOOM_MIN, scale - 0.25);
+}
+
+/* ── UI STATES ──────────────────────────────────────────── */
+
+function showCanvas() {
+    loaderShell.hidden  = true;
+    canvasScroll.hidden = false;
+    syncUI();
+}
+
+function showError() {
+    loaderShell.hidden = true;
+    errorShell.hidden  = false;
+    lucide.createIcons();
+}
+
+function showPlaceholder(heading, body) {
+    loaderShell.hidden = true;
+    errorShell.hidden  = false;
+    errorShell.querySelector('strong').textContent = heading;
+    errorShell.querySelector('p').textContent      = body;
+    lucide.createIcons();
+}
+
+/* ── FULLSCREEN ─────────────────────────────────────────── */
+
+function toggleFullscreen() {
+    document.fullscreenElement
+        ? document.exitFullscreen()
+        : document.documentElement.requestFullscreen?.();
+}
+
+document.addEventListener('fullscreenchange', () => {
+    const isFS = !!document.fullscreenElement;
+    const ic   = fullscreenBtn.querySelector('i');
+    if (ic) { ic.setAttribute('data-lucide', isFS ? 'minimize-2' : 'maximize-2'); lucide.createIcons(); }
+    if (fitMode !== 'custom') applyFitMode(fitMode);
 });
+
+/* ── TOAST ──────────────────────────────────────────────── */
+
+let toastTimer;
+function showToast(msg) {
+    let t = document.querySelector('.shortcut-toast');
+    if (!t) { t = Object.assign(document.createElement('div'), { className: 'shortcut-toast' }); document.body.appendChild(t); }
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+/* ── TOUCH PINCH ────────────────────────────────────────── */
+
+let lastDist = null;
+canvasScroll.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+}, { passive: true });
+canvasScroll.addEventListener('touchmove', e => {
+    if (e.touches.length !== 2 || !lastDist) return;
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    applyZoom(scale * (d / lastDist));
+    lastDist = d;
+}, { passive: true });
+canvasScroll.addEventListener('touchend', () => lastDist = null, { passive: true });
+
+/* ── CTRL+WHEEL ─────────────────────────────────────────── */
+
+canvasScroll.addEventListener('wheel', e => {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    applyZoom(snapToPreset(e.deltaY < 0 ? 1 : -1));
+}, { passive: false });
+
+/* ── KEYBOARD ───────────────────────────────────────────── */
+
+document.addEventListener('keydown', e => {
+    if (/INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    const ctrl = e.ctrlKey || e.metaKey;
+    switch (e.key) {
+        case 'ArrowRight': case 'ArrowDown': case 'PageDown': e.preventDefault(); goToPage(currentPage + 1); break;
+        case 'ArrowLeft':  case 'ArrowUp':   case 'PageUp':   e.preventDefault(); goToPage(currentPage - 1); break;
+        case 'Home': e.preventDefault(); goToPage(1); break;
+        case 'End':  e.preventDefault(); goToPage(totalPages); break;
+        case '+': case '=': if (ctrl) { e.preventDefault(); applyZoom(snapToPreset(1)); } break;
+        case '-':           if (ctrl) { e.preventDefault(); applyZoom(snapToPreset(-1)); } break;
+        case '0': if (ctrl) { e.preventDefault(); applyFitMode('page'); showToast('Fit page'); } break;
+        case 'f': case 'F': if (!ctrl) { toggleFullscreen(); showToast('Fullscreen'); } break;
+        case 'Escape': if (document.fullscreenElement) document.exitFullscreen(); break;
+    }
+});
+
+/* ── RESIZE ─────────────────────────────────────────────── */
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { if (fitMode !== 'custom') applyFitMode(fitMode); }, 180);
+});
+
+/* ── EVENTS ─────────────────────────────────────────────── */
+
+prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
+nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
+pageInput.addEventListener('change', () => { const n = +pageInput.value; if (!isNaN(n)) goToPage(n); });
+pageInput.addEventListener('keydown', e => { if (e.key === 'Enter') { const n = +pageInput.value; if (!isNaN(n)) goToPage(n); } });
+zoomOutBtn.addEventListener('click',  () => applyZoom(snapToPreset(-1)));
+zoomInBtn.addEventListener('click',   () => applyZoom(snapToPreset(1)));
+zoomDisplay.addEventListener('click', () => applyFitMode('page'));
+fitPageBtn.addEventListener('click',  () => { applyFitMode('page');  showToast('Fit page'); });
+fitWidthBtn.addEventListener('click', () => { applyFitMode('width'); showToast('Fit width'); });
+fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+themeToggle.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch(_) {}
+});
+
+window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 4), { passive: true });
+pagesWrap.addEventListener('contextmenu', e => { if (e.target.tagName === 'CANVAS') e.preventDefault(); });
+
+/* ── START ──────────────────────────────────────────────── */
+
+initMeta();
+loadPDF();

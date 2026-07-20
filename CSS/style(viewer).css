@@ -1,249 +1,397 @@
-/* ====================================================
+/* ============================================================
    NEB Archive — PDF Viewer Styles
-   ==================================================== */
+   Tokens mirror style(pyqs).css exactly.
+   ============================================================ */
 
-/* ---------- Design System / Variables ---------- */
 :root {
-    --bg: #FAFAFA;
-    --bg-alt: #FFFFFF;
-    --text: #1A1A1A;
-    --text-muted: #6B7280;
-    --accent: #4F46E5;
-    --accent-hover: #4338CA;
-    --accent-light: #EEF2FF;
-    --border: #E5E7EB;
-    --error: #EF4444;
-    --pdf-bg: #525659; 
-    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --radius-sm: 8px;
-    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --paper:         oklch(98.6% 0.007 80);
+    --surface:       oklch(99.7% 0.004 80);
+    --surface-2:     oklch(96.8% 0.008 80);
+    --surface-3:     oklch(94.8% 0.010 80);
+
+    --ink:           oklch(24% 0.020 275);
+    --ink-soft:      oklch(38% 0.020 275);
+    --muted:         oklch(53% 0.016 275);
+    --faint:         oklch(70% 0.012 275);
+
+    --border:        oklch(91.5% 0.008 80);
+    --border-strong: oklch(86% 0.010 80);
+
+    --accent:        oklch(48% 0.118 264);
+    --accent-hover:  oklch(42% 0.125 264);
+    --accent-ink:    oklch(34% 0.100 264);
+    --accent-tint:   oklch(96.2% 0.020 264);
+    --accent-soft:   oklch(92% 0.038 264);
+    --on-accent:     oklch(99% 0.01 264);
+
+    --shadow-xs: 0 1px 2px oklch(24% 0.02 275 / 0.05);
+    --shadow-sm: 0 2px 6px oklch(24% 0.02 275 / 0.06), 0 1px 2px oklch(24% 0.02 275 / 0.04);
+    --shadow-md: 0 8px 24px oklch(24% 0.02 275 / 0.08), 0 2px 6px oklch(24% 0.02 275 / 0.05);
+    --shadow-lg: 0 28px 60px oklch(24% 0.02 275 / 0.12);
+    --glow:      0 6px 22px oklch(48% 0.118 264 / 0.28);
+
+    --navbar-bg:        oklch(98.6% 0.007 80 / 0.85);
+    --navbar-bg-scroll: oklch(98.6% 0.007 80 / 0.95);
+    --toolbar-bg:       oklch(99.7% 0.004 80 / 0.92);
+
+    --font:         'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+
+    --r-sm: 10px; --r: 14px; --r-lg: 20px;
+
+    --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --t: 0.24s var(--ease-out-quart);
+
+    --navbar-h: 60px;
+    --toolbar-h: 52px;
+    --chrome-h: calc(var(--navbar-h) + var(--toolbar-h));
+    --page-gap: 20px;
+    --page-shadow: 0 4px 24px oklch(24% 0.02 275 / 0.12), 0 1px 4px oklch(24% 0.02 275 / 0.06);
 }
 
 [data-theme="dark"] {
-    --bg: #0F172A;
-    --bg-alt: #1E293B;
-    --text: #F1F5F9;
-    --text-muted: #94A3B8;
-    --accent: #818CF8;
-    --accent-hover: #6366F1;
-    --accent-light: #312E81;
-    --border: #334155;
-    --error: #F87171;
-    --pdf-bg: #1a1a1a;
+    --paper:         oklch(15.5% 0.018 274);
+    --surface:       oklch(18.5% 0.020 274);
+    --surface-2:     oklch(21.5% 0.022 274);
+    --surface-3:     oklch(25% 0.024 274);
+
+    --ink:           oklch(94% 0.012 274);
+    --ink-soft:      oklch(82% 0.014 274);
+    --muted:         oklch(68% 0.018 274);
+    --faint:         oklch(55% 0.020 274);
+
+    --border:        oklch(27% 0.022 274);
+    --border-strong: oklch(34% 0.026 274);
+
+    --accent:        oklch(72% 0.108 268);
+    --accent-hover:  oklch(78% 0.104 268);
+    --accent-ink:    oklch(85% 0.080 268);
+    --accent-tint:   oklch(28% 0.045 268);
+    --accent-soft:   oklch(38% 0.070 268);
+    --on-accent:     oklch(17% 0.030 268);
+
+    --shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.4);
+    --shadow-sm: 0 2px 8px oklch(0% 0 0 / 0.35);
+    --shadow-md: 0 10px 30px oklch(0% 0 0 / 0.4);
+    --shadow-lg: 0 32px 64px oklch(0% 0 0 / 0.5);
+    --glow:      0 6px 26px oklch(72% 0.108 268 / 0.28);
+
+    --navbar-bg:        oklch(15.5% 0.018 274 / 0.85);
+    --navbar-bg-scroll: oklch(15.5% 0.018 274 / 0.95);
+    --toolbar-bg:       oklch(18.5% 0.020 274 / 0.95);
+
+    --page-shadow: 0 4px 32px oklch(0% 0 0 / 0.5), 0 1px 6px oklch(0% 0 0 / 0.3);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: var(--font); background: var(--pdf-bg); color: var(--text); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+/* ── RESET ─────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; height: 100%; }
+body {
+    font-family: var(--font);
+    background: var(--surface-2);
+    color: var(--ink);
+    height: 100%;
+    overflow: hidden; /* outer body — scroll lives in .canvas-scroll */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transition: background 0.35s var(--ease-out-quart), color 0.35s var(--ease-out-quart);
+}
 a { text-decoration: none; color: inherit; }
+::selection { background: var(--accent-soft); color: var(--accent-ink); }
+:focus-visible { outline: 2.5px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
-/* ====================================================
-   TOP BAR
-   ==================================================== */
-.viewer-topbar {
-    position: relative; /* Required for absolute centering of the title */
-    height: 60px;
-    background: var(--bg-alt);
+/* ── NAVBAR ────────────────────────────────────────────── */
+.navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--navbar-h);
+    background: var(--navbar-bg);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
     border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    transition: background var(--t), box-shadow var(--t);
+}
+.navbar.scrolled { background: var(--navbar-bg-scroll); box-shadow: var(--shadow-sm); }
+.nav-inner {
+    height: 100%;
+    max-width: 100%;
     padding: 0 20px;
-    flex-shrink: 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    z-index: 10;
-}
-
-.viewer-left { display: flex; align-items: center; gap: 12px; min-width: 0; z-index: 2; }
-.viewer-back-btn {
-    display: flex; align-items: center; gap: 6px;
-    color: var(--text-muted); font-size: 14px; font-weight: 600;
-    padding: 8px 12px; border-radius: var(--radius-sm);
-    transition: all var(--transition);
-}
-.viewer-back-btn svg { width: 16px; height: 16px; }
-.viewer-back-btn:hover { background: var(--bg); color: var(--accent); }
-
-/* Absolute positioning to perfectly center the title */
-.viewer-title-wrapper {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
-    gap: 10px;
-    max-width: 50%; /* Prevents it from overlapping the left/right buttons */
-    pointer-events: none; /* Lets clicks pass through to buttons underneath if they overlap */
+    gap: 16px;
 }
 
-.viewer-badge { font-size: 10px; background: var(--error); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; flex-shrink: 0; }
-#pdf-title { 
-    font-size: 15px; 
-    font-weight: 600; 
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    width: 100%; /* Allows ellipsis to work */
+.back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--muted); font-size: 0.875rem; font-weight: 500;
+    padding: 7px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-sm);
+    transition: color var(--t), border-color var(--t), background var(--t);
+    white-space: nowrap; flex-shrink: 0;
 }
+.back-btn svg { width: 15px; height: 15px; }
+.back-btn:hover { color: var(--accent); border-color: var(--accent-soft); background: var(--accent-tint); }
 
-.viewer-controls { display: flex; align-items: center; gap: 8px; z-index: 2; }
-#zoom-level { font-size: 13px; font-weight: 600; color: var(--text-muted); min-width: 45px; text-align: center; }
+.paper-meta-bar {
+    flex: 1; min-width: 0;
+    display: flex; align-items: center; gap: 12px;
+    overflow: hidden;
+}
+.paper-badge {
+    flex-shrink: 0;
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--accent-ink); background: var(--accent-tint);
+    padding: 3px 9px; border-radius: 999px;
+}
+.paper-title-nav {
+    font-family: var(--font);
+    font-size: 0.925rem; font-weight: 600;
+    color: var(--ink-soft);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    letter-spacing: 0;
+}
 
 .icon-btn {
-    background: transparent; border: 1px solid transparent;
-    color: var(--text-muted); padding: 6px; border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: all var(--transition);
-}
-.icon-btn:hover { background: var(--bg); color: var(--accent); border-color: var(--border); }
-.icon-btn svg { width: 18px; height: 18px; }
-
-.icon-sun { display: block; } .icon-moon { display: none; }
-[data-theme="dark"] .icon-sun { display: none; } [data-theme="dark"] .icon-moon { display: block; }
-
-/* ====================================================
-   LAYOUT & SIDEBAR
-   ==================================================== */
-.viewer-layout {
-    flex: 1;
-    display: flex;
-    overflow: hidden; 
-}
-
-.pdf-sidebar {
-    width: 220px;
-    background: var(--bg-alt);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    transition: margin-left 0.3s ease; 
-    overflow: hidden;
-}
-
-.pdf-sidebar.hidden {
-    margin-left: -220px; 
-}
-
-.sidebar-header {
-    padding: 16px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
-    font-weight: 700;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#page-indicator {
-    font-size: 12px;
-    color: var(--accent);
-    background: var(--accent-light);
-    padding: 4px 8px;
-    border-radius: 4px;
-    text-transform: none;
-    letter-spacing: 0;
-    font-weight: 600;
-}
-
-.thumbnail-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    align-items: center;
-}
-
-.thumbnail-item {
-    width: 100%;
-    max-width: 150px;
+    display: grid; place-items: center;
+    width: 38px; height: 38px; flex-shrink: 0;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-sm);
+    background: transparent; color: var(--muted);
     cursor: pointer;
-    border: 3px solid transparent;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    transition: border-color 0.2s;
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
+    transition: color var(--t), border-color var(--t), background var(--t);
+}
+.icon-btn svg { width: 17px; height: 17px; }
+.icon-btn:hover { color: var(--accent); border-color: var(--accent-soft); background: var(--accent-tint); }
+
+/* Theme icon swap */
+.i-sun { display: block; }
+.i-moon { display: none; }
+[data-theme="dark"] .i-sun { display: none; }
+[data-theme="dark"] .i-moon { display: block; }
+
+/* ── TOOLBAR ───────────────────────────────────────────── */
+.toolbar {
+    position: fixed; top: var(--navbar-h); left: 0; right: 0; z-index: 90;
+    height: var(--toolbar-h);
+    background: var(--toolbar-bg);
+    backdrop-filter: saturate(160%) blur(10px);
+    -webkit-backdrop-filter: saturate(160%) blur(10px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    gap: 4px; padding: 0 16px;
+    transition: opacity var(--t), transform var(--t);
+}
+.toolbar.hide {
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
 }
 
-.thumbnail-item:hover { border-color: var(--border); }
-.thumbnail-item.active { border-color: var(--accent); }
+.toolbar-group { display: flex; align-items: center; gap: 2px; }
+.toolbar-divider { width: 1px; height: 24px; background: var(--border-strong); margin: 0 6px; }
 
-.thumbnail-item canvas {
-    display: block;
-    width: 100%;
-    height: auto;
+.tool-btn {
+    display: grid; place-items: center;
+    width: 36px; height: 36px;
+    border: 0; border-radius: var(--r-sm);
+    background: transparent; color: var(--muted);
+    cursor: pointer;
+    transition: background var(--t), color var(--t);
 }
+.tool-btn svg { width: 16px; height: 16px; }
+.tool-btn:hover { background: var(--surface-3); color: var(--ink); }
+.tool-btn:active { background: var(--accent-tint); color: var(--accent-ink); }
+.tool-btn.active { background: var(--accent-tint); color: var(--accent-ink); }
+.tool-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-.thumbnail-page-num {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
+.page-indicator {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.84rem; color: var(--muted);
+}
+#pageInput {
+    width: 44px; height: 32px;
     text-align: center;
-    padding: 8px 4px;
-    background: var(--bg-alt);
-    border-top: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--font); font-size: 0.84rem; font-weight: 500;
+    -moz-appearance: textfield;
+    transition: border-color var(--t);
+}
+#pageInput::-webkit-inner-spin-button,
+#pageInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+#pageInput:focus { outline: none; border-color: var(--accent); }
+.page-sep { color: var(--faint); }
+#totalPages { min-width: 20px; font-weight: 500; }
+
+.zoom-display {
+    min-width: 52px; height: 32px; padding: 0 8px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: var(--font); font-size: 0.82rem; font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--t), color var(--t), background var(--t);
+    text-align: center;
+}
+.zoom-display:hover { border-color: var(--accent-soft); color: var(--accent-ink); background: var(--accent-tint); }
+
+/* ── PROGRESS BAR ──────────────────────────────────────── */
+.progress-bar {
+    position: fixed; top: 0; left: 0; z-index: 200;
+    height: 3px;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.3s var(--ease-out-quart), opacity 0.4s ease;
+    transform-origin: left;
+    box-shadow: var(--glow);
+}
+.progress-bar.done { opacity: 0; }
+
+/* ── MAIN SCROLL AREA ──────────────────────────────────── */
+.viewer-main {
+    position: fixed;
+    top: var(--chrome-h);
+    left: 0; right: 0; bottom: 0;
+    overflow: hidden;
 }
 
-/* ====================================================
-   PDF CONTAINER & LOADING SPINNER
-   ==================================================== */
-.pdf-container {
-    flex: 1;
-    overflow: auto; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    padding: 24px 0;
+/* Loader */
+.loader-shell {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 18px;
 }
-
-.pdf-container canvas {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    max-width: 100%;
-    height: auto;
-}
-
-.loading-spinner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--text-muted);
-    gap: 16px;
-}
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(129, 140, 248, 0.2);
+.loader-ring {
+    width: 44px; height: 44px;
+    border: 3px solid var(--border-strong);
     border-top-color: var(--accent);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.75s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.loader-text { color: var(--muted); font-size: 0.9rem; }
 
-/* ====================================================
-   RESPONSIVE
-   ==================================================== */
-@media (max-width: 768px) {
-    .pdf-sidebar {
-        position: absolute;
-        z-index: 20;
-        height: 100%;
-        box-shadow: 4px 0 15px rgba(0,0,0,0.2);
-    }
+/* Error */
+.error-shell {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; padding: 40px;
+    text-align: center;
+}
+.error-shell svg { width: 48px; height: 48px; color: var(--faint); }
+.error-shell strong { font-size: 1.15rem; color: var(--ink); font-family: var(--font-display); }
+.error-shell p { color: var(--muted); font-size: 0.9rem; max-width: 32ch; line-height: 1.6; }
+.error-back {
+    margin-top: 8px;
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--accent); font-weight: 600; font-size: 0.9rem;
+    padding: 10px 20px; border: 1px solid var(--accent-soft);
+    border-radius: var(--r-sm); background: var(--accent-tint);
+    transition: background var(--t), border-color var(--t);
+}
+.error-back:hover { background: var(--accent-soft); }
+
+/* Canvas scroll */
+.canvas-scroll {
+    position: absolute; inset: 0;
+    overflow-y: auto; overflow-x: auto;
+    scroll-behavior: smooth;
+    /* Custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+}
+.canvas-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.canvas-scroll::-webkit-scrollbar-track { background: transparent; }
+.canvas-scroll::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; }
+.canvas-scroll::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+.pages-wrap {
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 32px 24px calc(32px + var(--page-gap));
+    gap: var(--page-gap);
+    min-height: 100%;
 }
 
-@media (max-width: 640px) {
-    .viewer-topbar { padding: 0 12px; height: 56px; }
-    /* Hide title entirely on very small screens to prevent overlap */
-    .viewer-title-wrapper { display: none; } 
-    .viewer-back-btn span { display: none; } 
+/* Individual page */
+.pdf-page {
+    position: relative;
+    background: white; /* PDF pages are always white */
+    box-shadow: var(--page-shadow);
+    border-radius: 3px;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: box-shadow var(--t);
+}
+.pdf-page canvas {
+    display: block;
+    /* No pointer-events manipulation — text selection intentionally enabled */
+}
+
+/* Page number label */
+.page-label {
+    position: absolute; bottom: 10px; right: 12px;
+    font-size: 0.7rem; font-weight: 500;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2px 7px; border-radius: 999px;
+    opacity: 0;
+    transition: opacity var(--t);
+    pointer-events: none;
+    user-select: none;
+}
+.pdf-page:hover .page-label { opacity: 1; }
+
+/* ── FULLSCREEN ADJUSTMENTS ────────────────────────────── */
+:fullscreen .viewer-main,
+:-webkit-full-screen .viewer-main {
+    top: 0;
+}
+:fullscreen .toolbar,
+:-webkit-full-screen .toolbar {
+    top: 0;
+}
+:fullscreen .navbar,
+:-webkit-full-screen .navbar {
+    display: none;
+}
+
+/* ── KEYBOARD SHORTCUT HINT ────────────────────────────── */
+.shortcut-toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px);
+    background: var(--ink); color: var(--paper);
+    font-size: 0.82rem; font-weight: 500;
+    padding: 9px 18px; border-radius: var(--r-sm);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s var(--ease-out-quart);
+    white-space: nowrap; z-index: 500;
+}
+.shortcut-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .toolbar-divider:nth-child(6),  /* hide fit-mode divider on mobile */
+    .toolbar-group:nth-child(7) { display: none; }
+    #fullscreenBtn { display: none; }
+    .back-btn span { display: none; }
+    .pages-wrap { padding: 16px 8px 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
 }
