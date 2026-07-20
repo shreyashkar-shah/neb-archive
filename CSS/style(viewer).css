@@ -261,7 +261,7 @@ a { text-decoration: none; color: inherit; }
 
 /* Loader */
 .loader-shell {
-    position: absolute; inset: 0; z-index: 5;
+    position: absolute; inset: 0; z-index: 20;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     gap: 18px;
@@ -285,8 +285,8 @@ a { text-decoration: none; color: inherit; }
     align-items: center; justify-content: center;
     gap: 12px; padding: 40px;
     text-align: center;
-    background: var(--surface-2); /* covers canvas if shown over it */
-    z-index: 10;
+    background: var(--surface-2);
+    z-index: 15;
 }
 .error-shell[hidden] { display: none !important; }
 .error-shell svg { width: 48px; height: 48px; color: var(--faint); }
