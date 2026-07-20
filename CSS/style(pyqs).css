@@ -343,6 +343,37 @@ p { text-wrap: pretty; }
     border-color: oklch(55% 0.10 60);
 }
 
+
+/* ================= STREAM BAR ================= */
+.stream-bar {
+    display: flex; align-items: center; gap: 14px;
+    margin: 24px 0 0;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+}
+.stream-bar-label {
+    font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--faint); white-space: nowrap; flex-shrink: 0;
+}
+.stream-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.stream-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 18px; border-radius: var(--r-sm);
+    border: 1px solid var(--border-strong);
+    background: transparent; color: var(--muted);
+    font-family: inherit; font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; transition: background var(--t), color var(--t), border-color var(--t), box-shadow var(--t);
+    white-space: nowrap;
+}
+.stream-pill svg { width: 15px; height: 15px; flex-shrink: 0; }
+.stream-pill:hover { color: var(--ink); border-color: var(--accent-soft); background: var(--accent-tint); }
+.stream-pill[aria-selected="true"] {
+    background: var(--accent); color: var(--on-accent);
+    border-color: var(--accent); box-shadow: var(--glow);
+}
+
 /* ================= REVEAL ================= */
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo); transition-delay: calc(var(--i, 0) * 70ms); }
 .reveal.in { opacity: 1; transform: none; }
