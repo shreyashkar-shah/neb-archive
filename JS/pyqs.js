@@ -25,14 +25,14 @@ const BOARD_DATA = {
     },
     11: {
         streams: {
-            Science:    { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], Physics: ['2082','2081'], Chemistry: ['2082','2081'], Biology: ['2082','2081'], 'Computer Science': ['2082','2081'] } },
-            Management: { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], 'Social Studies': ['2082','2081'], Economics: ['2082','2081'], Accounting: ['2082','2081'], 'Business Studies': ['2082','2081'] } }
+            Science:    { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], Physics: ['2083','2082','2081'], Chemistry: ['2083','2082','2081'], Biology: ['2083','2082','2081'], 'Computer Science': ['2083','2082','2081'] } },
+            Management: { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], 'Social Studies': ['2083','2082','2081'], Economics: ['2083','2082','2081'], Accounting: ['2083','2082','2081'], 'Business Studies': ['2083','2082','2081'] } }
         }
     },
     12: {
         streams: {
-            Science:    { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], Physics: ['2082','2081'], Chemistry: ['2082','2081'], Biology: ['2082','2081'], 'Computer Science': ['2082','2081'] } },
-            Management: { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], 'Social Studies': ['2082','2081'], Economics: ['2082','2081'], Accounting: ['2082','2081'], 'Business Studies': ['2082','2081'] } }
+            Science:    { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], Physics: ['2083','2082','2081'], Chemistry: ['2083','2082','2081'], Biology: ['2083','2082','2081'], 'Computer Science': ['2083','2082','2081'] } },
+            Management: { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], 'Social Studies': ['2083','2082','2081'], Economics: ['2083','2082','2081'], Accounting: ['2083','2082','2081'], 'Business Studies': ['2083','2082','2081'] } }
         }
     }
 };
@@ -40,14 +40,14 @@ const BOARD_DATA = {
 const SCHOOL_DATA = {
     11: {
         streams: {
-            Science:    { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], Physics: ['2082','2081'], Chemistry: ['2082','2081'], Biology: ['2082','2081'], 'Computer Science': ['2082','2081'] } },
-            Management: { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], 'Social Studies': ['2082','2081'], Economics: ['2082','2081'], Accounting: ['2082','2081'], 'Business Studies': ['2082','2081'] } }
+            Science:    { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], Physics: ['2083','2082','2081'], Chemistry: ['2083','2082','2081'], Biology: ['2083','2082','2081'], 'Computer Science': ['2083','2082','2081'] } },
+            Management: { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], 'Social Studies': ['2083','2082','2081'], Economics: ['2083','2082','2081'], Accounting: ['2083','2082','2081'], 'Business Studies': ['2083','2082','2081'] } }
         }
     },
     12: {
         streams: {
-            Science:    { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], Physics: ['2082','2081'], Chemistry: ['2082','2081'], Biology: ['2082','2081'], 'Computer Science': ['2082','2081'] } },
-            Management: { subjects: { English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'], 'Social Studies': ['2082','2081'], Economics: ['2082','2081'], Accounting: ['2082','2081'], 'Business Studies': ['2082','2081'] } }
+            Science:    { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], Physics: ['2083','2082','2081'], Chemistry: ['2083','2082','2081'], Biology: ['2083','2082','2081'], 'Computer Science': ['2083','2082','2081'] } },
+            Management: { subjects: { English: ['2083','2082','2081'], Mathematics: ['2083','2082','2081'], Nepali: ['2083','2082','2081'], 'Social Studies': ['2083','2082','2081'], Economics: ['2083','2082','2081'], Accounting: ['2083','2082','2081'], 'Business Studies': ['2083','2082','2081'] } }
         }
     }
 };
