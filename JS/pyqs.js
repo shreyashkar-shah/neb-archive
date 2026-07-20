@@ -202,7 +202,7 @@ function openViewer(action) {
     const streamPart = state.stream ? ` (${state.stream})` : '';
     const yearPart   = state.year === 'all' ? currentYears()[0] : state.year;
     const title      = `${state.subject}${streamPart} — Grade ${state.grade} · ${yearPart}`;
-    const source     = state.source === 'board' ? 'NEB Official' : 'School Paper';
+    const source     = state.source === 'board' ? 'NEB' : 'School Paper';
 
     const p = new URLSearchParams({ url: fileURL, title, source, mode });
     window.location.href = `viewer.html?${p}`;
@@ -217,7 +217,7 @@ function openViewerForCard(card, action) {
 
     const streamPart = state.stream ? ` (${state.stream})` : '';
     const title      = `${state.subject}${streamPart} — Grade ${state.grade} · ${year}`;
-    const source     = state.source === 'board' ? 'NEB Official' : 'School Paper';
+    const source     = state.source === 'board' ? 'NEB' : 'School Paper';
 
     const p = new URLSearchParams({ url: fileURL, title, source, mode });
     window.location.href = `viewer.html?${p}`;
@@ -343,7 +343,7 @@ function renderPapers() {
                     <span>·</span>
                     <span class="paper-year">${y}</span>
                     <span>·</span>
-                    <span>${state.source === 'board' ? 'NEB Official' : 'School Paper'}</span>
+                    <span>${state.source === 'board' ? 'NEB' : 'School Paper'}</span>
                 </div>
             </div>
             <div class="paper-actions">
