@@ -256,6 +256,7 @@ function snapToPreset(dir) {
 
 function showCanvas() {
     loaderShell.hidden  = true;
+    errorShell.hidden   = true;  // ensure error overlay never shows over a successful render
     canvasScroll.hidden = false;
     syncUI();
 }
