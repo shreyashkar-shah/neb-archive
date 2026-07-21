@@ -110,6 +110,7 @@ function openViewerForCard(card, action) {
         province: state.province || '',
         year,
     });
+    sessionStorage.setItem('pyqsState', JSON.stringify(state));
     window.location.href = `viewer.html?${p}`;
 }
 
@@ -322,6 +323,16 @@ function render() {
 
 document.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
+
+    const saved = sessionStorage.getItem('pyqsState');
+    if (saved) {
+        try {
+            Object.assign(state, JSON.parse(saved));
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     ensureValidGrade();
     ensureValidStream();
     ensureValidSubject();
