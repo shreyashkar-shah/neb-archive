@@ -20,9 +20,13 @@ export const BOARD_DATA = {
   10: {
     province: true,
     subjects: {
-      English: ['2082','2081'], Mathematics: ['2082','2081'], Nepali: ['2082','2081'],
-      Science: ['2082','2081'], 'Social Studies': ['2082','2081'],
-      'Computer Science': ['2082','2081'], Accounting: ['2082','2081'],
+      English: ['2082','2081','2080','2079'], 
+      Mathematics: ['2082','2081','2080','2079'], 
+      Nepali: ['2082','2081','2080','2079'],
+      Science: ['2082','2081','2080','2079'], 
+      'Social Studies': ['2082','2081','2080','2079'],
+      'Computer Science': ['2082','2081','2080','2079'], 
+      Accounting: ['2082','2081','2080','2079'],
     },
   },
   11: {
