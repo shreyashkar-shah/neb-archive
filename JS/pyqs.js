@@ -51,8 +51,8 @@ const BOARD_DATA = {
                               Mathematics: ['2083','2082','2081','2080'], 
                               Nepali: ['2083','2082','2081','2080'], 
                               Physics: ['2083','2082','2081','2080',
-                                        { value: '2079-model', label: '2083 (Model Question)' },
-    {                                     value: '2078-model', label: '2083 (Model Question))' },], 
+                                        { value: '2079-model', label: '2079' },
+                                        { value: '2078-model', label: '2078' },], 
                               Chemistry: ['2083','2082','2081'], 
                               Biology: ['2083','2082','2081'], 
                               'Computer Science': ['2083','2082','2081', '2080'] } },
@@ -340,37 +340,43 @@ function renderPapers() {
     const list = state.year === 'all' ? yrs : yrs.filter(y => y === state.year);
 
     const streamPart  = state.stream ? ` (${state.stream})` : '';
-    const provPart    = isProvinceGrade() ? ` · ${state.province}` : '';
-    const sourceLabel = state.source === 'board' ? 'NEB' : 'School Paper';
-    const eyebrow     = `Grade ${state.grade}${streamPart}${provPart} / ${state.subject}`;
+    const eyebrow     = `Grade ${state.grade}${streamPart} / ${state.subject}`;
 
     $('#contentEyebrow').textContent = eyebrow;
     $('#paperHeading').textContent   = state.subject;
     $('#paperCount').textContent     = `Showing ${list.length} ${list.length === 1 ? 'paper' : 'papers'}`;
 
-    $('#paperList').innerHTML = list.length ? list.map(y => `
+    $('#paperList').innerHTML = list.length ? list.map(y => {
+        // Work out a clean label for the year value
+        const suffix =
+            y.includes('model') ? ' (Model Question)' :
+            y.includes('Sup')   ? ' (Supplementary)'  :
+            y.includes('GIE')   ? ' (GIE)'            : '';
+        const yearDisplay = y.replace(/-model|-Sup|-GIE/gi, '');
+
+        return `
         <article class="paper-card reveal in" data-year="${y}">
             <div class="paper-icon">${icon('file-text')}</div>
             <div>
-                <div class="paper-title">${state.subject}</div>
+                <div class="paper-title">${state.subject}${suffix}</div>
                 <div class="paper-meta">
-                    <span>Grade ${state.grade}${state.stream ? ' · ' + state.stream : ''}${isProvinceGrade() ? ' · ' + state.province : ''}</span>
+                    <span>Grade ${state.grade}${state.stream ? ' · ' + state.stream : ''}</span>
                     <span>·</span>
-                    <span class="paper-year">${y}</span>
+                    <span class="paper-year">${yearDisplay}</span>
                     <span>·</span>
-                    <span>${sourceLabel}</span>
+                    <span>${state.source === 'board' ? 'NEB' : 'School Paper'}</span>
                 </div>
             </div>
             <div class="paper-actions">
                 <button class="paper-action primary" data-action="view">${icon('eye')}<span>View</span></button>
                 <button class="paper-action solution" data-action="solution">${icon('lightbulb')}<span>Solution</span></button>
             </div>
-        </article>`
-    ).join('') : `
+        </article>`;
+    }).join('') : `
         <div class="empty-state">
             ${icon('file-search')}
             <strong>No papers found</strong>
-            <span>Try a different year, subject${isProvinceGrade() ? ', or province' : ', or grade'}.</span>
+            <span>Try a different year, subject, or grade.</span>
         </div>`;
 }
 
