@@ -1,5 +1,5 @@
 /* ============================================================
-   NEB Archive â€” Landing Page Logic
+   NEB Archive —” Landing Page Logic
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
 
