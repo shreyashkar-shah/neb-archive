@@ -15,38 +15,6 @@ const state = {
     year:     'all',
 };
 
-/* ── STATE PERSISTENCE (survives view → back navigation) ─── */
-
-const STATE_KEY = 'nebArchiveState';
-
-function saveState() {
-    try { sessionStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
-}
-
-function loadState() {
-    const cameFromViewer = new URLSearchParams(location.search).get('from') === 'viewer';
-
-    // Strip the marker immediately so a later plain reload doesn't keep restoring.
-    if (cameFromViewer) {
-        history.replaceState(null, '', location.pathname);
-    }
-
-    if (!cameFromViewer) return; // plain reload / fresh nav → keep hardcoded defaults
-
-    try {
-        const saved = JSON.parse(sessionStorage.getItem(STATE_KEY));
-        if (saved && typeof saved === 'object') Object.assign(state, saved);
-    } catch (e) {}
-}
-
-function syncSourceButtons() {
-    document.querySelectorAll('.source-btn').forEach(b => {
-        const active = b.dataset.source === state.source;
-        b.classList.toggle('active', active);
-        b.setAttribute('aria-selected', active);
-    });
-}
-
 /* ── HELPERS ────────────────────────────────────────────── */
 
 const $ = s => document.querySelector(s);
@@ -84,7 +52,9 @@ function availableStreams() {
 function currentSubjects() {
     const node = gradeNode();
     if (!node) return {};
-    return node.streams ? (node.streams[state.stream]?.subjects || {}) : (node.subjects || {});
+    if (node.streams) return node.streams[state.stream]?.subjects || {};
+    if (node.province) return node.subjects?.[state.province] || {};
+    return node.subjects || {};
 }
 
 function availableGrades() {
@@ -336,18 +306,15 @@ function render() {
     renderPapers();
     renderStats();
     lucide.createIcons();
-    saveState();
 }
 
 /* ── INIT ─────────────────────────────────────────────────── */
 
 document.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
-    loadState();
     ensureValidGrade();
     ensureValidStream();
     ensureValidSubject();
-    syncSourceButtons();
     render();
     $('#year').textContent = new Date().getFullYear();
 
@@ -406,12 +373,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (provEl) {
             state.province = provEl.dataset.province;
             state.year     = 'all';
+            ensureValidSubject();
             renderProvinceRow();
+            renderLeftPanel();
             renderYears();
             renderPapers();
             renderStats();
             lucide.createIcons();
-            saveState();
             return;
         }
 
@@ -425,7 +393,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderPapers();
             renderStats();
             lucide.createIcons();
-            saveState();
             return;
         }
 
@@ -436,7 +403,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderYears();
             renderPapers();
             lucide.createIcons();
-            saveState();
         }
     });
 

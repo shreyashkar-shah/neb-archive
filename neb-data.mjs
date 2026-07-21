@@ -19,14 +19,75 @@ export const PROVINCES = ['Koshi','Madhesh','Bagmati','Gandaki','Lumbini','Karna
 export const BOARD_DATA = {
   10: {
     province: true,
+    // Each province has its OWN subject → years map.
+    // They all start identical (same as before this change) so nothing on
+    // the site changes yet. Edit each province's lists independently as you
+    // confirm what papers actually exist for it — remove a year that isn't
+    // available, or leave a subject as [] if that province has none yet.
     subjects: {
-      English: ['2082','2081','2080'], 
-      Mathematics: ['2082','2081','2080'], 
-      Nepali: ['2082','2081','2080'],
-      Science: ['2082','2081','2080'], 
-      'Social Studies': ['2082','2081','2080'],
-      'Computer Science': ['2082','2081','2080'], 
-      Accounting: ['2082','2081','2080'],
+      Koshi: {
+        English: ['2082','2081','2080'],
+        Mathematics: ['2082','2081','2080'],
+        Nepali: ['2082','2081','2080'],
+        Science: ['2082','2081','2080'],
+        'Social Studies': ['2082','2081','2080'],
+        'Computer Science': ['2082','2081','2080'],
+        Accounting: ['2082','2081','2080'],
+      },
+      Madhesh: {
+        English: ['2082','2081','2080'],
+        Mathematics: ['2082','2081','2080'],
+        Nepali: ['2082','2081','2080'],
+        Science: ['2082','2081','2080'],
+        'Social Studies': ['2082','2081','2080'],
+        'Computer Science': ['2082','2081','2080'],
+        Accounting: ['2082','2081','2080'],
+      },
+      Bagmati: {
+        English: ['2082','2081','2080'],
+        Mathematics: ['2082','2081','2080'],
+        Nepali: ['2082','2081','2080'],
+        Science: ['2082','2081','2080'],
+        'Social Studies': ['2082','2081','2080'],
+        'Computer Science': ['2082','2081','2080'],
+        Accounting: ['2082','2081','2080'],
+      },
+      Gandaki: {
+        English: ['2082','2081','2080'],
+        Mathematics: ['2082','2081','2080'],
+        Nepali: ['2082','2081','2080'],
+        Science: ['2082','2081','2080'],
+        'Social Studies': ['2082','2081','2080'],
+        'Computer Science': ['2082','2081','2080'],
+        Accounting: ['2082','2081','2080'],
+      },
+      Lumbini: {
+        English: ['2082','2081','2080'],
+        Mathematics: ['2082','2081','2080'],
+        Nepali: ['2082','2081','2080'],
+        Science: ['2082','2081','2080'],
+        'Social Studies': ['2082','2081','2080'],
+        'Computer Science': ['2082','2081','2080'],
+        Accounting: ['2082','2081','2080'],
+      },
+      Karnali: {
+        English: ['2082','2081','2080'],
+        Mathematics: ['2082','2081','2080'],
+        Nepali: ['2082','2081','2080'],
+        Science: ['2082','2081','2080'],
+        'Social Studies': ['2082','2081','2080'],
+        'Computer Science': ['2082','2081','2080'],
+        Accounting: ['2082','2081','2080'],
+      },
+      Sudurpashchim: {
+        English: ['2082','2081','2080'],
+        Mathematics: ['2082','2081','2080'],
+        Nepali: ['2082','2081','2080'],
+        Science: ['2082','2081','2080'],
+        'Social Studies': ['2082','2081','2080'],
+        'Computer Science': ['2082','2081','2080'],
+        Accounting: ['2082','2081','2080'],
+      },
     },
   },
   11: {
