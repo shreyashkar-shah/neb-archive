@@ -245,8 +245,9 @@ function renderHub(pages) {
 
 /* ── SITEMAP + ROBOTS ───────────────────────────────────── */
 function renderSitemap(pages) {
-  const urls = [abs('/index.html'), abs('/pyqs.html'), abs('/papers/'), ...pages.map((p) => abs(pageUrl(p)))];
-  const body = urls.map((u) => `  <url><loc>${esc(u)}</loc><changefreq>weekly</changefreq></url>`).join('\n');
+  const today = new Date().toISOString().slice(0, 10);
+  const urls = [abs('/'), abs('/pyqs.html'), abs('/papers/'), ...pages.map((p) => abs(pageUrl(p)))];
+  const body = urls.map((u) => `  <url><loc>${esc(u)}</loc><changefreq>weekly</changefreq><lastmod>${today}</lastmod></url>`).join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>`;
 }
 function renderRobots() {
