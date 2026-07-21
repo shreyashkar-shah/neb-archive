@@ -48,9 +48,24 @@ function collectPages() {
     for (const grade of Object.keys(data)) {
       const node = data[grade];
       if (node.province) {
-        for (const [subject, years] of Object.entries(node.subjects)) {
-          if (!years.length) continue;
-          pages.push({ source, grade, subject, years, kind: 'province' });
+        // node.subjects is now { [province]: { [subject]: years } } —
+        // union the subjects across provinces, then group years back
+        // by province so each row can say exactly which province it's for.
+        const subjectSet = new Set();
+        for (const provSubjects of Object.values(node.subjects)) {
+          Object.keys(provSubjects).forEach(s => subjectSet.add(s));
+        }
+        for (const subject of subjectSet) {
+          const byProvince = {};
+          let years = [];
+          for (const province of PROVINCES) {
+            const provYears = node.subjects[province]?.[subject] || [];
+            if (!provYears.length) continue;
+            byProvince[province] = provYears;
+            years = years.concat(provYears);
+          }
+          if (!years.length) continue; // no province has this subject yet
+          pages.push({ source, grade, subject, years, byProvince, kind: 'province' });
         }
       } else if (node.streams) {
         for (const [stream, sObj] of Object.entries(node.streams)) {
@@ -92,7 +107,8 @@ function seo(p) {
   const streamBit = p.kind === 'stream' ? ` ${p.stream}` : '';
   const h1 = `${org} ${gLabel}${streamBit} ${p.subject} Question Papers${range ? ` (${range})` : ''}`;
   const title = `${h1} | NEB Archive`;
-  const provNote = p.kind === 'province' ? ' Available for all 7 provinces.' : '';
+  const provCount = p.kind === 'province' ? Object.keys(p.byProvince).length : 0;
+  const provNote = p.kind === 'province' ? ` Available for ${provCount} province${provCount === 1 ? '' : 's'}.` : '';
   const desc = `Download & view ${org} ${gLabel}${streamBit} ${p.subject} previous year question papers${range ? ` from ${range}` : ''}. Free, no sign-up, opens instantly in-browser.${provNote}`;
   return { h1, title, desc: desc.slice(0, 158) };
 }
@@ -100,18 +116,22 @@ function seo(p) {
 /* ── PAPER-LINK ROWS ────────────────────────────────────── */
 function paperRows(p) {
   const rows = [];
-  for (const raw of p.years) {
-    const value = yearValue(raw);
-    const label = `${yearDisplay(value)}${yearSuffix(value)}`;
-    if (p.kind === 'province') {
-      for (const province of PROVINCES) {
+  if (p.kind === 'province') {
+    for (const [province, years] of Object.entries(p.byProvince)) {
+      for (const raw of years) {
+        const value = yearValue(raw);
+        const label = `${yearDisplay(value)}${yearSuffix(value)}`;
         rows.push({
           label: `${p.subject} ${label} \u2014 ${province}`,
           href: viewerHref({ ...p, value, province }),
           solHref: CONFIG.includeSolutionLinks ? viewerHref({ ...p, value, province, mode: 'solution' }) : null,
         });
       }
-    } else {
+    }
+  } else {
+    for (const raw of p.years) {
+      const value = yearValue(raw);
+      const label = `${yearDisplay(value)}${yearSuffix(value)}`;
       rows.push({
         label: `${p.subject} ${label}`,
         href: viewerHref({ ...p, value }),
