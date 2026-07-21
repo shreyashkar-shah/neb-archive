@@ -1,36 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1A1530"/>
-      <stop offset="100%" style="stop-color:#0C0A14"/>
+      <stop offset="0%" style="stop-color:#2A2050"/>
+      <stop offset="55%" style="stop-color:#150F28"/>
+      <stop offset="100%" style="stop-color:#08060E"/>
     </linearGradient>
+    <radialGradient id="glow" cx="30%" cy="20%" r="65%">
+      <stop offset="0%" style="stop-color:#8A63FF" stop-opacity="0.55"/>
+      <stop offset="100%" style="stop-color:#8A63FF" stop-opacity="0"/>
+    </radialGradient>
     <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#9B7FFF"/>
-      <stop offset="100%" style="stop-color:#6C47FF"/>
+      <stop offset="0%" style="stop-color:#C7B3FF"/>
+      <stop offset="50%" style="stop-color:#8F63FF"/>
+      <stop offset="100%" style="stop-color:#5B33F2"/>
     </linearGradient>
+    <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
   </defs>
 
   <!-- Background rounded square -->
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <!-- Ambient top-left light -->
+  <rect width="512" height="512" rx="116" fill="url(#glow)"/>
 
-  <!-- Stack of 3 books / layers — mirrors library-big icon concept -->
+  <!-- Soft glow behind the stack for lift -->
+  <rect x="120" y="200" width="272" height="170" rx="30" fill="#8F63FF" opacity="0.35" filter="url(#softGlow)"/>
+
+  <!-- Stack of 3 layers — mirrors library-big icon concept -->
   <!-- Bottom layer -->
-  <rect x="96" y="310" width="320" height="52" rx="14" fill="url(#accent)" opacity="0.45"/>
+  <rect x="92" y="312" width="328" height="54" rx="15" fill="url(#accent)" opacity="0.5"/>
   <!-- Middle layer -->
-  <rect x="116" y="248" width="280" height="52" rx="14" fill="url(#accent)" opacity="0.70"/>
+  <rect x="114" y="248" width="284" height="54" rx="15" fill="url(#accent)" opacity="0.78"/>
   <!-- Top layer -->
-  <rect x="136" y="186" width="240" height="52" rx="14" fill="url(#accent)"/>
+  <rect x="136" y="184" width="240" height="54" rx="15" fill="url(#accent)"/>
 
-  <!-- Subtle spine line on top layer -->
-  <rect x="184" y="186" width="4" height="52" rx="2" fill="#ffffff" opacity="0.25"/>
+  <!-- Glossy top-edge highlight on each layer -->
+  <rect x="92" y="312" width="328" height="8" rx="4" fill="#ffffff" opacity="0.18"/>
+  <rect x="114" y="248" width="284" height="8" rx="4" fill="#ffffff" opacity="0.22"/>
+  <rect x="136" y="184" width="240" height="8" rx="4" fill="#ffffff" opacity="0.32"/>
 
-  <!-- "N" letterform on top layer -->
-  <text x="256" y="228" 
-        font-family="Georgia, 'Times New Roman', serif" 
-        font-size="42" 
-        font-weight="700" 
-        fill="#ffffff" 
-        text-anchor="middle" 
+  <!-- "NEB" monogram on top layer — bold condensed sans (not the old thin serif) so it survives at 16px -->
+  <text x="256" y="222"
+        font-family="'Hanken Grotesk', Arial, sans-serif"
+        font-size="42"
+        font-weight="800"
+        fill="#ffffff"
+        text-anchor="middle"
         dominant-baseline="middle"
-        letter-spacing="-1">NEB</text>
+        letter-spacing="-1.5">NEB</text>
+
+  <!-- Primary sparkle accent -->
+  <g transform="translate(346,76) scale(4.6)" fill="#F1ECFF">
+    <path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/>
+  </g>
+
+  <!-- Secondary sparkle accent, dimmer, for balance -->
+  <g transform="translate(50,398) scale(2.1)" fill="#C4AFFF" opacity="0.55">
+    <path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/>
+  </g>
 </svg>

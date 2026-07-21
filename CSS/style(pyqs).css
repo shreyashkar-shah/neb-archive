@@ -259,6 +259,8 @@ p { text-wrap: pretty; }
 .foot-col h4 { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--faint); margin-bottom: 16px; font-family: var(--font); }
 .foot-col a { display: block; color: var(--muted); font-size: 0.94rem; padding: 6px 0; transition: color var(--t); }
 .foot-col a:hover { color: var(--accent); }
+.foot-col .foot-soon { display: flex; align-items: center; gap: 8px; color: var(--faint); font-size: 0.94rem; padding: 6px 0; cursor: default; }
+.foot-col .foot-soon::after { content: 'Soon'; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--faint); border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding-top: 28px; }
 .footer-bottom p { color: var(--faint); font-size: 0.88rem; }
 .footer-socials { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; }
