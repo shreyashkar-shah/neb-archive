@@ -383,6 +383,8 @@ p { text-wrap: pretty; }
 .foot-col h4 { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--faint); margin-bottom: 16px; font-family: var(--font); }
 .foot-col a { display: block; color: var(--muted); font-size: 0.94rem; padding: 6px 0; transition: color var(--t); }
 .foot-col a:hover { color: var(--accent); }
+.foot-soon { display: block; color: var(--faint); font-size: 0.94rem; padding: 6px 0; opacity: 0.5; cursor: not-allowed; }
+.nav-soon { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding-top: 28px; }
 .footer-bottom p { color: var(--faint); font-size: 0.88rem; }
 .footer-socials {
