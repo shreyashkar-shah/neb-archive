@@ -63,7 +63,17 @@ let pdfDoc        = null;
 let currentPage   = 1;
 let totalPages    = 0;
 let scale         = 1.0;
-let fitMode       = 'width';  // A5 portrait: fit-width gives a good default reading size
+function detectDefaultFitMode() {
+    // Touch-primary devices (phones, tablets) — 'pointer: coarse' is the
+    // standard, reliable signal, not fragile user-agent sniffing.
+    try {
+        if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return 'width';
+    } catch (e) {}
+    // Fallback for anything matchMedia can't classify.
+    return window.innerWidth < 900 ? 'width' : 'page';
+}
+
+let fitMode       = detectDefaultFitMode();  // phone/tablet → fit-width, laptop/desktop → fit-page
 let pageElements  = new Map();
 let renderPending = new Set();
 let intersectObs  = null;
@@ -79,9 +89,9 @@ function initMeta() {
     sourceBadge.textContent   = MODE === 'solution' ? 'Solution' : SOURCE;
     paperTitleNav.textContent = TITLE;
     document.title            = `${TITLE} — NEB Archive`;
-    // reflect default fitMode in toolbar
-    fitPageBtn.classList.remove('active');
-    fitWidthBtn.classList.add('active');
+    // reflect the actual default fitMode in the toolbar
+    fitPageBtn.classList.toggle('active',  fitMode === 'page');
+    fitWidthBtn.classList.toggle('active', fitMode === 'width');
     lucide.createIcons();
 }
 
