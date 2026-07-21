@@ -24,6 +24,15 @@ function saveState() {
 }
 
 function loadState() {
+    const cameFromViewer = new URLSearchParams(location.search).get('from') === 'viewer';
+
+    // Strip the marker immediately so a later plain reload doesn't keep restoring.
+    if (cameFromViewer) {
+        history.replaceState(null, '', location.pathname);
+    }
+
+    if (!cameFromViewer) return; // plain reload / fresh nav → keep hardcoded defaults
+
     try {
         const saved = JSON.parse(sessionStorage.getItem(STATE_KEY));
         if (saved && typeof saved === 'object') Object.assign(state, saved);
