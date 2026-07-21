@@ -348,7 +348,7 @@ function renderPapers() {
         <article class="paper-card reveal in" data-year="${y}">
             <div class="paper-icon">${icon('file-text')}</div>
             <div>
-                <div class="paper-title">${state.subject} — ${sourceLabel}</div>
+                <div class="paper-title">${state.subject}</div>
                 <div class="paper-meta">
                     <span>Grade ${state.grade}${state.stream ? ' · ' + state.stream : ''}${isProvinceGrade() ? ' · ' + state.province : ''}</span>
                     <span>·</span>
