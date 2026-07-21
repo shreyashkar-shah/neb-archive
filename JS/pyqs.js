@@ -332,30 +332,35 @@ function renderLeftPanel() {
 /* ── YEAR FILTER ─────────────────────────────────────────── */
 
 function renderYears() {
-    const yrs = currentYears();
-    if (state.year !== 'all' && !yrs.find(y => (y.value || y) === state.year)) state.year = 'all';
+    const yrs = currentYears(); // raw entries: strings or {value, label}
 
-    // Deduplicate chips by numeric year — GIE/model share the same chip as their base year
+    // Compute base year for a raw entry
+    const baseYear = e => (e.value || e).replace(/-model|-sup|-gie|-[a-z]/gi, '').replace(/[^0-9]/g, '').slice(0, 4);
+
+    // Reset state.year if it no longer exists
+    if (state.year !== 'all' && !yrs.find(e => baseYear(e) === state.year)) state.year = 'all';
+
+    // Deduplicate chips — GIE/Sup/model all collapse into same year chip
     const seen = new Set();
-    const chips = yrs.filter(y => {
-        const base = (y.value || y).replace(/-model|-sup|-gie/gi, '');
+    const chips = yrs.filter(e => {
+        const base = baseYear(e);
         if (seen.has(base)) return false;
         seen.add(base);
         return true;
     });
 
-    $('#yearFilter').innerHTML = ['all', ...chips].map(y => {
-        const value = (y.value || y).replace(/-model|-sup|-gie/gi, '');
-        const label = value;
-        return `<button class="year-chip" aria-pressed="${state.year === value}" data-year="${value}">${value === 'all' ? 'All years' : label}</button>`;
+    $('#yearFilter').innerHTML = ['all', ...chips].map(e => {
+        const value = e === 'all' ? 'all' : baseYear(e);
+        return `<button class="year-chip" aria-pressed="${state.year === value}" data-year="${value}">${value === 'all' ? 'All years' : value}</button>`;
     }).join('');
 }
 
 /* ── PAPER LIST ──────────────────────────────────────────── */
 
 function renderPapers() {
-    const yrs  = currentYearValues();
-    const list = state.year === 'all' ? yrs : yrs.filter(y => (y.value || y).startsWith(state.year));
+    const yrs  = currentYearValues(); // array of plain strings e.g. '2081', '2081-gie', '2079-model'
+    const baseYear = v => v.replace(/-model|-sup|-gie|-[a-z]/gi, '').replace(/[^0-9]/g, '').slice(0, 4);
+    const list = state.year === 'all' ? yrs : yrs.filter(y => baseYear(y) === state.year);
 
     const streamPart  = state.stream ? ` (${state.stream})` : '';
     const eyebrow     = `Grade ${state.grade}${streamPart} / ${state.subject}`;
@@ -366,11 +371,12 @@ function renderPapers() {
 
     $('#paperList').innerHTML = list.length ? list.map(y => {
         // Work out a clean label for the year value
+        const yl = y.toLowerCase();
         const suffix =
-            y.includes('model') ? ' (Model Question)' :
-            y.includes('Sup')   ? ' (Supplementary)'  :
-            y.toLowerCase().includes('gie')   ? ' (GIE)'            : '';
-        const yearDisplay = y.replace(/-model|-Sup|-GIE|-gie/gi, '');
+            yl.includes('model') ? ' (Model Question)' :
+            yl.includes('sup')   ? ' (Supplementary)'  :
+            yl.includes('gie')   ? ' (GIE)'             : '';
+        const yearDisplay = y.replace(/-model$|-sup$|-gie$|-[a-z]+$/gi, '');
 
         return `
         <article class="paper-card reveal in" data-year="${y}">
