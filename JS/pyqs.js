@@ -50,7 +50,9 @@ const BOARD_DATA = {
                             { English: ['2083','2082','2081','2080'], 
                               Mathematics: ['2083','2082','2081','2080'], 
                               Nepali: ['2083','2082','2081','2080'], 
-                              Physics: ['2083','2082','2081','2080'], 
+                              Physics: ['2083','2082','2081','2080',
+                                        { value: '2079-model', label: '2083 (Model Question)' },
+    {                                     value: '2078-model', label: '2083 (Model Question))' },], 
                               Chemistry: ['2083','2082','2081'], 
                               Biology: ['2083','2082','2081'], 
                               'Computer Science': ['2083','2082','2081', '2080'] } },
@@ -166,7 +168,7 @@ function availableGrades() {
 }
 
 function currentYears() {
-    return currentSubjects()[state.subject] || [];
+    return (currentSubjects()[state.subject] || []).map(y => y.value || y);
 }
 
 function ensureValidGrade() {
@@ -323,10 +325,12 @@ function renderLeftPanel() {
 
 function renderYears() {
     const yrs = currentYears();
-    if (state.year !== 'all' && !yrs.includes(state.year)) state.year = 'all';
-    $('#yearFilter').innerHTML = ['all', ...yrs].map(y =>
-        `<button class="year-chip" aria-pressed="${state.year === y}" data-year="${y}">${y === 'all' ? 'All years' : y}</button>`
-    ).join('');
+    if (state.year !== 'all' && !yrs.find(y => (y.value || y) === state.year)) state.year = 'all';
+    $('#yearFilter').innerHTML = ['all', ...yrs].map(y => {
+        const value = y.value || y;
+        const label = y.label || y;
+        return `<button class="year-chip" aria-pressed="${state.year === value}" data-year="${value}">${value === 'all' ? 'All years' : label}</button>`;
+    }).join('');
 }
 
 /* ── PAPER LIST ──────────────────────────────────────────── */
