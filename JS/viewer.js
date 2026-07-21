@@ -5,6 +5,7 @@
    ============================================================ */
 
 import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs';
+import { getPaperPath, getPaperURL, getSubjectYearValues } from '../neb-data.mjs';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
@@ -14,10 +15,25 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 const p       = new URLSearchParams(location.search);
 const PDF_URL = p.get('url')    || '';
 const TITLE   = p.get('title')  || 'Question Paper';
-const YEAR    = p.get('year')   || '';
 const GRADE   = p.get('grade')  || '';
 const SOURCE  = p.get('source') || 'NEB Official';
 const MODE    = p.get('mode')   || 'paper';
+
+// Identity params — present on links generated from the PYQs page, absent
+// on older/bare links. Everything below degrades gracefully when they're
+// missing: swipe navigation just has nothing to navigate to.
+const SRC      = p.get('src')      || '';
+const STREAM   = p.get('stream')   || '';
+const SUBJECT  = p.get('subject')  || '';
+const PROVINCE = p.get('province') || '';
+
+let activeYear = p.get('year') || '';
+let activeMode = MODE;
+let activeUrl  = PDF_URL;
+
+const YEAR_LIST = (SRC && GRADE && SUBJECT)
+    ? getSubjectYearValues(SRC, GRADE, STREAM, SUBJECT, PROVINCE)
+    : [];
 
 /* ── DOM ────────────────────────────────────────────────── */
 
@@ -79,15 +95,33 @@ function setProgress(pct) {
 
 /* ── LOAD ───────────────────────────────────────────────── */
 
-async function loadPDF() {
-    if (!PDF_URL) {
+async function loadPDF(url) {
+    if (!url) {
         showPlaceholder('No paper selected', 'Open this viewer from the PYQs page by clicking "View" on a paper.');
         return;
     }
 
+    // Reset — this function now also runs when swiping to a different year.
+    if (intersectObs) { intersectObs.disconnect(); intersectObs = null; }
+    pdfDoc        = null;
+    currentPage   = 1;
+    totalPages    = 0;
+    pageElements  = new Map();
+    renderPending = new Set();
+    loadSuccess   = false;
+    pagesWrap.innerHTML = '';
+    progressBar.classList.remove('done');
+    setProgress(0);
+    loaderShell.hidden        = false;
+    loaderShell.style.display = '';
+    errorShell.hidden         = true;
+    errorShell.style.display  = 'none';
+    canvasScroll.hidden       = true;
+    canvasScroll.style.display = 'none';
+
     try {
         const task = pdfjsLib.getDocument({
-            url: PDF_URL,
+            url,
             cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/cmaps/',
             cMapPacked: true,
             withCredentials: false,
@@ -310,6 +344,80 @@ function showToast(msg) {
     toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
 }
 
+/* ── SWIPE-TO-CHANGE-YEAR ───────────────────────────────── */
+
+function buildTitleForYear(yearValue) {
+    const displayYear = String(yearValue).replace(/-model$/i, '').replace(/-sup(plementary)?$/i, '').replace(/-gie$/i, '');
+    const streamPart  = STREAM ? ` (${STREAM})` : '';
+    const provPart    = PROVINCE && !STREAM ? ` · ${PROVINCE}` : '';
+    return `${SUBJECT}${streamPart} — Grade ${GRADE}${provPart} · ${displayYear}`;
+}
+
+function goToYear(newYear) {
+    const path = getPaperPath(SRC, GRADE, STREAM, SUBJECT, newYear, activeMode, PROVINCE);
+    const url  = getPaperURL(path);
+    const title = buildTitleForYear(newYear);
+
+    activeYear = newYear;
+    activeUrl  = url;
+
+    paperTitleNav.textContent = title;
+    document.title            = `${title} — NEB Archive`;
+
+    // keep the URL in sync so refresh/share/back lands on the right paper
+    const params = new URLSearchParams(location.search);
+    params.set('year', newYear);
+    params.set('url', url);
+    params.set('title', title);
+    history.replaceState(null, '', `${location.pathname}?${params}`);
+
+    showToast(title.split('·').pop().trim());
+    loadPDF(url);
+}
+
+function navigateYear(indexDelta) {
+    if (!YEAR_LIST.length || !activeYear) return; // no identity params → nothing to navigate to
+    const idx = YEAR_LIST.indexOf(activeYear);
+    if (idx === -1) return;
+    const newIdx = idx + indexDelta;
+    if (newIdx < 0)                 { showToast('Already at the newest paper'); return; }
+    if (newIdx >= YEAR_LIST.length) { showToast('Already at the oldest paper'); return; }
+    goToYear(YEAR_LIST[newIdx]);
+}
+
+let swipeStartX = null, swipeStartY = null, swipeStartT = 0, swipeMulti = false;
+
+canvasScroll.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) { swipeMulti = true; return; }
+    swipeMulti  = false;
+    swipeStartX = e.touches[0].clientX;
+    swipeStartY = e.touches[0].clientY;
+    swipeStartT = Date.now();
+}, { passive: true });
+
+canvasScroll.addEventListener('touchmove', e => {
+    if (e.touches.length !== 1) swipeMulti = true;
+}, { passive: true });
+
+canvasScroll.addEventListener('touchend', e => {
+    if (swipeMulti || swipeStartX === null) { swipeStartX = null; return; }
+    // Page is wider than the viewport (zoomed in) → horizontal drag is panning, not swiping.
+    if (canvasScroll.scrollWidth > canvasScroll.clientWidth + 2) { swipeStartX = null; return; }
+
+    const t  = e.changedTouches[0];
+    const dx = t.clientX - swipeStartX;
+    const dy = t.clientY - swipeStartY;
+    const dt = Date.now() - swipeStartT;
+    swipeStartX = null;
+
+    if (Math.abs(dx) < 70) return;                  // too short to be intentional
+    if (Math.abs(dx) < Math.abs(dy) * 1.5) return;   // mostly vertical → page scroll, ignore
+    if (dt > 700) return;                            // too slow to be a flick
+
+    if (dx > 0) navigateYear(-1); // swiped right → newer year
+    else        navigateYear(1);  // swiped left  → older year
+}, { passive: true });
+
 /* ── TOUCH PINCH ────────────────────────────────────────── */
 
 let lastDist = null;
@@ -383,4 +491,4 @@ pagesWrap.addEventListener('contextmenu', e => { if (e.target.tagName === 'CANVA
 /* ── START ──────────────────────────────────────────────── */
 
 initMeta();
-loadPDF();
+loadPDF(activeUrl);

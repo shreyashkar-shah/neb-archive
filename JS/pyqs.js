@@ -99,7 +99,17 @@ function openViewerForCard(card, action) {
     const title      = `${state.subject}${streamPart} — Grade ${state.grade}${provPart} · ${year}`;
     const source     = state.source === 'board' ? 'NEB' : 'School Paper';
 
-    const p = new URLSearchParams({ url: fileURL, title, source, mode });
+    // Extra identity params (src/grade/stream/subject/province/year) let the
+    // viewer look up neighboring years itself, for swipe-to-change-year.
+    const p = new URLSearchParams({
+        url: fileURL, title, source, mode,
+        src: state.source,
+        grade: state.grade,
+        stream: state.stream || '',
+        subject: state.subject,
+        province: state.province || '',
+        year,
+    });
     window.location.href = `viewer.html?${p}`;
 }
 

@@ -131,6 +131,23 @@ export const SCHOOL_DATA = {
 
 export const slug = (s) => s.toLowerCase().replace(/\s+/g, '-');
 
+// Single source of truth for "what years exist for this subject" — mirrors
+// the streams/province/flat shapes above. Used by pyqs.js to render the
+// list, and by viewer.js to know what the "next"/"previous" paper is.
+export function getSubjectYears(source, grade, stream, subject, province) {
+  const node = source === 'board' ? BOARD_DATA[grade] : SCHOOL_DATA[grade];
+  if (!node) return [];
+  const subjects = node.streams  ? (node.streams[stream]?.subjects || {})
+                  : node.province ? (node.subjects?.[province] || {})
+                  : (node.subjects || {});
+  return subjects[subject] || [];
+}
+
+// Same, but normalized to plain path-usable strings (unwraps {value,label}).
+export function getSubjectYearValues(source, grade, stream, subject, province) {
+  return getSubjectYears(source, grade, stream, subject, province).map(y => y.value || y);
+}
+
 export function getPaperPath(source, grade, stream, subject, year, mode, province) {
   const suffix = mode === 'solution' ? '-solution' : '';
   const file = `${year}${suffix}.pdf`;
