@@ -54,7 +54,7 @@ const BOARD_DATA = {
                                         { value: '2079-Model', label: '2079' },
                                         { value: '2078-Model', label: '2078' },], 
                               Chemistry: ['2083', '2082', '2081',
-                                        { value: '2081-GIE', label: '2081 (GIE)' },
+                                        { value: '2081-Supplementary', label: '2081 (Supplementary)' },
                                         { value: '2080-GIE', label: '2080 (GIE)' },
                               ], 
                               Biology: ['2083','2082','2081'], 
