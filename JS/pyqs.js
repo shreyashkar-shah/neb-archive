@@ -328,7 +328,7 @@ function renderYears() {
     if (state.year !== 'all' && !yrs.find(y => (y.value || y) === state.year)) state.year = 'all';
     $('#yearFilter').innerHTML = ['all', ...yrs].map(y => {
         const value = y.value || y;
-        const label = y.label || y;
+const label = y.label || y.replace(/-model|-Sup|-GIE/gi, '');
         return `<button class="year-chip" aria-pressed="${state.year === value}" data-year="${value}">${value === 'all' ? 'All years' : label}</button>`;
     }).join('');
 }
