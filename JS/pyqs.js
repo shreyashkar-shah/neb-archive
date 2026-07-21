@@ -15,6 +15,29 @@ const state = {
     year:     'all',
 };
 
+/* ── STATE PERSISTENCE (survives view → back navigation) ─── */
+
+const STATE_KEY = 'nebArchiveState';
+
+function saveState() {
+    try { sessionStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function loadState() {
+    try {
+        const saved = JSON.parse(sessionStorage.getItem(STATE_KEY));
+        if (saved && typeof saved === 'object') Object.assign(state, saved);
+    } catch (e) {}
+}
+
+function syncSourceButtons() {
+    document.querySelectorAll('.source-btn').forEach(b => {
+        const active = b.dataset.source === state.source;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active);
+    });
+}
+
 /* ── HELPERS ────────────────────────────────────────────── */
 
 const $ = s => document.querySelector(s);
@@ -304,15 +327,18 @@ function render() {
     renderPapers();
     renderStats();
     lucide.createIcons();
+    saveState();
 }
 
 /* ── INIT ─────────────────────────────────────────────────── */
 
 document.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
+    loadState();
     ensureValidGrade();
     ensureValidStream();
     ensureValidSubject();
+    syncSourceButtons();
     render();
     $('#year').textContent = new Date().getFullYear();
 
@@ -376,6 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderPapers();
             renderStats();
             lucide.createIcons();
+            saveState();
             return;
         }
 
@@ -389,6 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderPapers();
             renderStats();
             lucide.createIcons();
+            saveState();
             return;
         }
 
@@ -399,6 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderYears();
             renderPapers();
             lucide.createIcons();
+            saveState();
         }
     });
 
