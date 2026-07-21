@@ -226,8 +226,9 @@ p { text-wrap: pretty; }
 .sort-note { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.83rem; white-space: nowrap; }
 .sort-note svg { width: 16px; height: 16px; color: var(--accent); }
 
-.year-filter { display: flex; gap: 8px; flex-wrap: wrap; padding: 24px 0; }
-.year-chip { border: 1px solid var(--border-strong); background: transparent; color: var(--muted); border-radius: 999px; padding: 7px 16px; font-size: 0.84rem; font-weight: 500; transition: background var(--t), color var(--t), border-color var(--t); cursor: pointer; }
+.year-filter { display: flex; gap: 8px; flex-wrap: nowrap; overflow-x: auto; padding: 24px 0; scrollbar-width: none; -ms-overflow-style: none; }
+.year-filter::-webkit-scrollbar { display: none; }
+.year-chip { border: 1px solid var(--border-strong); background: transparent; color: var(--muted); border-radius: 999px; padding: 7px 16px; font-size: 0.84rem; font-weight: 500; transition: background var(--t), color var(--t), border-color var(--t); cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 .year-chip:hover { border-color: var(--accent-soft); color: var(--ink); }
 .year-chip[aria-pressed="true"] { background: var(--accent-tint); color: var(--accent-ink); border-color: var(--accent-soft); }
 
