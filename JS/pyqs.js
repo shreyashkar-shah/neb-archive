@@ -53,7 +53,10 @@ const BOARD_DATA = {
                               Physics: ['2083','2082','2081','2080',
                                         { value: '2079-model', label: '2079' },
                                         { value: '2078-model', label: '2078' },], 
-                              Chemistry: ['2083','2082','2081'], 
+                              Chemistry: ['2083', '2082', '2081',
+                                        { value: '2081-gie', label: '2081 (GIE)' },
+                                        { value: '2080-gie', label: '2080 (GIE)' },
+                              ], 
                               Biology: ['2083','2082','2081'], 
                               'Computer Science': ['2083','2082','2081', '2080'] } },
 
@@ -168,7 +171,12 @@ function availableGrades() {
 }
 
 function currentYears() {
-    return (currentSubjects()[state.subject] || []).map(y => y.value || y);
+    // Returns raw entries (string or {value, label}) — callers extract .value as needed
+    return currentSubjects()[state.subject] || [];
+}
+
+function currentYearValues() {
+    return currentYears().map(y => y.value || y);
 }
 
 function ensureValidGrade() {
@@ -326,9 +334,19 @@ function renderLeftPanel() {
 function renderYears() {
     const yrs = currentYears();
     if (state.year !== 'all' && !yrs.find(y => (y.value || y) === state.year)) state.year = 'all';
-    $('#yearFilter').innerHTML = ['all', ...yrs].map(y => {
-        const value = y.value || y;
-const label = y.label || y.replace(/-model|-Sup|-GIE/gi, '');
+
+    // Deduplicate chips by numeric year — GIE/model share the same chip as their base year
+    const seen = new Set();
+    const chips = yrs.filter(y => {
+        const base = (y.value || y).replace(/-model|-sup|-gie/gi, '');
+        if (seen.has(base)) return false;
+        seen.add(base);
+        return true;
+    });
+
+    $('#yearFilter').innerHTML = ['all', ...chips].map(y => {
+        const value = (y.value || y).replace(/-model|-sup|-gie/gi, '');
+        const label = value;
         return `<button class="year-chip" aria-pressed="${state.year === value}" data-year="${value}">${value === 'all' ? 'All years' : label}</button>`;
     }).join('');
 }
@@ -336,8 +354,8 @@ const label = y.label || y.replace(/-model|-Sup|-GIE/gi, '');
 /* ── PAPER LIST ──────────────────────────────────────────── */
 
 function renderPapers() {
-    const yrs  = currentYears();
-    const list = state.year === 'all' ? yrs : yrs.filter(y => y === state.year);
+    const yrs  = currentYearValues();
+    const list = state.year === 'all' ? yrs : yrs.filter(y => (y.value || y).startsWith(state.year));
 
     const streamPart  = state.stream ? ` (${state.stream})` : '';
     const eyebrow     = `Grade ${state.grade}${streamPart} / ${state.subject}`;
@@ -351,8 +369,8 @@ function renderPapers() {
         const suffix =
             y.includes('model') ? ' (Model Question)' :
             y.includes('Sup')   ? ' (Supplementary)'  :
-            y.includes('GIE')   ? ' (GIE)'            : '';
-        const yearDisplay = y.replace(/-model|-Sup|-GIE/gi, '');
+            y.toLowerCase().includes('gie')   ? ' (GIE)'            : '';
+        const yearDisplay = y.replace(/-model|-Sup|-GIE|-gie/gi, '');
 
         return `
         <article class="paper-card reveal in" data-year="${y}">
