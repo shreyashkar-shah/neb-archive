@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textbooks — NEB Archive</title>
+    <meta name="description" content="Official CDC/NEB textbooks for Grades 10, 11 and 12. Science and Management streams. Open in browser instantly, no download needed.">
+
+    <script>
+        (function() {
+            const t = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@350;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@0.475.0"></script>
+    <link rel="stylesheet" href="CSS/style(pyqs).css">
+    <link rel="stylesheet" href="CSS/style(textbooks).css">
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-mark"><i data-lucide="layers"></i></span>
+                NEB Archive
+            </a>
+            <nav class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="pyqs.html" class="nav-link">PYQs</a>
+                <a href="textbooks.html" class="nav-link active">Textbooks</a>
+                <a href="#" class="nav-link nav-soon" title="Coming soon">Notes</a>
+                <a href="#" class="nav-link nav-soon" title="Coming soon">Quizzes</a>
+            </nav>
+            <div class="nav-right">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i class="i-sun" data-lucide="sun"></i>
+                    <i class="i-moon" data-lucide="moon"></i>
+                </button>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+
+        <!-- ==================== HERO ==================== -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-grid"></div>
+            <div class="container">
+                <div class="pyq-hero-grid">
+                    <div class="hero-inner" style="text-align:left; max-width:100%;">
+                        <span class="eyebrow">Official Textbooks</span>
+                        <h1 class="hero-title">CDC Textbooks,<br>all in one place</h1>
+                        <p class="hero-subtitle" style="margin-left:0;">
+                            Official NEB/CDC prescribed textbooks for Grades 10, 11 and 12. Open any book instantly in the browser — no hunting PDFs, no dead links.
+                        </p>
+                    </div>
+
+                    <!-- Info panel -->
+                    <div class="stats-panel reveal" style="--i:1">
+                        <div class="stats-panel-header">
+                            <span class="stats-label" id="statsLabel">Grade 12 · Science</span>
+                            <i data-lucide="book-open"></i>
+                        </div>
+                        <div class="stats-grid" id="statsGrid"></div>
+                        <div class="stats-footer" id="statsFooter"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ARCHIVE SECTION ==================== -->
+        <section class="section archive-section">
+            <div class="container">
+
+                <!-- Grade Pills -->
+                <div class="grade-bar reveal">
+                    <div class="grade-caption" id="gradeCaption">Select your grade to view available textbooks.</div>
+                    <div class="grade-pills" id="gradePills"></div>
+                </div>
+
+                <!-- Stream bar (Grade 11 & 12) -->
+                <!-- injected by JS -->
+
+                <!-- Layout -->
+                <div class="archive-layout">
+
+                    <aside class="subject-panel reveal" id="subjectPanel">
+                        <div class="panel-heading">
+                            <h2 id="subjectHeading">Grade 12</h2>
+                            <button id="subjectToggle" class="collapse-btn" aria-expanded="true">
+                                <i data-lucide="chevron-down"></i>
+                            </button>
+                        </div>
+                        <p class="subject-note" id="subjectNote">Select a subject to view its textbook.</p>
+                        <div class="subject-list" id="subjectList"></div>
+                    </aside>
+
+                    <div class="paper-panel reveal" style="--i:1">
+                        <div class="content-top">
+                            <div>
+                                <span class="eyebrow" id="contentEyebrow">Grade 12 / Physics</span>
+                                <h2 id="bookHeading">Physics</h2>
+                                <p id="bookMeta">Official CDC textbook</p>
+                            </div>
+                        </div>
+
+                        <div class="book-display" id="bookDisplay"></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <span class="logo-mark"><i data-lucide="layers"></i></span>
+                        NEB Archive
+                    </a>
+                    <p class="footer-tag">Authentic NEB study resources, organized and free for every student in Nepal.</p>
+                </div>
+                <div class="foot-col">
+                    <h4>Resources</h4>
+                    <a href="pyqs.html">PYQs</a>
+                    <span class="foot-soon">Notes</span>
+                    <span class="foot-soon">Quizzes</span>
+                    <a href="textbooks.html">Textbooks</a>
+                </div>
+                <div class="foot-col">
+                    <h4>Project</h4>
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© <span id="year"></span> NEB Archive · All Rights Reserved</p>
+                <div class="footer-socials">
+                    <a href="#" aria-label="GitHub"><i data-lucide="github"></i></a>
+                    <a href="#" aria-label="Mail"><i data-lucide="mail"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="JS/textbooks.js"></script>
+</body>
+</html>

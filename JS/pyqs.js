@@ -21,7 +21,7 @@ const $ = s => document.querySelector(s);
 const icon = n => `<i data-lucide="${n}"></i>`;
 
 const subjectIcon = s =>
-    s === 'Mathematics' || s === 'Business Mathematics' ? 'sigma' :
+    s === 'Mathematics' || s === 'Business Mathematics' || s === 'Optional Mathematics' ? 'sigma' :
     s === 'Physics'            ? 'atom' :
     s === 'Chemistry'          ? 'flask-conical' :
     s === 'Biology'            ? 'dna' :
@@ -109,8 +109,8 @@ function openViewerForCard(card, action) {
         subject: state.subject,
         province: state.province || '',
         year,
+        return: 'pyqs.html?from=viewer',
     });
-    sessionStorage.setItem('pyqsState', JSON.stringify(state));
     window.location.href = `viewer.html?${p}`;
 }
 
@@ -323,16 +323,6 @@ function render() {
 
 document.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
-
-    const saved = sessionStorage.getItem('pyqsState');
-    if (saved) {
-        try {
-            Object.assign(state, JSON.parse(saved));
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
     ensureValidGrade();
     ensureValidStream();
     ensureValidSubject();

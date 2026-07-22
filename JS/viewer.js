@@ -26,6 +26,7 @@ const SRC      = p.get('src')      || '';
 const STREAM   = p.get('stream')   || '';
 const SUBJECT  = p.get('subject')  || '';
 const PROVINCE = p.get('province') || '';
+const RETURN_TO = p.get('return') || 'pyqs.html?from=viewer'; // default preserves existing pyqs.js links
 
 let activeYear = p.get('year') || '';
 let activeMode = MODE;
@@ -92,6 +93,11 @@ function initMeta() {
     // reflect the actual default fitMode in the toolbar
     fitPageBtn.classList.toggle('active',  fitMode === 'page');
     fitWidthBtn.classList.toggle('active', fitMode === 'width');
+    // send the user back to wherever they actually opened this from
+    const backBtn = document.getElementById('backBtn');
+    const errorBackBtn = document.getElementById('errorBackBtn');
+    if (backBtn) backBtn.href = RETURN_TO;
+    if (errorBackBtn) errorBackBtn.href = RETURN_TO;
     lucide.createIcons();
 }
 
