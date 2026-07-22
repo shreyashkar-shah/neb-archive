@@ -40,8 +40,7 @@ export const BOARD_DATA = {
         Nepali: ['2082','2081','2080'],
         Science: ['2082','2081','2080'],
         'Social Studies': ['2082','2081','2080'],
-        'Computer Science': ['2082','2081','2080'],
-        Accounting: ['2082','2081','2080'],
+        'Optional Mathematics': ['2082','2081','2080']
       },
       Bagmati: {
         English: ['2082','2081','2080'],
@@ -49,8 +48,7 @@ export const BOARD_DATA = {
         Nepali: ['2082','2081','2080'],
         Science: ['2082','2081','2080'],
         'Social Studies': ['2082','2081','2080'],
-        'Optional Mathematics': ['2082','2081','2080'],
-        Economics: ['2082','2081','2080'],
+        'Optional Mathematics': ['2082','2081','2080']
       },
       Gandaki: {
         English: ['2082','2081','2080'],
