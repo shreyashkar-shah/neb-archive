@@ -111,7 +111,10 @@ const $ = s => document.querySelector(s);
 const icon = n => `<i data-lucide="${n}"></i>`;
 
 function slug(s) {
-    return s.toLowerCase().replace(/\s+/g, '-');
+    return s.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')  // strip punctuation (em-dashes, etc.)
+        .trim()
+        .replace(/\s+/g, '-');
 }
 
 function getBookURL(grade, stream, subject, bookTitle) {
