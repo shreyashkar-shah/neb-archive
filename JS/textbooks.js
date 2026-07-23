@@ -72,9 +72,9 @@ const TEXTBOOK_DATA = {
                 ]},
                 Nepali:            { available: true },
                 Physics:           { available: false, recommended: [
-                    { title: 'Pioneer Physics', author: 'K.B. Rayamajhi et al.', publisher: 'Dreamland Publication', available: false },
-                    { title: 'Concepts of Physics', author: 'H.C. Verma', publisher: 'Bharati Bhawan', available: false },
-                    { title: 'Numerical Problems in Physics', author: 'V.K. Jha', publisher: 'Heritage Publisher & Distributors', available: false },
+                    { title: 'Concepts of Physics (Volume - 1)', author: 'H.C. Verma', publisher: 'Bharati Bhawan', available: true, file: 'hcv1' },
+                    { title: 'Concepts of Physics (Volume - 2)', author: 'H.C. Verma', publisher: 'Bharati Bhawan', available: true, file: 'hcv2' },
+                    { title: 'Physics Textbook (Based on NEB)', available: true, file: 'physics12' },
                 ]},
                 Chemistry:         { available: false, recommended: [
                     { title: 'Pioneer Chemistry', author: 'A.D. Mishra et al.', publisher: 'Dreamland Publication', available: false },
@@ -117,16 +117,20 @@ function slug(s) {
         .replace(/\s+/g, '-');
 }
 
-function getBookURL(grade, stream, subject, bookTitle) {
+function getBookURL(grade, stream, subject, book) {
     const subjSlug = slug(subject);
     const segs = [grade];
     if (stream) segs.push(slug(stream));
     segs.push(subjSlug);
 
-    // Official CDC textbook → filename defaults to subject + grade (english12.pdf)
-    // Alt/recommended book → filename is the book's own title slug + grade
-    const fileSlug = bookTitle ? slug(bookTitle) : subjSlug;
-    segs.push(`${fileSlug}${grade}.pdf`);
+    if (book && book.file) {
+        // Explicit filename given — use it exactly as-is, no grade auto-append
+        segs.push(`${book.file}.pdf`);
+    } else {
+        // No override — official CDC textbook or auto-slug of title, grade appended
+        const fileSlug = book ? slug(book.title) : subjSlug;
+        segs.push(`${fileSlug}${grade}.pdf`);
+    }
 
     return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${segs.join('/')}`;
 }
@@ -136,7 +140,7 @@ function getViewerURL(grade, stream, subject, book) {
     const title  = book
         ? `${book.title} — ${subject}${streamPart}, Grade ${grade}`
         : `${subject}${streamPart} — Grade ${grade} Textbook`;
-    const url    = getBookURL(grade, stream, subject, book?.title);
+    const url    = getBookURL(grade, stream, subject, book);   // ← was book?.title
     const source = book ? (book.author || book.publisher || 'Reference') : 'CDC Textbook';
     const p      = new URLSearchParams({ url, title, source, mode: 'paper', return: 'textbooks.html' });
     return `viewer.html?${p}`;
@@ -284,7 +288,7 @@ function renderBook() {
                 <div class="recommend-wrap">
                     <div class="recommend-note">
                         ${icon('info')}
-                        <span>No official CDC PDF for ${state.subject} yet. Here are the reference books we're adding for NEB ${state.grade}${streamPart}.</span>
+                        <span>Here are the reference books we're adding for NEB ${state.grade}${streamPart}.</span>
                     </div>
                     <div class="alt-book-list">
                         ${recs.map(b => {
