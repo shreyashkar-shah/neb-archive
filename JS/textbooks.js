@@ -118,11 +118,17 @@ function slug(s) {
 }
 
 function getBookURL(grade, stream, subject, bookTitle) {
+    const subjSlug = slug(subject);
     const segs = [grade];
     if (stream) segs.push(slug(stream));
-    segs.push(slug(subject));
-    if (bookTitle) segs.push(slug(bookTitle));
-    return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${segs.join('/')}.pdf`;
+    segs.push(subjSlug);
+
+    // Official CDC textbook → filename defaults to subject + grade (english12.pdf)
+    // Alt/recommended book → filename is the book's own title slug + grade
+    const fileSlug = bookTitle ? slug(bookTitle) : subjSlug;
+    segs.push(`${fileSlug}${grade}.pdf`);
+
+    return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${segs.join('/')}`;
 }
 
 function getViewerURL(grade, stream, subject, book) {
