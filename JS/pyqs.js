@@ -15,6 +15,19 @@ const state = {
     year:     'all',
 };
 
+const STATE_KEY = 'nebArchivePyqState';
+
+function saveState() {
+    try { sessionStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function restoreState() {
+    try {
+        const saved = JSON.parse(sessionStorage.getItem(STATE_KEY));
+        if (saved) Object.assign(state, saved);
+    } catch (e) {}
+}
+
 /* ── HELPERS ────────────────────────────────────────────── */
 
 const $ = s => document.querySelector(s);
@@ -98,6 +111,8 @@ function openViewerForCard(card, action) {
     const provPart   = isProvinceGrade() ? ` · ${state.province}` : '';
     const title      = `${state.subject}${streamPart} — Grade ${state.grade}${provPart} · ${year}`;
     const source     = state.source === 'board' ? 'NEB' : 'School Paper';
+
+    saveState();
 
     // Extra identity params (src/grade/stream/subject/province/year) let the
     // viewer look up neighboring years itself, for swipe-to-change-year.
@@ -322,6 +337,7 @@ function render() {
 /* ── INIT ─────────────────────────────────────────────────── */
 
 document.addEventListener('DOMContentLoaded', () => {
+    restoreState();
     lucide.createIcons();
     ensureValidGrade();
     ensureValidStream();
