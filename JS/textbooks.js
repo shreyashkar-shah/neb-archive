@@ -71,10 +71,9 @@ const TEXTBOOK_DATA = {
                     { title: 'Fundamental Mathematics', author: 'P.M. Bajracharya et al.', publisher: 'Buddha Publication', available: false },
                 ]},
                 Nepali:            { available: true },
-                Physics:           { available: false, recommended: [
+                Physics:           { available: true, recommended: [
                     { title: 'Concepts of Physics (Volume - 1)', author: 'H.C. Verma', publisher: 'Bharati Bhawan', available: true, file: 'hcv1' },
                     { title: 'Concepts of Physics (Volume - 2)', author: 'H.C. Verma', publisher: 'Bharati Bhawan', available: true, file: 'hcv2' },
-                    { title: 'Physics Textbook (Based on NEB)', available: true, file: 'physics12' },
                 ]},
                 Chemistry:         { available: false, recommended: [
                     { title: 'Pioneer Chemistry', author: 'A.D. Mishra et al.', publisher: 'Dreamland Publication', available: false },
@@ -189,18 +188,27 @@ function ensureValidSubject() {
     if (!subs.includes(state.subject)) state.subject = subs[0] || '';
 }
 
+// A subject counts as "available" if it has an official CDC PDF, OR at least
+// one recommended reference book that's actually uploaded. This is what the
+// stats bar and book-meta text should reflect — not just the official flag.
+function subjectHasContent(data) {
+    if (!data) return false;
+    if (data.available) return true;
+    return (data.recommended || []).some(b => b.available);
+}
+
 /* ── RENDER: STATS PANEL ─────────────────────────────────── */
 
 function renderStats() {
     const subs      = currentSubjects();
     const subNames  = Object.keys(subs);
-    const available = subNames.filter(s => subs[s].available).length;
+    const available = subNames.filter(s => subjectHasContent(subs[s])).length;
     const streamPart = state.stream ? ` · ${state.stream}` : '';
 
     $('#statsLabel').textContent = `Grade ${state.grade}${streamPart}`;
 
     $('#statsGrid').innerHTML = subNames.map(s => {
-        const avail = subs[s].available;
+        const avail = subjectHasContent(subs[s]);
         return `
             <div class="stat-row">
                 <span class="stat-subject">${s}</span>
@@ -270,59 +278,39 @@ function renderLeftPanel() {
 /* ── RENDER: BOOK DISPLAY ────────────────────────────────── */
 
 function renderBook() {
-    const subs       = currentSubjects();
-    const data       = subs[state.subject];
-    const streamPart = state.stream ? ` (${state.stream})` : '';
-    const eyebrow    = `Grade ${state.grade}${streamPart} / ${state.subject}`;
+    const subs        = currentSubjects();
+    const data        = subs[state.subject];
+    const streamPart  = state.stream ? ` (${state.stream})` : '';
+    const eyebrow     = `Grade ${state.grade}${streamPart} / ${state.subject}`;
+    const hasOfficial = !!data?.available;
+    const recs        = data?.recommended || [];
 
     $('#contentEyebrow').textContent = eyebrow;
     $('#bookHeading').textContent    = state.subject;
-    $('#bookMeta').textContent       = data?.available
+    $('#bookMeta').textContent       = hasOfficial
         ? 'Official CDC Textbook · Available'
-        : (data?.recommended?.length ? 'No official CDC PDF · Recommended references below' : 'Official CDC Textbook · Coming soon');
+        : (recs.length ? 'No official CDC PDF · Recommended references below' : 'Official CDC Textbook · Coming soon');
 
-    if (!data?.available) {
-        const recs = data?.recommended || [];
-        if (recs.length) {
-            $('#bookDisplay').innerHTML = `
-                <div class="recommend-wrap">
-                    <div class="recommend-note">
-                        ${icon('info')}
-                        <span>Here are the reference books we're adding for NEB ${state.grade}${streamPart}.</span>
-                    </div>
-                    <div class="alt-book-list">
-                        ${recs.map(b => {
-                            const metaLine = [b.author, b.publisher].filter(Boolean).join(' · ');
-                            if (b.available) {
-                                const url = getViewerURL(state.grade, state.stream, state.subject, b);
-                                return `
-                                <a href="${url}" class="book-card alt-book-card">
-                                    <div class="book-card-icon">${icon('book-open')}</div>
-                                    <div class="book-card-body">
-                                        <div class="book-card-title">${b.title}</div>
-                                        <div class="book-card-sub">${metaLine}</div>
-                                        <div class="book-card-badge available">Available</div>
-                                    </div>
-                                    <div class="book-card-action">${icon('eye')} <span>Open</span></div>
-                                </a>`;
-                            }
-                            return `
-                                <div class="book-card alt-book-card coming-soon">
-                                    <div class="book-card-icon">${icon('clock')}</div>
-                                    <div class="book-card-body">
-                                        <div class="book-card-title">${b.title}</div>
-                                        <div class="book-card-sub">${metaLine}</div>
-                                        <div class="book-card-badge coming">Coming soon</div>
-                                    </div>
-                                </div>`;
-                        }).join('')}
-                    </div>
-                </div>`;
-            window.lucide?.createIcons();
-            return;
-        }
+    let html = '';
 
-        $('#bookDisplay').innerHTML = `
+    // Official CDC card — shown whenever the PDF exists, regardless of recommended list
+    if (hasOfficial) {
+        const viewerURL = getViewerURL(state.grade, state.stream, state.subject);
+        html += `
+            <a href="${viewerURL}" class="book-card">
+                <div class="book-card-icon">${icon('book-open')}</div>
+                <div class="book-card-body">
+                    <div class="book-card-title">${state.subject} Textbook</div>
+                    <div class="book-card-sub">Grade ${state.grade}${streamPart} · CDC Official</div>
+                    <div class="book-card-badge available">Available</div>
+                </div>
+                <div class="book-card-action">
+                    ${icon('eye')} <span>Open Textbook</span>
+                </div>
+            </a>`;
+    } else if (!recs.length) {
+        // No official book AND nothing recommended yet — the true "coming soon" case
+        html += `
             <div class="book-card coming-soon">
                 <div class="book-card-icon">${icon('clock')}</div>
                 <div class="book-card-body">
@@ -331,24 +319,49 @@ function renderBook() {
                     <div class="book-card-badge coming">Coming soon</div>
                 </div>
             </div>`;
-        window.lucide?.createIcons();
-        return;
     }
 
-    const viewerURL = getViewerURL(state.grade, state.stream, state.subject);
+    // Recommended/reference books — shown whenever present, alongside the official card if there is one
+    if (recs.length) {
+        html += `
+            <div class="recommend-wrap" style="${hasOfficial ? 'margin-top:20px' : ''}">
+                <div class="recommend-note">
+                    ${icon('info')}
+                    <span>${hasOfficial
+                        ? `Additional reference books for NEB ${state.grade}${streamPart}.`
+                        : `Here are the reference books we're adding for NEB ${state.grade}${streamPart}.`}</span>
+                </div>
+                <div class="alt-book-list">
+                    ${recs.map(b => {
+                        const metaLine = [b.author, b.publisher].filter(Boolean).join(' · ');
+                        if (b.available) {
+                            const url = getViewerURL(state.grade, state.stream, state.subject, b);
+                            return `
+                            <a href="${url}" class="book-card alt-book-card">
+                                <div class="book-card-icon">${icon('book-open')}</div>
+                                <div class="book-card-body">
+                                    <div class="book-card-title">${b.title}</div>
+                                    <div class="book-card-sub">${metaLine}</div>
+                                    <div class="book-card-badge available">Available</div>
+                                </div>
+                                <div class="book-card-action">${icon('eye')} <span>Open</span></div>
+                            </a>`;
+                        }
+                        return `
+                            <div class="book-card alt-book-card coming-soon">
+                                <div class="book-card-icon">${icon('clock')}</div>
+                                <div class="book-card-body">
+                                    <div class="book-card-title">${b.title}</div>
+                                    <div class="book-card-sub">${metaLine}</div>
+                                    <div class="book-card-badge coming">Coming soon</div>
+                                </div>
+                            </div>`;
+                    }).join('')}
+                </div>
+            </div>`;
+    }
 
-    $('#bookDisplay').innerHTML = `
-        <a href="${viewerURL}" class="book-card">
-            <div class="book-card-icon">${icon('book-open')}</div>
-            <div class="book-card-body">
-                <div class="book-card-title">${state.subject} Textbook</div>
-                <div class="book-card-sub">Grade ${state.grade}${streamPart} · CDC Official</div>
-                <div class="book-card-badge available">Available</div>
-            </div>
-            <div class="book-card-action">
-                ${icon('eye')} <span>Open Textbook</span>
-            </div>
-        </a>`;
+    $('#bookDisplay').innerHTML = html;
     window.lucide?.createIcons();
 }
 
