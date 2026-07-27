@@ -1,0 +1,104 @@
+/* ============================================================
+   NEB Archive — About Page Styles
+   Inherits all tokens + base components from style.css.
+   Only genuinely new components live here.
+   ============================================================ */
+
+/* ── STORY PROSE ─────────────────────────────────────────── */
+.about-prose {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.about-prose p {
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    text-align: justify;
+    hyphens: auto;
+}
+
+/* ── NOTE CARD ───────────────────────────────────────────── */
+.note-card {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 48px 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--t), border-color var(--t);
+}
+.note-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+}
+
+/* ── FOUNDER CARD ────────────────────────────────────────── */
+.founder-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 48px 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--t), border-color var(--t);
+}
+.founder-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+}
+
+.founder-avatar {
+    width: 84px;
+    height: 84px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--accent-tint);
+    color: var(--accent);
+    display: grid;
+    place-items: center;
+}
+.founder-avatar svg { width: 36px; height: 36px; }
+
+.founder-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.founder-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: var(--heading-weight);
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+.founder-role {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 6px 0 14px;
+}
+.founder-bio {
+    font-size: 0.98rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 48ch;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 720px) {
+    .founder-card { padding: 36px 24px; }
+    .note-card { padding: 32px 24px; }
+    .about-prose p { font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .founder-card, .note-card { transition: none; }
+}

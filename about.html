@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Why NEB Archive exists — a free, ad-free, organized archive of NEB past papers and textbooks for Grades 10–12, built for students in Nepal.">
+    <title>About — NEB Archive</title>
+
+    <!-- Prevent flash of wrong theme -->
+    <script>
+        (function () {
+            try {
+                const t = localStorage.getItem('theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+        })();
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@350;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@0.475.0"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="CSS/style(about).css">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RT0GH6QY0J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-RT0GH6QY0J');
+    </script>
+
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo" aria-label="NEB Archive home">
+                <span class="logo-mark"><i data-lucide="library-big"></i></span>
+                NEB Archive
+            </a>
+
+            <nav class="nav-links" id="navLinks" aria-label="Primary">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="pyqs.html" class="nav-link">PYQs</a>
+                <a href="textbooks.html" class="nav-link">Textbooks</a>
+                <a href="#" class="nav-link nav-soon" title="Coming soon">Notes</a>
+                <a href="#" class="nav-link nav-soon" title="Coming soon">Quizzes</a>
+            </nav>
+
+            <div class="nav-right">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <i data-lucide="sun" class="i-sun"></i>
+                    <i data-lucide="moon" class="i-moon"></i>
+                </button>
+                <a href="pyqs.html" class="btn btn-primary nav-cta">Browse resources</a>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+
+    <!-- ==================== BUILDER ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="eyebrow">Behind The Project</span>
+                <h2 class="section-title">Who's building this website?</h2>
+            </div>
+            <div class="founder-card reveal">
+                <div class="founder-avatar" aria-hidden="true">
+                    <i data-lucide="user"></i>
+                </div>
+                <div class="founder-body">
+                    <div class="founder-name"><!-- EDIT -->Shreyashkar Shah</div>
+                    <div class="founder-role">Developer, NEB Archive</div>
+                    <p class="founder-bio"><!-- EDIT: a couple sentences about yourself — who you are, what you're studying, why this -->Greetings everyone!<br>This is my side project so things might some time to be fully up-to-date. I hope you found this website useful.<br>Best wishes for your preparations!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== A MESSAGE ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="eyebrow">A Note from the Developer</span>
+                <h2 class="section-title">What I want you to know</h2>
+            </div>
+            <div class="note-card reveal" style="--i:1">
+                <div class="about-prose">
+                    <!-- EDIT: replace with your own message to the students using this site —
+                         why you're doing this, what you want them to take from it,
+                         anything you'd want a stranger reading this to actually hear from you.
+                         2–4 short paragraphs read best; write it like you're talking to one person. -->
+                    <p>While I was in high school, especially during exam season, I often struggled to find authentic and well-organized past papers. Most resources were scattered across different websites, outdated, or difficult to trust. That frustration inspired me to build NEB Archive—a centralized platform where students can easily access reliable question papers and study materials without wasting hours searching. This project is my attempt to solve the very problems I once faced as a student.</p>
+                    <p>NEB Archive is still in its early days, and there’s plenty of room to improve. If you notice something missing, outdated, or broken, I’d genuinely appreciate hearing about it. Every suggestion and bug report helps make this platform better for every student who uses it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section class="cta section">
+        <div class="container">
+            <div class="cta-panel reveal">
+                <div class="cta-inner">
+                    <span class="eyebrow" style="color:oklch(80% 0.09 264)">Found a mistake?</span>
+                    <h2>Help make it better</h2>
+                    <p>Spotted a wrong paper, a broken link, or a missing subject? Reports directly shape what gets fixed next.</p>
+                    <a href="mailto:shrijalworkspace@gmail.com" class="btn btn-primary btn-lg"><!-- EDIT: your email -->Report an issue <i data-lucide="arrow-right" class="arrow"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <span class="logo-mark"><i data-lucide="library-big"></i></span>
+                        NEB Archive
+                    </a>
+                    <p class="footer-tag">Authentic NEB study resources, organized and free for every student in Nepal.</p>
+                </div>
+                <div class="foot-col">
+                    <h4>Resources</h4>
+                    <a href="pyqs.html">PYQs</a>
+                    <a href="textbooks.html">Textbooks</a>
+                    <span class="foot-soon">Study notes</span>
+                    <span class="foot-soon">Quizzes</span>
+                </div>
+                <div class="foot-col">
+                    <h4>Project</h4>
+                    <a href="about.html">About</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© <span id="year"></span> NEB Archive · All Rights Reserved</p>
+                <div class="footer-socials">
+                    <a href="###" target="_blank" rel="noopener" aria-label="GitHub"><i data-lucide="github"></i></a>
+                    <a href="###" aria-label="Email"><i data-lucide="mail"></i></a>
+                    <a href="###" target="_blank" rel="noopener" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="JS/index.js"></script>
+</body>
+</html>
