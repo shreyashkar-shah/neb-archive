@@ -18,7 +18,9 @@ const TEXTBOOK_DATA = {
             Science:            { available: true },
             'Social Studies':   { available: true },
             'Computer Science': { available: true },
-            Accounting:         { available: true },
+            Accounting:         { available: true, recommended: [
+                { title: 'Accounting (English Version)',available: true, file: 'accounting-english' },
+            ]},
         }
     },
     11: {
