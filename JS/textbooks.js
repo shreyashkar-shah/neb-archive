@@ -143,7 +143,7 @@ function getViewerURL(grade, stream, subject, book) {
         : `${subject}${streamPart} — Grade ${grade} Textbook`;
     const url    = getBookURL(grade, stream, subject, book);   // ← was book?.title
     const source = book ? (book.author || book.publisher || 'Reference') : 'CDC Textbook';
-    const p      = new URLSearchParams({ url, title, source, mode: 'paper', return: 'textbooks.html' });
+    const p      = new URLSearchParams({ url, title, source, mode: 'paper', return: 'textbooks.html?from=viewer' });
     return `viewer.html?${p}`;
 }
 
@@ -167,6 +167,19 @@ const state = {
     stream:  'Science',
     subject: 'Physics',
 };
+
+const STATE_KEY = 'nebArchiveTextbookState';
+
+function saveState() {
+    try { sessionStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function restoreState() {
+    try {
+        const saved = JSON.parse(sessionStorage.getItem(STATE_KEY));
+        if (saved) Object.assign(state, saved);
+    } catch (e) {}
+}
 
 /* ── CURRENT DATA HELPERS ────────────────────────────────── */
 
@@ -376,12 +389,14 @@ function render() {
     renderBook();
     renderStats();
     window.lucide?.createIcons();
+    saveState();
 }
 
 /* ── INIT ────────────────────────────────────────────────── */
 
 document.addEventListener('DOMContentLoaded', () => {
     window.lucide?.createIcons();
+    restoreState();
     ensureValidStream();
     ensureValidSubject();
     render();
@@ -409,6 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderBook();
             renderStats();
             window.lucide?.createIcons();
+            saveState();
             return;
         }
 
@@ -418,6 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderBook();
             renderStats();
             window.lucide?.createIcons();
+            saveState();
         }
     });
 

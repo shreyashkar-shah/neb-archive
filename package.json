@@ -2,7 +2,6 @@
   "type": "module",
   "scripts": {
     "generate": "node generate-pages.mjs",
-    "prebuild": "node generate-pages.mjs",
-    "predeploy": "node generate-pages.mjs"
+    "build": "node generate-pages.mjs"
   }
 }
