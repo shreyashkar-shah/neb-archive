@@ -142,8 +142,7 @@ export function getSubjectYearValues(source, grade, stream, subject, province) {
 }
 
 export function getPaperPath(source, grade, stream, subject, year, mode, province) {
-  const suffix = mode === 'solution' ? '-solution' : '';
-  const file = `${year}${suffix}.pdf`;
+  const file = `${year}.pdf`;
   if (source === 'board') {
     if (['11','12'].includes(String(grade))) return `board/${grade}/${slug(stream)}/${slug(subject)}/${file}`;
     return `board/${grade}/${slug(province)}/${slug(subject)}/${file}`;

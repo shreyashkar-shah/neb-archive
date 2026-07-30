@@ -332,24 +332,6 @@ p { text-wrap: pretty; }
 .stats-dot { color: var(--border-strong); }
 .stats-empty { font-size: 0.85rem; color: var(--faint); padding: 8px 0; }
 
-/* Solution button — amber tint to differentiate from View */
-.paper-action.solution {
-    color: oklch(50% 0.12 60);
-    border-color: oklch(88% 0.06 60);
-}
-[data-theme="dark"] .paper-action.solution {
-    color: oklch(80% 0.10 60);
-    border-color: oklch(38% 0.08 60);
-}
-.paper-action.solution:hover {
-    background: oklch(97% 0.04 60);
-    border-color: oklch(75% 0.10 60);
-}
-[data-theme="dark"] .paper-action.solution:hover {
-    background: oklch(28% 0.07 60);
-    border-color: oklch(55% 0.10 60);
-}
-
 
 
 /* ================= PROVINCE ROW ================= */

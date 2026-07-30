@@ -101,9 +101,9 @@ function ensureValidSubject() {
 
 /* ── OPEN VIEWER ────────────────────────────────────────── */
 
-function openViewerForCard(card, action) {
+function openViewerForCard(card) {
     const year    = card.dataset.year;
-    const mode    = action === 'solution' ? 'solution' : 'paper';
+    const mode    = 'paper';
     const path    = getPaperPath(state.source, state.grade, state.stream, state.subject, year, mode, state.province);
     const fileURL = getPaperURL(path);
 
@@ -310,7 +310,6 @@ function renderPapers() {
             </div>
             <div class="paper-actions">
                 <button class="paper-action primary" data-action="view">${icon('eye')}<span>View</span></button>
-                <button class="paper-action solution" data-action="solution">${icon('lightbulb')}<span>Solution</span></button>
             </div>
         </article>`;
     }).join('') : `
@@ -370,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const actionBtn = e.target.closest('[data-action]');
         if (actionBtn) {
             const card = actionBtn.closest('[data-year]');
-            if (card) openViewerForCard(card, actionBtn.dataset.action);
+            if (card) openViewerForCard(card);
             return;
         }
 

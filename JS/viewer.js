@@ -87,7 +87,7 @@ const ZOOM_PRESETS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0];
 /* ── META ───────────────────────────────────────────────── */
 
 function initMeta() {
-    sourceBadge.textContent   = MODE === 'solution' ? 'Solution' : SOURCE;
+    sourceBadge.textContent   = SOURCE;
     paperTitleNav.textContent = TITLE;
     document.title            = `${TITLE} — NEB Archive`;
     // reflect the actual default fitMode in the toolbar
