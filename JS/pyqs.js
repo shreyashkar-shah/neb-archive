@@ -139,7 +139,10 @@ function renderStats() {
     $('#statsLabel').textContent = `Grade ${state.grade}${streamPart}${provPart}`;
 
     if (!subNames.length) {
-        $('#statsGrid').innerHTML   = `<div class="stats-empty">No data available</div>`;
+        const msg = state.source === 'school'
+            ? 'No school papers uploaded yet.'
+            : 'No data available';
+        $('#statsGrid').innerHTML   = `<div class="stats-empty">${msg}</div>`;
         $('#statsFooter').innerHTML = '';
         return;
     }
@@ -243,7 +246,7 @@ function renderLeftPanel() {
             <button class="subject-btn" aria-selected="${s === state.subject}" data-subject="${s}">
                 ${icon(subjectIcon(s))}<span>${s}</span>
             </button>`).join('')
-        : `<div class="stats-empty">No subjects available</div>`;
+        : `<div class="stats-empty">${state.source === 'school' ? 'No school papers uploaded yet.' : 'No subjects available'}</div>`;
 }
 
 /* ── YEAR FILTER ─────────────────────────────────────────── */
@@ -277,7 +280,9 @@ function renderYears() {
 function renderPapers() {
     const yrs  = currentYearValues(); // array of plain strings e.g. '2081', '2081-gie', '2079-model'
     const baseYear = v => v.replace(/-model|-sup|-gie|-[a-z]/gi, '').replace(/[^0-9]/g, '').slice(0, 4);
-    const list = state.year === 'all' ? yrs : yrs.filter(y => baseYear(y) === state.year);
+    const list = (state.year === 'all' ? yrs : yrs.filter(y => baseYear(y) === state.year))
+        .slice() // don't mutate the source array from neb-data.mjs
+        .sort((a, b) => parseInt(baseYear(b), 10) - parseInt(baseYear(a), 10)); // newest first, regardless of data-entry order
 
     const streamPart  = state.stream ? ` (${state.stream})` : '';
     const eyebrow     = `Grade ${state.grade}${streamPart} / ${state.subject}`;

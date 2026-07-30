@@ -64,6 +64,7 @@ let pdfDoc        = null;
 let currentPage   = 1;
 let totalPages    = 0;
 let scale         = 1.0;
+let renderVersion = 0;  // bumped on every zoom/fit change — stale in-flight renders check this before committing
 function detectDefaultFitMode() {
     // Touch-primary devices (phones, tablets) — 'pointer: coarse' is the
     // standard, reliable signal, not fragile user-agent sniffing.
@@ -206,6 +207,7 @@ async function renderPage(n) {
     const e = pageElements.get(n);
     if (!e || e.rendered || renderPending.has(n)) return;
     renderPending.add(n);
+    const version = renderVersion;  // snapshot — if a zoom/fit change bumps this before we finish, our result is stale
     try {
         const vp  = e.page.getViewport({ scale });
         const ctx = e.canvas.getContext('2d');
@@ -217,7 +219,11 @@ async function renderPage(n) {
         e.wrap.style.height   = vp.height + 'px';
         ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
         await e.page.render({ canvasContext: ctx, viewport: vp }).promise;
-        e.rendered = true;
+        if (version === renderVersion) {
+            e.rendered = true;
+        }
+        // else: a zoom/fit change happened mid-render — leave e.rendered false
+        // so the next renderVisiblePages() pass picks it up at the new scale.
     } catch (_) {
         // cancelled — will retry on next scroll/zoom
     } finally {
@@ -233,6 +239,7 @@ function renderVisiblePages() {
 }
 
 async function reRenderAll() {
+    renderVersion++;
     for (const [, e] of pageElements) e.rendered = false;
     renderPending.clear();
     renderVisiblePages();
