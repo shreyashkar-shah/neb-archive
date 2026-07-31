@@ -294,11 +294,13 @@ function renderPapers() {
     $('#paperList').innerHTML = list.length ? list.map(y => {
         // Work out a clean label for the year value
         const yl = y.toLowerCase();
+        const setMatch = yl.match(/set-?(\w+)/);
         const suffix =
             yl.includes('model') ? ' (Model Question)' :
             yl.includes('sup')   ? ' (Supplementary)'  :
-            yl.includes('gie')   ? ' (GIE)'             : '';
-        const yearDisplay = y.replace(/-model$|-sup$|-gie$|-[a-z]+$/gi, '');
+            yl.includes('gie')   ? ' (GIE)'             :
+            setMatch             ? ` (Set ${setMatch[1].toUpperCase()})` : '';
+        const yearDisplay = y.replace(/-[a-z0-9]+$/i, '');
 
         return `
         <article class="paper-card reveal in" data-year="${y}">
