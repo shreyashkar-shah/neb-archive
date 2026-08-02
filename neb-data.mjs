@@ -92,7 +92,7 @@ export const BOARD_DATA = {
   12: {
     streams: {
       Science: { subjects: {
-        English: ['2083','2082','2081','2080'],
+        English: ['2083','2082','2081','2080',{ value:'2079-Model', label:'2079'}],
         Mathematics: ['2083','2082',{ value: '2081-Set1', label: '2081' },{ value: '2081-Set2', label: '2081' },{ value:'2081-Supplementary', label:'2081' },{ value: '2080-Set1', label: '2080' }, { value: '2080-Set2', label: '2080' },{ value:'2080-GIE', label:'2080' },{ value:'2080-Model', label:'2080'},'2079'],
         Nepali: ['2083','2082','2081','2080'],
         Physics: ['2083','2082','2081','2080',{ value: '2079-Set1', label: '2079' },{ value: '2079-Set2', label: '2079' },{ value:'2079-Model', label:'2079' }, { value:'2078-Model', label:'2078' }],
