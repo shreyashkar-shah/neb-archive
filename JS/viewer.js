@@ -484,9 +484,19 @@ document.addEventListener('keydown', e => {
 /* ── RESIZE ─────────────────────────────────────────────── */
 
 let resizeTimer;
+let lastKnownWidth = window.innerWidth;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { if (fitMode !== 'custom') applyFitMode(fitMode); }, 180);
+    resizeTimer = setTimeout(() => {
+        // Mobile browsers fire 'resize' when the address bar shows/hides during
+        // scroll — that only changes innerHeight, not innerWidth. Reacting to it
+        // means re-laying-out every visible PDF page mid-scroll, which is the
+        // biggest source of layout shift on this page. Only real width changes
+        // (actual device rotation / window resize) should trigger a refit.
+        if (Math.abs(window.innerWidth - lastKnownWidth) < 5) return;
+        lastKnownWidth = window.innerWidth;
+        if (fitMode !== 'custom') applyFitMode(fitMode);
+    }, 180);
 });
 
 /* ── EVENTS ─────────────────────────────────────────────── */

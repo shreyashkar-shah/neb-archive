@@ -426,3 +426,12 @@ p { text-wrap: pretty; }
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
     .reveal { opacity: 1; transform: none; }
 }
+
+/* ================= LUCIDE ICON PLACEHOLDER ================= */
+/* See style.css for the full explanation — same fix, duplicated here
+   because pyqs/textbooks load this file instead of style.css. */
+[data-lucide] {
+    display: inline-flex;
+    width: 1em;
+    height: 1em;
+}

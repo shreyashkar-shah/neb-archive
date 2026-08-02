@@ -465,3 +465,17 @@ p { text-wrap: pretty; }
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
     .reveal { opacity: 1; transform: none; }
 }
+
+/* ================= LUCIDE ICON PLACEHOLDER ================= */
+/* Before lucide.createIcons() replaces <i data-lucide> with an <svg>,
+   the raw <i> tag has no intrinsic size and collapses to 0x0. Inside
+   auto-sized buttons/pills, that means the element visibly grows the
+   moment the icon pops in, pushing everything below it down — this is
+   the #1 source of CLS on this site. Reserving ~1em of space up front
+   makes that pop-in a non-event instead of a layout shift. Harmless
+   after replacement too, since the rule only targets <i>, not <svg>. */
+[data-lucide] {
+    display: inline-flex;
+    width: 1em;
+    height: 1em;
+}
