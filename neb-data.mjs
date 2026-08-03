@@ -16,6 +16,14 @@ export const STORAGE_BUCKET = 'pyqs';
 
 export const PROVINCES = ['Koshi','Madhesh','Bagmati','Gandaki','Lumbini','Karnali','Sudurpashchim'];
 
+// Grade 12 English/Nepali papers are the same compulsory exam regardless of
+// stream — one shared list, referenced by both Science and Management below,
+// so adding a new year here updates both instead of needing to be repeated
+// (and risking the two silently drifting out of sync, like they already had).
+const G12_ENGLISH_YEARS = ['2083','2082','2081','2080',{ value:'2079-Model', label:'2079'}];
+const G12_NEPALI_YEARS  = ['2083','2082','2081','2080',{ value:'2080-GIE', label:'2080' }];
+const G12_MATH_YEARS    = ['2083','2082',{ value: '2081-Set1', label: '2081' },{ value: '2081-Set2', label: '2081' },{ value:'2081-Supplementary', label:'2081' },{ value: '2080-Set1', label: '2080' }, { value: '2080-Set2', label: '2080' },{ value:'2080-GIE', label:'2080' },{ value:'2080-Model', label:'2080'},'2079'];
+
 export const BOARD_DATA = {
   10: {
     province: true,
@@ -92,18 +100,18 @@ export const BOARD_DATA = {
   12: {
     streams: {
       Science: { subjects: {
-        English: ['2083','2082','2081','2080',{ value:'2079-Model', label:'2079'}],
-        Mathematics: ['2083','2082',{ value: '2081-Set1', label: '2081' },{ value: '2081-Set2', label: '2081' },{ value:'2081-Supplementary', label:'2081' },{ value: '2080-Set1', label: '2080' }, { value: '2080-Set2', label: '2080' },{ value:'2080-GIE', label:'2080' },{ value:'2080-Model', label:'2080'},'2079'],
-        Nepali: ['2083','2082','2081','2080',{ value:'2080-GIE', label:'2080' }],
+        English: G12_ENGLISH_YEARS,
+        Mathematics: G12_MATH_YEARS,
+        Nepali: G12_NEPALI_YEARS,
         Physics: ['2083','2082','2081','2080',{ value: '2079-Set1', label: '2079' },{ value: '2079-Set2', label: '2079' },{ value:'2079-Model', label:'2079' }, { value:'2078-Model', label:'2078' }],
         Chemistry: ['2083','2082','2081', { value:'2081-Supplementary', label:'2081' },'2080',{ value:'2080-GIE', label:'2080' },'2079',{ value:'2079-Model', label:'2079' }],
         Biology: ['2083','2082','2081',{ value:'2081-Supplementary', label:'2081' },{ value:'2080-GIE', label:'2080'},'2079'],
         'Computer Science': ['2083','2082','2081','2080',{ value:'2079-Model', label:'2079' }],
       } },
       Management: { subjects: {
-        English: ['2083','2082','2081','2080'],
-        Mathematics: ['2083','2082','2081','2080'],
-        Nepali: ['2083','2082','2081','2080'],
+        English: G12_ENGLISH_YEARS,
+        Mathematics: G12_MATH_YEARS,
+        Nepali: G12_NEPALI_YEARS,
         'Social Studies': [], Economics: [],
         Accounting: ['2083'], 'Business Studies': [],
       } },
@@ -141,10 +149,20 @@ export function getSubjectYearValues(source, grade, stream, subject, province) {
   return getSubjectYears(source, grade, stream, subject, province).map(y => y.value || y);
 }
 
+// Subjects whose Grade 11/12 papers are the compulsory, identical-across-streams
+// exam — stored once under a shared 'common' folder instead of duplicated inside
+// each stream's folder. Add a subject here only once you've confirmed the PDF is
+// genuinely byte-for-byte the same paper in both Science and Management.
+const SHARED_STREAM_SUBJECTS = ['English', 'Nepali', 'Mathematics'];
+
 export function getPaperPath(source, grade, stream, subject, year, mode, province) {
-  const file = `${year}.pdf`;
+  const suffix = mode === 'solution' ? '-solution' : '';
+  const file = `${year}${suffix}.pdf`;
   if (source === 'board') {
-    if (['11','12'].includes(String(grade))) return `board/${grade}/${slug(stream)}/${slug(subject)}/${file}`;
+    if (['11','12'].includes(String(grade))) {
+      const streamSeg = SHARED_STREAM_SUBJECTS.includes(subject) ? 'common' : slug(stream);
+      return `board/${grade}/${streamSeg}/${slug(subject)}/${file}`;
+    }
     return `board/${grade}/${slug(province)}/${slug(subject)}/${file}`;
   }
   return `school/${grade}/${slug(stream)}/${slug(subject)}/${file}`;
