@@ -218,6 +218,7 @@ a { text-decoration: none; color: inherit; }
     color: var(--ink);
     font-family: var(--font); font-size: 0.84rem; font-weight: 500;
     -moz-appearance: textfield;
+    appearance: textfield;
     transition: border-color var(--t);
 }
 #pageInput::-webkit-inner-spin-button,
