@@ -46,6 +46,8 @@
     </header>
 
     <div class="toolbar" id="toolbar" role="toolbar" aria-label="PDF controls">
+        <button class="tool-btn" id="prevPaperBtn" aria-label="Previous paper" title="Previous paper"><i data-lucide="chevrons-left"></i></button>
+        <div class="toolbar-divider paper-nav-divider"></div>
         <div class="toolbar-group">
             <button class="tool-btn" id="prevPage" aria-label="Previous page" title="Previous page"><i data-lucide="chevron-up"></i></button>
             <div class="page-indicator">
@@ -66,10 +68,12 @@
             <button class="tool-btn fit-btn active" id="fitPage" title="Fit page" data-fit="page"><i data-lucide="expand"></i></button>
             <button class="tool-btn fit-btn" id="fitWidth" title="Fit width" data-fit="width"><i data-lucide="arrow-left-right"></i></button>
         </div>
-        <div class="toolbar-divider"></div>
+        <div class="toolbar-divider" id="fullscreenDivider"></div>
         <div class="toolbar-group">
             <button class="tool-btn" id="fullscreenBtn" title="Fullscreen"><i data-lucide="maximize-2"></i></button>
         </div>
+        <div class="toolbar-divider paper-nav-divider"></div>
+        <button class="tool-btn" id="nextPaperBtn" aria-label="Next paper" title="Next paper"><i data-lucide="chevrons-right"></i></button>
     </div>
 
     <main class="viewer-main" id="viewerMain">
@@ -80,7 +84,7 @@
         <div class="error-shell" id="errorShell" style="display:none">
             <i data-lucide="file-x-2"></i>
             <strong>Couldn't load this paper</strong>
-            <p>The file may not be available yet.</p>
+            <p>The file may not be available yet or the link is broken.</p>
             <a href="pyqs.html" id="errorBackBtn" class="error-back">← Go back</a>
         </div>
         <div class="canvas-scroll" id="canvasScroll" hidden>

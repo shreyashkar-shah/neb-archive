@@ -387,9 +387,9 @@ a { text-decoration: none; color: inherit; }
 
 /* ── RESPONSIVE ────────────────────────────────────────── */
 @media (max-width: 600px) {
-    .toolbar-divider:nth-child(6),  /* hide fit-mode divider on mobile */
-    .toolbar-group:nth-child(7) { display: none; }
+    #fullscreenDivider,      /* hide fit-mode divider on mobile */
     #fullscreenBtn { display: none; }
+    #prevPaperBtn, #nextPaperBtn, .paper-nav-divider { display: none; } /* desktop-only — mobile already has swipe */
     .back-btn span { display: none; }
     .pages-wrap { padding: 16px 8px 32px; }
 }

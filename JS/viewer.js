@@ -57,6 +57,8 @@ const fitPageBtn    = document.getElementById('fitPage');
 const fitWidthBtn   = document.getElementById('fitWidth');
 const fullscreenBtn = document.getElementById('fullscreenBtn');
 const themeToggle   = document.getElementById('themeToggle');
+const prevPaperBtn  = document.getElementById('prevPaperBtn');
+const nextPaperBtn  = document.getElementById('nextPaperBtn');
 
 /* ── STATE ──────────────────────────────────────────────── */
 
@@ -395,6 +397,7 @@ function goToYear(newYear) {
     history.replaceState(null, '', `${location.pathname}?${params}`);
 
     showToast(title.split('·').pop().trim());
+    syncPaperNavUI();
     loadPDF(url);
 }
 
@@ -406,6 +409,21 @@ function navigateYear(indexDelta) {
     if (newIdx < 0)                 { showToast('Already at the newest paper'); return; }
     if (newIdx >= YEAR_LIST.length) { showToast('Already at the oldest paper'); return; }
     goToYear(YEAR_LIST[newIdx]);
+}
+
+function syncPaperNavUI() {
+    // No identity params (bare/older links) → nothing to navigate to, hide both buttons entirely
+    // rather than leave clickable buttons that silently do nothing.
+    if (!YEAR_LIST.length || !activeYear) {
+        prevPaperBtn.hidden = true;
+        nextPaperBtn.hidden = true;
+        return;
+    }
+    prevPaperBtn.hidden = false;
+    nextPaperBtn.hidden = false;
+    const idx = YEAR_LIST.indexOf(activeYear);
+    prevPaperBtn.disabled = idx <= 0;
+    nextPaperBtn.disabled = idx === -1 || idx >= YEAR_LIST.length - 1;
 }
 
 let swipeStartX = null, swipeStartY = null, swipeStartT = 0, swipeMulti = false;
@@ -511,6 +529,8 @@ zoomDisplay.addEventListener('click', () => applyFitMode('page'));
 fitPageBtn.addEventListener('click',  () => { applyFitMode('page');  showToast('Fit page'); });
 fitWidthBtn.addEventListener('click', () => { applyFitMode('width'); showToast('Fit width'); });
 fullscreenBtn.addEventListener('click', toggleFullscreen);
+prevPaperBtn.addEventListener('click', () => navigateYear(-1)); // same direction as swipe-right on mobile
+nextPaperBtn.addEventListener('click', () => navigateYear(1));  // same direction as swipe-left on mobile
 
 themeToggle.addEventListener('click', () => {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -524,4 +544,5 @@ pagesWrap.addEventListener('contextmenu', e => { if (e.target.tagName === 'CANVA
 /* ── START ──────────────────────────────────────────────── */
 
 initMeta();
+syncPaperNavUI();
 loadPDF(activeUrl);
