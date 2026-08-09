@@ -113,7 +113,7 @@ export const BOARD_DATA = {
         Mathematics: G12_MATH_YEARS,
         Nepali: G12_NEPALI_YEARS,
         'Social Studies': [], Economics: [],
-        Accounting: ['2083','2082'], 
+        Accounting: ['2083','2082','2081'], 
         'Business Studies': [],
       } },
     },
