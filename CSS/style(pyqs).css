@@ -435,3 +435,24 @@ p { text-wrap: pretty; }
     width: 1em;
     height: 1em;
 }
+
+/* ================= LOAD MORE ================= */
+.load-more-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%;
+    padding: 14px;
+    margin-top: 4px;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--r);
+    background: transparent;
+    color: var(--muted);
+    font-family: inherit; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer;
+    transition: background var(--t), color var(--t), border-color var(--t);
+}
+.load-more-btn svg { width: 16px; height: 16px; }
+.load-more-btn:hover {
+    background: var(--accent-tint);
+    color: var(--accent-ink);
+    border-color: var(--accent-soft);
+}

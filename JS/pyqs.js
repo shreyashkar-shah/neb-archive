@@ -16,6 +16,8 @@ const state = {
 };
 
 const STATE_KEY = 'nebArchivePyqState';
+const PAPERS_PAGE_SIZE = 5;
+let papersVisibleCount = PAPERS_PAGE_SIZE; // how many cards are currently shown — resets on any filter change
 
 function saveState() {
     try { sessionStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
@@ -277,7 +279,9 @@ function renderYears() {
 
 /* ── PAPER LIST ──────────────────────────────────────────── */
 
-function renderPapers() {
+function renderPapers(keepVisibleCount = false) {
+    if (!keepVisibleCount) papersVisibleCount = PAPERS_PAGE_SIZE; // any real filter change starts back at 5
+
     const yrs  = currentYearValues(); // array of plain strings e.g. '2081', '2081-gie', '2079-model'
     const baseYear = v => v.replace(/-model|-sup|-gie|-[a-z]/gi, '').replace(/[^0-9]/g, '').slice(0, 4);
     const list = (state.year === 'all' ? yrs : yrs.filter(y => baseYear(y) === state.year))
@@ -286,12 +290,16 @@ function renderPapers() {
 
     const streamPart  = state.stream ? ` (${state.stream})` : '';
     const eyebrow     = `Grade ${state.grade}${streamPart} / ${state.subject}`;
+    const visibleList = list.slice(0, papersVisibleCount);
+    const remaining   = list.length - visibleList.length;
 
     $('#contentEyebrow').textContent = eyebrow;
     $('#paperHeading').textContent   = state.subject;
-    $('#paperCount').textContent     = `Showing ${list.length} ${list.length === 1 ? 'paper' : 'papers'}`;
+    $('#paperCount').textContent     = list.length > PAPERS_PAGE_SIZE
+        ? `Showing ${visibleList.length} of ${list.length} papers`
+        : `Showing ${list.length} ${list.length === 1 ? 'paper' : 'papers'}`;
 
-    $('#paperList').innerHTML = list.length ? list.map(y => {
+    const cardsHTML = visibleList.length ? visibleList.map(y => {
         // Work out a clean label for the year value — a paper can carry more than
         // one tag at once (e.g. '2080-GIE-Set1' is both GIE and Set 1), so build
         // up every matching part instead of stopping at the first one that hits.
@@ -328,6 +336,14 @@ function renderPapers() {
             <strong>No papers found</strong>
             <span>Try a different year, subject, or grade.</span>
         </div>`;
+
+    const loadMoreHTML = remaining > 0 ? `
+        <button class="load-more-btn" id="loadMorePapers">
+            <span>Show more papers</span>
+            ${icon('chevron-down')}
+        </button>` : '';
+
+    $('#paperList').innerHTML = cardsHTML + loadMoreHTML;
 }
 
 /* ── FULL RENDER ─────────────────────────────────────────── */
@@ -374,6 +390,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* Delegated click handler */
     document.addEventListener('click', e => {
+
+        // 0. Load more papers
+        if (e.target.closest('#loadMorePapers')) {
+            papersVisibleCount += PAPERS_PAGE_SIZE;
+            renderPapers(true); // true = keep the expanded count, don't reset to 5
+            lucide.createIcons();
+            return;
+        }
 
         // 1. Paper action buttons
         const actionBtn = e.target.closest('[data-action]');
