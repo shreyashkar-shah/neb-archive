@@ -109,6 +109,7 @@ export const BOARD_DATA = {
           '2081',
           '2080',
           { value:'2080-GIE-Set1', label:'2080' },
+          { value:'2080-GIE-Set2', label:'2080' },
           { value: '2079-Set1', label: '2079' },
           { value: '2079-Set2', label: '2079' },
           { value:'2079-Model', label:'2079' }, 
