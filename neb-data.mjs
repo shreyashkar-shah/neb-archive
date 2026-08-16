@@ -133,11 +133,34 @@ export const BOARD_DATA = {
 
 export const SCHOOL_DATA = {
   11: { streams: {
-    Science:    { subjects: { English: [], Mathematics: [], Nepali: [], Physics: [], Chemistry: [], Biology: [], 'Computer Science': [] } },
+    Science:    
+    { subjects: 
+      { English: [], 
+        Mathematics: [], 
+        Nepali: [], 
+        Physics: [], 
+        Chemistry: [], 
+        Biology: [], 
+        'Computer Science': [] } },
     Management: { subjects: { English: [], Mathematics: [], Nepali: [], 'Social Studies': [], Economics: [], Accounting: [], 'Business Studies': [] } },
   } },
   12: { streams: {
-    Science:    { subjects: { English: [], Mathematics: [], Nepali: [], Physics: [], Chemistry: [], Biology: [], 'Computer Science': [] } },
+    Science:    
+      { subjects: 
+        { English: [], 
+          Mathematics: [], 
+          Nepali: [], 
+          Physics: [
+            { value: '2082-hissan-Set1', label: '2082' },
+            { value: '2082-hissan-Set2', label: '2082' },
+            { value:'2082-sxc', label:'2082' },
+            { value:'2081-sxc', label:'2081' },
+            { value: '2081-hissan-Set1', label: '2081' },
+            { value: '2081-hissan-Set2', label: '2081' },
+          ], 
+          Chemistry: [], 
+          Biology: [], 
+          'Computer Science': [] } },
     Management: { subjects: { English: [], Mathematics: [], Nepali: [], 'Social Studies': [], Economics: [], Accounting: [], 'Business Studies': [] } },
   } },
 };

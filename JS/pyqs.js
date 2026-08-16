@@ -109,9 +109,22 @@ function openViewerForCard(card) {
     const path    = getPaperPath(state.source, state.grade, state.stream, state.subject, year, mode, state.province);
     const fileURL = getPaperURL(path);
 
+    // Same tag logic as the paper cards — keep viewer title consistent with the card it came from
+    const yl = year.toLowerCase();
+    const setMatch = yl.match(/set-?(\w+)/);
+    const tags = [];
+    if (yl.includes('model')) tags.push('Model Question');
+    if (yl.includes('sup'))   tags.push('Supplementary');
+    if (yl.includes('gie'))   tags.push('GIE');
+    if (yl.includes('sxc'))     tags.push("St. Xavier's College");
+    if (yl.includes('hissan'))  tags.push('HISSAN');
+    if (setMatch)             tags.push(`Set ${setMatch[1].toUpperCase()}`);
+    const suffix      = tags.length ? ` (${tags.join(' - ')})` : '';
+    const yearDisplay = year.replace(/-.+$/, '');
+
     const streamPart = state.stream ? ` (${state.stream})` : '';
     const provPart   = isProvinceGrade() ? ` · ${state.province}` : '';
-    const title      = `${state.subject}${streamPart} — Grade ${state.grade}${provPart} · ${year}`;
+    const title      = `${state.subject}${suffix}${streamPart} — Grade ${state.grade}${provPart} · ${yearDisplay}`;
     const source     = state.source === 'board' ? 'NEB' : 'School Paper';
 
     saveState();
@@ -309,6 +322,8 @@ function renderPapers(keepVisibleCount = false) {
         if (yl.includes('model')) tags.push('Model Question');
         if (yl.includes('sup'))   tags.push('Supplementary');
         if (yl.includes('gie'))   tags.push('GIE');
+        if (yl.includes('sxc'))     tags.push("St. Xavier's College");
+        if (yl.includes('hissan'))  tags.push('HISSAN');
         if (setMatch)             tags.push(`Set ${setMatch[1].toUpperCase()}`);
         const suffix = tags.length ? ` (${tags.join(' - ')})` : '';
         const yearDisplay = y.replace(/-.+$/, ''); // strip everything from the first hyphen on, not just the last segment

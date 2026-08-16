@@ -372,7 +372,7 @@ function showToast(msg) {
 /* ── SWIPE-TO-CHANGE-YEAR ───────────────────────────────── */
 
 function buildTitleForYear(yearValue) {
-    const displayYear = String(yearValue).replace(/-model$/i, '').replace(/-sup(plementary)?$/i, '').replace(/-gie$/i, '');
+    const displayYear = String(yearValue).replace(/-.+$/, '');
     const streamPart  = STREAM ? ` (${STREAM})` : '';
     const provPart    = PROVINCE && !STREAM ? ` · ${PROVINCE}` : '';
     return `${SUBJECT}${streamPart} — Grade ${GRADE}${provPart} · ${displayYear}`;
