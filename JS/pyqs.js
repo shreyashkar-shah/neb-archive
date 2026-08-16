@@ -292,15 +292,18 @@ function renderPapers() {
     $('#paperCount').textContent     = `Showing ${list.length} ${list.length === 1 ? 'paper' : 'papers'}`;
 
     $('#paperList').innerHTML = list.length ? list.map(y => {
-        // Work out a clean label for the year value
+        // Work out a clean label for the year value — a paper can carry more than
+        // one tag at once (e.g. '2080-GIE-Set1' is both GIE and Set 1), so build
+        // up every matching part instead of stopping at the first one that hits.
         const yl = y.toLowerCase();
         const setMatch = yl.match(/set-?(\w+)/);
-        const suffix =
-            yl.includes('model') ? ' (Model Question)' :
-            yl.includes('sup')   ? ' (Supplementary)'  :
-            yl.includes('gie')   ? ' (GIE)'             :
-            setMatch             ? ` (Set ${setMatch[1].toUpperCase()})` : '';
-        const yearDisplay = y.replace(/-[a-z0-9]+$/i, '');
+        const tags = [];
+        if (yl.includes('model')) tags.push('Model Question');
+        if (yl.includes('sup'))   tags.push('Supplementary');
+        if (yl.includes('gie'))   tags.push('GIE');
+        if (setMatch)             tags.push(`Set ${setMatch[1].toUpperCase()}`);
+        const suffix = tags.length ? ` (${tags.join(' - ')})` : '';
+        const yearDisplay = y.replace(/-.+$/, ''); // strip everything from the first hyphen on, not just the last segment
 
         return `
         <article class="paper-card reveal in" data-year="${y}">
