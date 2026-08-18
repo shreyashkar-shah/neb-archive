@@ -335,10 +335,10 @@ function renderPapers(keepVisibleCount = false) {
                 <div class="paper-title">${state.subject}${suffix}</div>
                 <div class="paper-meta">
                     <span>Grade ${state.grade}${state.stream ? ' · ' + state.stream : ''}</span>
+                    <span class="paper-year">${yearDisplay}</span>
                 </div>
             </div>
             <div class="paper-actions">
-                <span class="paper-year">${yearDisplay}</span>
                 <button class="paper-action primary" data-action="view">${icon('eye')}<span>View</span></button>
             </div>
         </article>`;
