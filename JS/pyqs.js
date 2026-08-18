@@ -364,6 +364,15 @@ function renderPapers(keepVisibleCount = false) {
 /* ── FULL RENDER ─────────────────────────────────────────── */
 
 function render() {
+    // Keep the NEB/School toggle buttons visually in sync with state.source.
+    // This used to only update inside the click handler, so a restored session
+    // (state.source from sessionStorage) could leave the wrong tab highlighted
+    // while the actually-displayed data came from the other source entirely.
+    document.querySelectorAll('.source-btn').forEach(b => {
+        const active = b.dataset.source === state.source;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active);
+    });
     renderGrades();
     renderStreamBar();
     renderProvinceRow();
@@ -392,14 +401,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (src === state.source) return;
             state.source = src;
             state.year   = 'all';
-            document.querySelectorAll('.source-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.source === src);
-                b.setAttribute('aria-selected', b.dataset.source === src);
-            });
             ensureValidGrade();
             ensureValidStream();
             ensureValidSubject();
-            render();
+            render(); // also syncs the toggle buttons' visual state now
         });
     });
 
