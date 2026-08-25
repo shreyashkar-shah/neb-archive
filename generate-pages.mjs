@@ -29,10 +29,18 @@ const GRADE_LABEL = { 8: 'Grade 8 (BLE)', 10: 'Grade 10 (SEE)', 11: 'Grade 11', 
 
 const yearValue = (e) => (e && e.value) || e;
 const baseYear = (v) => String(v).replace(/-model|-sup|-gie|-[a-z]/gi, '').replace(/[^0-9]/g, '').slice(0, 4);
-const yearDisplay = (v) => String(v).replace(/-model$|-sup$|-gie$|-[a-z]+$/gi, '');
+const yearDisplay = (v) => String(v).replace(/-.+$/, ''); // strip everything from the first hyphen on, not just the last segment
 const yearSuffix = (v) => {
   const l = String(v).toLowerCase();
-  return l.includes('model') ? ' (Model Question)' : l.includes('sup') ? ' (Supplementary)' : l.includes('gie') ? ' (GIE)' : '';
+  const setMatch = l.match(/set-?(\w+)/);
+  const tags = [];
+  if (l.includes('model'))  tags.push('Model Question');
+  if (l.includes('sup'))    tags.push('Supplementary');
+  if (l.includes('gie'))    tags.push('GIE');
+  if (l.includes('sxc'))    tags.push("St. Xavier's College");
+  if (l.includes('hissan')) tags.push('HISSAN');
+  if (setMatch)             tags.push(`Set ${setMatch[1].toUpperCase()}`);
+  return tags.length ? ` (${tags.join(' - ')})` : '';
 };
 const yearRange = (values) => {
   const nums = values.map(baseYear).map(Number).filter(Boolean).sort((a, b) => a - b);
@@ -99,6 +107,30 @@ function pageDir(p) {
 }
 const pageUrl = (p) => `/${pageDir(p).replace(/\\/g, '/')}/`;
 
+/* ── PER-PAPER PAGE DIR + URL — one page per individual paper,
+   nested under its subject page, e.g. /papers/board/12/science/physics/2083/ */
+function paperDir(pp) {
+  const base = pageDir(pp.parent);
+  const yearSeg = slug(String(pp.value));
+  return pp.kind === 'province' ? join(base, slug(pp.province), yearSeg) : join(base, yearSeg);
+}
+const paperUrl = (pp) => `/${paperDir(pp).replace(/\\/g, '/')}/`;
+
+/* ── PER-PAPER SEO STRINGS — phrased the way a student actually searches,
+   e.g. "NEB Grade 12 (Science) Physics Question Paper 2083" */
+function paperSeo(pp) {
+  const gLabel = GRADE_LABEL[pp.grade] || `Grade ${pp.grade}`;
+  const org = pp.source === 'board' ? 'NEB' : 'School';
+  const streamBit = pp.kind === 'stream' ? ` (${pp.stream})` : '';
+  const provBit = pp.kind === 'province' ? ` \u2014 ${pp.province}` : '';
+  const yd = yearDisplay(pp.value);
+  const suf = yearSuffix(pp.value);
+  const h1 = `${org} ${gLabel}${streamBit} ${pp.subject} Question Paper ${yd}${suf}${provBit}`;
+  const title = `${h1} | NEB Archive`;
+  const desc = `${org} ${gLabel}${streamBit} ${pp.subject} previous year question paper for ${yd}${suf}${provBit}. Free, opens instantly in-browser, no sign-up needed.`;
+  return { h1, title, desc: desc.slice(0, 158) };
+}
+
 /* ── SEO STRINGS ────────────────────────────────────────── */
 function seo(p) {
   const range = yearRange(p.years.map(yearValue));
@@ -116,28 +148,23 @@ function seo(p) {
 /* ── PAPER-LINK ROWS ────────────────────────────────────── */
 function paperRows(p) {
   const rows = [];
+  const pushRow = (value, province) => {
+    const label = `${yearDisplay(value)}${yearSuffix(value)}`;
+    const pp = { ...p, value, province, parent: p };
+    rows.push({
+      value, province,
+      label: province ? `${p.subject} ${label} \u2014 ${province}` : `${p.subject} ${label}`,
+      href: viewerHref({ ...p, value, province }),          // straight to the PDF — used by human-facing buttons
+      pageHref: paperUrl(pp),                                // this paper's own indexable static page
+      solHref: CONFIG.includeSolutionLinks ? viewerHref({ ...p, value, province, mode: 'solution' }) : null,
+    });
+  };
   if (p.kind === 'province') {
     for (const [province, years] of Object.entries(p.byProvince)) {
-      for (const raw of years) {
-        const value = yearValue(raw);
-        const label = `${yearDisplay(value)}${yearSuffix(value)}`;
-        rows.push({
-          label: `${p.subject} ${label} \u2014 ${province}`,
-          href: viewerHref({ ...p, value, province }),
-          solHref: CONFIG.includeSolutionLinks ? viewerHref({ ...p, value, province, mode: 'solution' }) : null,
-        });
-      }
+      for (const raw of years) pushRow(yearValue(raw), province);
     }
   } else {
-    for (const raw of p.years) {
-      const value = yearValue(raw);
-      const label = `${yearDisplay(value)}${yearSuffix(value)}`;
-      rows.push({
-        label: `${p.subject} ${label}`,
-        href: viewerHref({ ...p, value }),
-        solHref: CONFIG.includeSolutionLinks ? viewerHref({ ...p, value, mode: 'solution' }) : null,
-      });
-    }
+    for (const raw of p.years) pushRow(yearValue(raw));
   }
   return rows;
 }
@@ -156,7 +183,7 @@ function jsonLd(p, rows, meta) {
   const itemList = {
     '@context': 'https://schema.org', '@type': 'ItemList', name: meta.h1,
     itemListElement: rows.map((r, i) => ({
-      '@type': 'ListItem', position: i + 1, name: r.label, url: CONFIG.siteOrigin + r.href,
+      '@type': 'ListItem', position: i + 1, name: r.label, url: abs(r.pageHref),
     })),
   };
   return `<script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>\n<script type="application/ld+json">${JSON.stringify(itemList)}</script>`;
@@ -236,7 +263,39 @@ function renderPage(p) {
   return { html: layout({ title: meta.title, desc: meta.desc, canonical, body }), dir: pageDir(p) };
 }
 
-/* ── HUB INDEX (/papers/) ───────────────────────────────── */
+/* ── RENDER A SINGLE-PAPER PAGE ─────────────────────────── */
+function renderPaperPage(row, p) {
+  const pp = { ...p, value: row.value, province: row.province, parent: p };
+  const meta = paperSeo(pp);
+  const canonical = abs(paperUrl(pp));
+  const parentMeta = seo(p);
+
+  const crumbs = [
+    { name: 'Home', url: abs('/index.html') },
+    { name: 'PYQs', url: abs('/pyqs.html') },
+    { name: parentMeta.h1, url: abs(pageUrl(p)) },
+    { name: meta.h1, url: canonical },
+  ];
+  const breadcrumbLd = {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: c.url })),
+  };
+
+  const body = `
+    <nav class="eyebrow" aria-label="Breadcrumb"><a href="${withBase('/index.html')}">Home</a> / <a href="${withBase('/pyqs.html')}">PYQs</a> / <a href="${withBase(pageUrl(p))}">${esc(parentMeta.h1)}</a></nav>
+    <h1 class="hero-title" style="font-size:clamp(1.7rem,3.6vw,2.6rem)">${esc(meta.h1)}</h1>
+    <p class="hero-subtitle" style="margin:16px 0 24px">${esc(meta.desc)}</p>
+    <p>
+      <a class="btn btn-primary btn-lg" href="${esc(row.href)}"><i data-lucide="eye"></i> Open this paper <i data-lucide="arrow-right" class="arrow"></i></a>
+      ${row.solHref ? `<a class="btn btn-ghost" style="margin-left:10px" href="${esc(row.solHref)}"><i data-lucide="lightbulb"></i> Solution</a>` : ''}
+    </p>
+    <p style="margin-top:28px"><a href="${withBase(pageUrl(p))}">\u2190 Browse all ${esc(p.subject)} papers</a></p>
+  ${breadcrumbLd ? `<script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>` : ''}`;
+
+  return { html: layout({ title: meta.title, desc: meta.desc, canonical, body }), dir: paperDir(pp), url: paperUrl(pp) };
+}
+
+
 function renderHub(pages) {
   const groups = {};
   for (const p of pages) {
@@ -264,9 +323,9 @@ function renderHub(pages) {
 }
 
 /* ── SITEMAP + ROBOTS ───────────────────────────────────── */
-function renderSitemap(pages) {
+function renderSitemap(pages, paperUrls) {
   const today = new Date().toISOString().slice(0, 10);
-  const urls = [abs('/'), abs('/pyqs.html'), abs('/papers/'), ...pages.map((p) => abs(pageUrl(p)))];
+  const urls = [abs('/'), abs('/pyqs.html'), abs('/papers/'), ...pages.map((p) => abs(pageUrl(p))), ...paperUrls.map(abs)];
   const body = urls.map((u) => `  <url><loc>${esc(u)}</loc><changefreq>weekly</changefreq><lastmod>${today}</lastmod></url>`).join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>`;
 }
@@ -280,20 +339,33 @@ async function build() {
   await rm(CONFIG.outDir, { recursive: true, force: true });
 
   let count = 0;
+  let paperCount = 0;
+  const paperUrls = [];
+
   for (const p of pages) {
     const { html, dir } = renderPage(p);
     await mkdir(dir, { recursive: true });
     await writeFile(join(dir, 'index.html'), html, 'utf8');
     count++;
+
+    // One indexable static page per individual paper, nested under this subject page.
+    for (const row of paperRows(p)) {
+      const paper = renderPaperPage(row, p);
+      await mkdir(paper.dir, { recursive: true });
+      await writeFile(join(paper.dir, 'index.html'), paper.html, 'utf8');
+      paperUrls.push(paper.url);
+      paperCount++;
+    }
   }
 
   await writeFile(join(CONFIG.outDir, 'index.html'), renderHub(pages), 'utf8');
-  await writeFile('sitemap.xml', renderSitemap(pages), 'utf8');
+  await writeFile('sitemap.xml', renderSitemap(pages, paperUrls), 'utf8');
   await writeFile('robots.txt', renderRobots(), 'utf8');
 
   console.log(`OK  ${count} subject pages -> ./${CONFIG.outDir}/`);
+  console.log(`OK  ${paperCount} individual paper pages -> ./${CONFIG.outDir}/.../<year>/`);
   console.log(`OK  hub index -> ./${CONFIG.outDir}/index.html`);
-  console.log(`OK  sitemap   -> ./sitemap.xml (${count + 3} urls)`);
+  console.log(`OK  sitemap   -> ./sitemap.xml (${count + paperCount + 3} urls)`);
   console.log(`OK  robots    -> ./robots.txt`);
 }
 
