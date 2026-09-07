@@ -456,3 +456,28 @@ p { text-wrap: pretty; }
     color: var(--accent-ink);
     border-color: var(--accent-soft);
 }
+
+/* ================= CTA + BUTTON HELPERS ================= */
+/* Ported from style.css — pyqs.html was loading style.css purely for these
+   6 classes, doubling its CSS payload for content it doesn't otherwise use.
+   Consolidated here so this page only loads one stylesheet. */
+.btn-lg { padding: 15px 30px; font-size: 1rem; }
+.btn .arrow { transition: transform var(--t); }
+.btn:hover .arrow { transform: translateX(3px); }
+.nav-soon { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
+
+.cta { background: var(--surface); border-top: 1px solid var(--border); }
+.cta-panel { position: relative; overflow: hidden; background: var(--panel); border-radius: var(--r-xl); padding: 76px 40px; text-align: center; box-shadow: var(--shadow-lg); }
+[data-theme="dark"] .cta-panel { border: 1px solid var(--border-strong); }
+.cta-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 55% 70% at 50% -10%, oklch(60% 0.14 264 / 0.35) 0%, transparent 65%); }
+.cta-panel::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.4; background-image: linear-gradient(oklch(100% 0 0 / 0.04) 1px, transparent 1px), linear-gradient(90deg, oklch(100% 0 0 / 0.04) 1px, transparent 1px); background-size: 44px 44px; mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black, transparent 75%); -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black, transparent 75%); }
+.cta-inner { position: relative; z-index: 1; }
+.cta-panel h2 { font-size: clamp(1.9rem, 3.6vw, 2.9rem); font-weight: var(--heading-weight); color: oklch(97% 0.01 264); margin-bottom: 16px; line-height: 1.1; }
+.cta-panel p { color: oklch(80% 0.02 274); font-size: 1.08rem; max-width: 48ch; margin: 0 auto 32px; line-height: 1.6; }
+.cta-panel .btn-primary { background: oklch(97% 0.01 264); color: var(--accent-ink); box-shadow: 0 10px 30px oklch(0% 0 0 / 0.3); }
+[data-theme="dark"] .cta-panel .btn-primary { color: oklch(20% 0.03 268); }
+.cta-panel .btn-primary:hover { background: white; }
+
+@media (max-width: 720px) {
+    .cta-panel { padding: 52px 22px; }
+}

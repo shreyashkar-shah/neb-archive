@@ -208,6 +208,15 @@ async function buildSkeleton() {
 async function renderPage(n) {
     const e = pageElements.get(n);
     if (!e || e.rendered || renderPending.has(n)) return;
+
+    // A previous render on this exact canvas may still be mid-draw (rapid pinch-zoom
+    // especially). Cancel it properly instead of letting two renders race on one
+    // canvas — that's what was producing the torn/garbled frames during zoom.
+    if (e.renderTask) {
+        try { e.renderTask.cancel(); } catch (_) {}
+        e.renderTask = null;
+    }
+
     renderPending.add(n);
     const version = renderVersion;  // snapshot — if a zoom/fit change bumps this before we finish, our result is stale
     try {
@@ -220,14 +229,17 @@ async function renderPage(n) {
         e.wrap.style.width    = vp.width  + 'px';
         e.wrap.style.height   = vp.height + 'px';
         ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-        await e.page.render({ canvasContext: ctx, viewport: vp }).promise;
+        const task = e.page.render({ canvasContext: ctx, viewport: vp });
+        e.renderTask = task;
+        await task.promise;
+        e.renderTask = null;
         if (version === renderVersion) {
             e.rendered = true;
         }
         // else: a zoom/fit change happened mid-render — leave e.rendered false
         // so the next renderVisiblePages() pass picks it up at the new scale.
     } catch (_) {
-        // cancelled — will retry on next scroll/zoom
+        // cancelled, or superseded — will retry on next scroll/zoom
     } finally {
         renderPending.delete(n);
     }
@@ -462,16 +474,29 @@ canvasScroll.addEventListener('touchend', e => {
 /* ── TOUCH PINCH ────────────────────────────────────────── */
 
 let lastDist = null;
+let pendingTargetScale = null;
+let pinchThrottleTimer = null;
+const PINCH_THROTTLE_MS = 90; // real re-render at most ~11x/sec during a pinch — plenty smooth, far fewer render cancel/restart cycles
+
 canvasScroll.addEventListener('touchstart', e => {
     if (e.touches.length === 2) lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
 }, { passive: true });
 canvasScroll.addEventListener('touchmove', e => {
     if (e.touches.length !== 2 || !lastDist) return;
     const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    applyZoom(scale * (d / lastDist));
+    pendingTargetScale = scale * (d / lastDist);
     lastDist = d;
+    if (pinchThrottleTimer) return; // already have a re-render queued — it'll pick up the freshest pendingTargetScale when it fires
+    pinchThrottleTimer = setTimeout(() => {
+        pinchThrottleTimer = null;
+        if (pendingTargetScale != null) applyZoom(pendingTargetScale);
+    }, PINCH_THROTTLE_MS);
 }, { passive: true });
-canvasScroll.addEventListener('touchend', () => lastDist = null, { passive: true });
+canvasScroll.addEventListener('touchend', () => {
+    lastDist = null;
+    pendingTargetScale = null;
+    if (pinchThrottleTimer) { clearTimeout(pinchThrottleTimer); pinchThrottleTimer = null; }
+}, { passive: true });
 
 /* ── CTRL+WHEEL ─────────────────────────────────────────── */
 
